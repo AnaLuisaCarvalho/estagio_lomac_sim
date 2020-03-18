@@ -11,5 +11,7 @@ At fermi/pauli (following http://geant4-userdoc.web.cern.ch/geant4-userdoc/Users
 - cmake -DGeant4_DIR=<path to geant installation> <path to CMakeLists.txt> or -DGeant4_DIR=`which geant`
 - make
 
-Compile GODDeSS (repository: https://git.rwth-aachen.de/3pia/forge/goddess-package):
-- 
+Compile GODDeSS:
+
+Repository: https://git.rwth-aachen.de/3pia/forge/goddess-package
+- Download tar with latest package version 
