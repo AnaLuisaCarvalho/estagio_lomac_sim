@@ -10,8 +10,15 @@ At fermi/pauli (following http://geant4-userdoc.web.cern.ch/geant4-userdoc/Users
 - cd build
 - cmake -DGeant4_DIR=<path to geant installation> <path to CMakeLists.txt> or -DGeant4_DIR=`which geant`
 - make
+- ./<executable name>: ./TileFCC (in this case)
 
-Compile GODDeSS:
+Current strategy for building the experimental setup:
+- TileFCCDetectorConstruction.cc is the file where we collec all the pieces and place them in the correct position
+- Each piece should be a class that returns a G4LogicalVolume (see TileFCCTile.cc as an example)
+- In order to be able to access this class from inside TileFCCDetectorConstruction.cc we must create a shared library. In the CMakeLists file add:
+  - add_library(TileFCCTile SHARED
+  src/TileFCCTile.cc)
+  - Link it: target_link_libraries(TileFCC ${Geant4_LIBRARIES} TileFCCTile)
 
-Repository: https://git.rwth-aachen.de/3pia/forge/goddess-package
-- Download tar with latest package version 
+
+GODDeSS repository: https://git.rwth-aachen.de/3pia/forge/goddess-package (not used, for inspiration only)
