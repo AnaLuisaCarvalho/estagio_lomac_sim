@@ -49,7 +49,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/TileFCC")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/TileFCC"
-         OLD_RPATH "/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/lib64:/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/lib:"
+         OLD_RPATH "/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/lib64:/home/t3atlas/aluisa/Geant4/TileFCC/build:/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/lib:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/cvmfs/sw.el7/gcc/6.3/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/TileFCC")

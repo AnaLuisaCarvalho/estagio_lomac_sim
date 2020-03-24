@@ -56,28 +56,6 @@ CMAKE_BINARY_DIR = /home/t3atlas/aluisa/Geant4/TileFCC/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target install
-install: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/cvmfs/sw.el7/cmake/3.11.2/bin/cmake -P cmake_install.cmake
-.PHONY : install
-
-# Special rule for the target install
-install/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/cvmfs/sw.el7/cmake/3.11.2/bin/cmake -P cmake_install.cmake
-.PHONY : install/fast
-
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
-
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-
-.PHONY : list_install_components/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -123,6 +101,28 @@ install/local/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
 	/cvmfs/sw.el7/cmake/3.11.2/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local/fast
+
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/cvmfs/sw.el7/cmake/3.11.2/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/cvmfs/sw.el7/cmake/3.11.2/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -181,6 +181,19 @@ TileFCC: cmake_check_build_system
 TileFCC/fast:
 	$(MAKE) -f CMakeFiles/TileFCC.dir/build.make CMakeFiles/TileFCC.dir/build
 .PHONY : TileFCC/fast
+
+#=============================================================================
+# Target rules for targets named TileFCCTile
+
+# Build rule for target.
+TileFCCTile: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 TileFCCTile
+.PHONY : TileFCCTile
+
+# fast build rule for target.
+TileFCCTile/fast:
+	$(MAKE) -f CMakeFiles/TileFCCTile.dir/build.make CMakeFiles/TileFCCTile.dir/build
+.PHONY : TileFCCTile/fast
 
 TileFCCmain.o: TileFCCmain.cc.o
 
@@ -371,20 +384,51 @@ src/TileFCCSteppingAction.cc.s:
 	$(MAKE) -f CMakeFiles/TileFCC.dir/build.make CMakeFiles/TileFCC.dir/src/TileFCCSteppingAction.cc.s
 .PHONY : src/TileFCCSteppingAction.cc.s
 
+src/TileFCCTile.o: src/TileFCCTile.cc.o
+
+.PHONY : src/TileFCCTile.o
+
+# target to build an object file
+src/TileFCCTile.cc.o:
+	$(MAKE) -f CMakeFiles/TileFCC.dir/build.make CMakeFiles/TileFCC.dir/src/TileFCCTile.cc.o
+	$(MAKE) -f CMakeFiles/TileFCCTile.dir/build.make CMakeFiles/TileFCCTile.dir/src/TileFCCTile.cc.o
+.PHONY : src/TileFCCTile.cc.o
+
+src/TileFCCTile.i: src/TileFCCTile.cc.i
+
+.PHONY : src/TileFCCTile.i
+
+# target to preprocess a source file
+src/TileFCCTile.cc.i:
+	$(MAKE) -f CMakeFiles/TileFCC.dir/build.make CMakeFiles/TileFCC.dir/src/TileFCCTile.cc.i
+	$(MAKE) -f CMakeFiles/TileFCCTile.dir/build.make CMakeFiles/TileFCCTile.dir/src/TileFCCTile.cc.i
+.PHONY : src/TileFCCTile.cc.i
+
+src/TileFCCTile.s: src/TileFCCTile.cc.s
+
+.PHONY : src/TileFCCTile.s
+
+# target to generate assembly for a file
+src/TileFCCTile.cc.s:
+	$(MAKE) -f CMakeFiles/TileFCC.dir/build.make CMakeFiles/TileFCC.dir/src/TileFCCTile.cc.s
+	$(MAKE) -f CMakeFiles/TileFCCTile.dir/build.make CMakeFiles/TileFCCTile.dir/src/TileFCCTile.cc.s
+.PHONY : src/TileFCCTile.cc.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... install"
-	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... install/strip"
 	@echo "... install/local"
 	@echo "... Tile"
 	@echo "... TileFCC"
+	@echo "... install"
+	@echo "... list_install_components"
+	@echo "... TileFCCTile"
 	@echo "... TileFCCmain.o"
 	@echo "... TileFCCmain.i"
 	@echo "... TileFCCmain.s"
@@ -406,6 +450,9 @@ help:
 	@echo "... src/TileFCCSteppingAction.o"
 	@echo "... src/TileFCCSteppingAction.i"
 	@echo "... src/TileFCCSteppingAction.s"
+	@echo "... src/TileFCCTile.o"
+	@echo "... src/TileFCCTile.i"
+	@echo "... src/TileFCCTile.s"
 .PHONY : help
 
 

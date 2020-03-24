@@ -29,6 +29,7 @@
 
 #include "TileFCCDetectorConstruction.hh"
 #include "TileFCCActionInitialization.hh"
+#include "TileFCCTile.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"

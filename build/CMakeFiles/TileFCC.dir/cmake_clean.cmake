@@ -6,6 +6,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/TileFCC.dir/src/TileFCCPrimaryGeneratorAction.cc.o"
   "CMakeFiles/TileFCC.dir/src/TileFCCRunAction.cc.o"
   "CMakeFiles/TileFCC.dir/src/TileFCCSteppingAction.cc.o"
+  "CMakeFiles/TileFCC.dir/src/TileFCCTile.cc.o"
   "TileFCC.pdb"
   "TileFCC"
 )

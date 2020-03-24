@@ -28,9 +28,10 @@
 /// \brief Definition of the B1DetectorConstruction class
 
 #ifndef TileFCCDetectorConstruction_h
-#define TileFCCDetectorConstruction_h 1
+#define TileFCCDetectorConstruction_h 
 
 #include "G4VUserDetectorConstruction.hh"
+//#include "TileFCCTile.hh"
 #include "globals.hh"
 
 class G4VPhysicalVolume;

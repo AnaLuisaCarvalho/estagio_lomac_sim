@@ -44,6 +44,10 @@ G4UserSteppingAction.hh
 globals.hh
 ../include/globals.hh
 
+../include/TileFCCTile.hh
+globals.hh
+../include/globals.hh
+
 /cvmfs/sw.el7/gcc63/clhep/2.4.1.3/b01/lib/CLHEP-2.4.1.3/../../include/CLHEP/Geometry/BasicVector3D.h
 iosfwd
 -
@@ -3377,6 +3381,8 @@ TileFCCDetectorConstruction.hh
 /home/t3atlas/aluisa/Geant4/TileFCC/TileFCCDetectorConstruction.hh
 TileFCCActionInitialization.hh
 /home/t3atlas/aluisa/Geant4/TileFCC/TileFCCActionInitialization.hh
+TileFCCTile.hh
+/home/t3atlas/aluisa/Geant4/TileFCC/TileFCCTile.hh
 G4MTRunManager.hh
 /home/t3atlas/aluisa/Geant4/TileFCC/G4MTRunManager.hh
 G4RunManager.hh
@@ -3407,6 +3413,8 @@ TileFCCSteppingAction.hh
 /home/t3atlas/aluisa/Geant4/TileFCC/src/TileFCCDetectorConstruction.cc
 TileFCCDetectorConstruction.hh
 /home/t3atlas/aluisa/Geant4/TileFCC/src/TileFCCDetectorConstruction.hh
+TileFCCTile.hh
+/home/t3atlas/aluisa/Geant4/TileFCC/src/TileFCCTile.hh
 G4RunManager.hh
 /home/t3atlas/aluisa/Geant4/TileFCC/src/G4RunManager.hh
 G4NistManager.hh
@@ -3497,4 +3505,28 @@ G4RunManager.hh
 /home/t3atlas/aluisa/Geant4/TileFCC/src/G4RunManager.hh
 G4LogicalVolume.hh
 /home/t3atlas/aluisa/Geant4/TileFCC/src/G4LogicalVolume.hh
+
+/home/t3atlas/aluisa/Geant4/TileFCC/src/TileFCCTile.cc
+TileFCCTile.hh
+/home/t3atlas/aluisa/Geant4/TileFCC/src/TileFCCTile.hh
+G4RunManager.hh
+/home/t3atlas/aluisa/Geant4/TileFCC/src/G4RunManager.hh
+G4NistManager.hh
+/home/t3atlas/aluisa/Geant4/TileFCC/src/G4NistManager.hh
+G4Box.hh
+/home/t3atlas/aluisa/Geant4/TileFCC/src/G4Box.hh
+G4Cons.hh
+/home/t3atlas/aluisa/Geant4/TileFCC/src/G4Cons.hh
+G4Orb.hh
+/home/t3atlas/aluisa/Geant4/TileFCC/src/G4Orb.hh
+G4Sphere.hh
+/home/t3atlas/aluisa/Geant4/TileFCC/src/G4Sphere.hh
+G4Trd.hh
+/home/t3atlas/aluisa/Geant4/TileFCC/src/G4Trd.hh
+G4LogicalVolume.hh
+/home/t3atlas/aluisa/Geant4/TileFCC/src/G4LogicalVolume.hh
+G4PVPlacement.hh
+/home/t3atlas/aluisa/Geant4/TileFCC/src/G4PVPlacement.hh
+G4SystemOfUnits.hh
+/home/t3atlas/aluisa/Geant4/TileFCC/src/G4SystemOfUnits.hh
 

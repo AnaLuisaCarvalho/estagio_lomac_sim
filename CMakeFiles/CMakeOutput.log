@@ -1,0 +1,192 @@
+The system is: Linux - 3.10.0-1062.12.1.el7.x86_64 - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /cvmfs/sw.el7/gcc/6.3/bin/gcc 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is GNU, found in "/home/t3atlas/aluisa/Geant4/TileFCC/CMakeFiles/3.11.2/CompilerIdC/a.out"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /cvmfs/sw.el7/gcc/6.3/bin/g++ 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+
+The CXX compiler identification is GNU, found in "/home/t3atlas/aluisa/Geant4/TileFCC/CMakeFiles/3.11.2/CompilerIdCXX/a.out"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: /home/t3atlas/aluisa/Geant4/TileFCC/CMakeFiles/CMakeTmp
+
+Run Build Command:"/bin/gmake" "cmTC_7e264/fast"
+/bin/gmake -f CMakeFiles/cmTC_7e264.dir/build.make CMakeFiles/cmTC_7e264.dir/build
+gmake[1]: Entering directory `/home/t3atlas/aluisa/Geant4/TileFCC/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_7e264.dir/testCCompiler.c.o
+/cvmfs/sw.el7/gcc/6.3/bin/gcc    -o CMakeFiles/cmTC_7e264.dir/testCCompiler.c.o   -c /home/t3atlas/aluisa/Geant4/TileFCC/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_7e264
+/cvmfs/sw.el7/cmake/3.11.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7e264.dir/link.txt --verbose=1
+/cvmfs/sw.el7/gcc/6.3/bin/gcc      -rdynamic CMakeFiles/cmTC_7e264.dir/testCCompiler.c.o  -o cmTC_7e264 
+gmake[1]: Leaving directory `/home/t3atlas/aluisa/Geant4/TileFCC/CMakeFiles/CMakeTmp'
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /home/t3atlas/aluisa/Geant4/TileFCC/CMakeFiles/CMakeTmp
+
+Run Build Command:"/bin/gmake" "cmTC_eb19c/fast"
+/bin/gmake -f CMakeFiles/cmTC_eb19c.dir/build.make CMakeFiles/cmTC_eb19c.dir/build
+gmake[1]: Entering directory `/home/t3atlas/aluisa/Geant4/TileFCC/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_eb19c.dir/CMakeCCompilerABI.c.o
+/cvmfs/sw.el7/gcc/6.3/bin/gcc    -o CMakeFiles/cmTC_eb19c.dir/CMakeCCompilerABI.c.o   -c /cvmfs/sw.el7/cmake/3.11.2/share/cmake-3.11/Modules/CMakeCCompilerABI.c
+Linking C executable cmTC_eb19c
+/cvmfs/sw.el7/cmake/3.11.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_eb19c.dir/link.txt --verbose=1
+/cvmfs/sw.el7/gcc/6.3/bin/gcc     -v -rdynamic CMakeFiles/cmTC_eb19c.dir/CMakeCCompilerABI.c.o  -o cmTC_eb19c 
+Using built-in specs.
+COLLECT_GCC=/cvmfs/sw.el7/gcc/6.3/bin/gcc
+COLLECT_LTO_WRAPPER=/cvmfs/sw.el7/gcc/6.3/bin/../libexec/gcc/x86_64-pc-linux-gnu/6.3.1/lto-wrapper
+Target: x86_64-pc-linux-gnu
+Configured with: ../gcc/configure --prefix=/exper-sw/sw/el7/gcc/6.3 --with-mpfr=/exper-sw/sw/el7/gcc/6.3 --enable-languages=c,c++,fortran,lto,objc --enable-multiarch --enable-shared --enable-threads=posix --with-tune=generic --disable-multilib
+Thread model: posix
+gcc version 6.3.1 20170523 (GCC) 
+COMPILER_PATH=/cvmfs/sw.el7/gcc/6.3/bin/../libexec/gcc/x86_64-pc-linux-gnu/6.3.1/:/cvmfs/sw.el7/gcc/6.3/bin/../libexec/gcc/:/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../../../x86_64-pc-linux-gnu/bin/
+LIBRARY_PATH=/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/:/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/:/cvmfs/sw.el7/gcc/6.3/lib64/../lib64/:/cvmfs/sw.el7/gcc/6.3/lib/../lib64/:/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/cvmfs/sw.el7/gcc63/clhep/2.4.1.3/b01/lib/:/cvmfs/sw.el7/gcc/6.3/lib64/:/cvmfs/sw.el7/gcc/6.3/lib/:/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../../../x86_64-pc-linux-gnu/lib/:/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_eb19c' '-mtune=generic' '-march=x86-64'
+ /cvmfs/sw.el7/gcc/6.3/bin/../libexec/gcc/x86_64-pc-linux-gnu/6.3.1/collect2 -plugin /cvmfs/sw.el7/gcc/6.3/bin/../libexec/gcc/x86_64-pc-linux-gnu/6.3.1/liblto_plugin.so -plugin-opt=/cvmfs/sw.el7/gcc/6.3/bin/../libexec/gcc/x86_64-pc-linux-gnu/6.3.1/lto-wrapper -plugin-opt=-fresolution=/tmp/ccAnGqBf.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --eh-frame-hdr -m elf_x86_64 -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_eb19c /lib/../lib64/crt1.o /lib/../lib64/crti.o /cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/crtbegin.o -L/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1 -L/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc -L/cvmfs/sw.el7/gcc/6.3/lib64/../lib64 -L/cvmfs/sw.el7/gcc/6.3/lib/../lib64 -L/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/cvmfs/sw.el7/gcc63/clhep/2.4.1.3/b01/lib -L/cvmfs/sw.el7/gcc/6.3/lib64 -L/cvmfs/sw.el7/gcc/6.3/lib -L/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../../../x86_64-pc-linux-gnu/lib -L/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../.. CMakeFiles/cmTC_eb19c.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/crtend.o /lib/../lib64/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_eb19c' '-mtune=generic' '-march=x86-64'
+gmake[1]: Leaving directory `/home/t3atlas/aluisa/Geant4/TileFCC/CMakeFiles/CMakeTmp'
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/t3atlas/aluisa/Geant4/TileFCC/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command:"/bin/gmake" "cmTC_eb19c/fast"]
+  ignore line: [/bin/gmake -f CMakeFiles/cmTC_eb19c.dir/build.make CMakeFiles/cmTC_eb19c.dir/build]
+  ignore line: [gmake[1]: Entering directory `/home/t3atlas/aluisa/Geant4/TileFCC/CMakeFiles/CMakeTmp']
+  ignore line: [Building C object CMakeFiles/cmTC_eb19c.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/cvmfs/sw.el7/gcc/6.3/bin/gcc    -o CMakeFiles/cmTC_eb19c.dir/CMakeCCompilerABI.c.o   -c /cvmfs/sw.el7/cmake/3.11.2/share/cmake-3.11/Modules/CMakeCCompilerABI.c]
+  ignore line: [Linking C executable cmTC_eb19c]
+  ignore line: [/cvmfs/sw.el7/cmake/3.11.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_eb19c.dir/link.txt --verbose=1]
+  ignore line: [/cvmfs/sw.el7/gcc/6.3/bin/gcc     -v -rdynamic CMakeFiles/cmTC_eb19c.dir/CMakeCCompilerABI.c.o  -o cmTC_eb19c ]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/cvmfs/sw.el7/gcc/6.3/bin/gcc]
+  ignore line: [COLLECT_LTO_WRAPPER=/cvmfs/sw.el7/gcc/6.3/bin/../libexec/gcc/x86_64-pc-linux-gnu/6.3.1/lto-wrapper]
+  ignore line: [Target: x86_64-pc-linux-gnu]
+  ignore line: [Configured with: ../gcc/configure --prefix=/exper-sw/sw/el7/gcc/6.3 --with-mpfr=/exper-sw/sw/el7/gcc/6.3 --enable-languages=c,c++,fortran,lto,objc --enable-multiarch --enable-shared --enable-threads=posix --with-tune=generic --disable-multilib]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 6.3.1 20170523 (GCC) ]
+  ignore line: [COMPILER_PATH=/cvmfs/sw.el7/gcc/6.3/bin/../libexec/gcc/x86_64-pc-linux-gnu/6.3.1/:/cvmfs/sw.el7/gcc/6.3/bin/../libexec/gcc/:/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../../../x86_64-pc-linux-gnu/bin/]
+  ignore line: [LIBRARY_PATH=/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/:/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/:/cvmfs/sw.el7/gcc/6.3/lib64/../lib64/:/cvmfs/sw.el7/gcc/6.3/lib/../lib64/:/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/cvmfs/sw.el7/gcc63/clhep/2.4.1.3/b01/lib/:/cvmfs/sw.el7/gcc/6.3/lib64/:/cvmfs/sw.el7/gcc/6.3/lib/:/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../../../x86_64-pc-linux-gnu/lib/:/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../../:/lib/:/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_eb19c' '-mtune=generic' '-march=x86-64']
+  link line: [ /cvmfs/sw.el7/gcc/6.3/bin/../libexec/gcc/x86_64-pc-linux-gnu/6.3.1/collect2 -plugin /cvmfs/sw.el7/gcc/6.3/bin/../libexec/gcc/x86_64-pc-linux-gnu/6.3.1/liblto_plugin.so -plugin-opt=/cvmfs/sw.el7/gcc/6.3/bin/../libexec/gcc/x86_64-pc-linux-gnu/6.3.1/lto-wrapper -plugin-opt=-fresolution=/tmp/ccAnGqBf.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --eh-frame-hdr -m elf_x86_64 -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_eb19c /lib/../lib64/crt1.o /lib/../lib64/crti.o /cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/crtbegin.o -L/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1 -L/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc -L/cvmfs/sw.el7/gcc/6.3/lib64/../lib64 -L/cvmfs/sw.el7/gcc/6.3/lib/../lib64 -L/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/cvmfs/sw.el7/gcc63/clhep/2.4.1.3/b01/lib -L/cvmfs/sw.el7/gcc/6.3/lib64 -L/cvmfs/sw.el7/gcc/6.3/lib -L/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../../../x86_64-pc-linux-gnu/lib -L/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../.. CMakeFiles/cmTC_eb19c.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/crtend.o /lib/../lib64/crtn.o]
+    arg [/cvmfs/sw.el7/gcc/6.3/bin/../libexec/gcc/x86_64-pc-linux-gnu/6.3.1/collect2] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [/cvmfs/sw.el7/gcc/6.3/bin/../libexec/gcc/x86_64-pc-linux-gnu/6.3.1/liblto_plugin.so] ==> ignore
+    arg [-plugin-opt=/cvmfs/sw.el7/gcc/6.3/bin/../libexec/gcc/x86_64-pc-linux-gnu/6.3.1/lto-wrapper] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccAnGqBf.res] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_x86_64] ==> ignore
+    arg [-export-dynamic] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_eb19c] ==> ignore
+    arg [/lib/../lib64/crt1.o] ==> ignore
+    arg [/lib/../lib64/crti.o] ==> ignore
+    arg [/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/crtbegin.o] ==> ignore
+    arg [-L/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1] ==> dir [/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1]
+    arg [-L/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc] ==> dir [/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc]
+    arg [-L/cvmfs/sw.el7/gcc/6.3/lib64/../lib64] ==> dir [/cvmfs/sw.el7/gcc/6.3/lib64/../lib64]
+    arg [-L/cvmfs/sw.el7/gcc/6.3/lib/../lib64] ==> dir [/cvmfs/sw.el7/gcc/6.3/lib/../lib64]
+    arg [-L/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../../../lib64] ==> dir [/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../../../lib64]
+    arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+    arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+    arg [-L/cvmfs/sw.el7/gcc63/clhep/2.4.1.3/b01/lib] ==> dir [/cvmfs/sw.el7/gcc63/clhep/2.4.1.3/b01/lib]
+    arg [-L/cvmfs/sw.el7/gcc/6.3/lib64] ==> dir [/cvmfs/sw.el7/gcc/6.3/lib64]
+    arg [-L/cvmfs/sw.el7/gcc/6.3/lib] ==> dir [/cvmfs/sw.el7/gcc/6.3/lib]
+    arg [-L/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../../../x86_64-pc-linux-gnu/lib] ==> dir [/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../../../x86_64-pc-linux-gnu/lib]
+    arg [-L/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../..] ==> dir [/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../..]
+    arg [CMakeFiles/cmTC_eb19c.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [-lc] ==> lib [c]
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/crtend.o] ==> ignore
+    arg [/lib/../lib64/crtn.o] ==> ignore
+  collapse library dir [/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1] ==> [/cvmfs/sw.el7/gcc/6.3/lib/gcc/x86_64-pc-linux-gnu/6.3.1]
+  collapse library dir [/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc] ==> [/cvmfs/sw.el7/gcc/6.3/lib/gcc]
+  collapse library dir [/cvmfs/sw.el7/gcc/6.3/lib64/../lib64] ==> [/cvmfs/sw.el7/gcc/6.3/lib64]
+  collapse library dir [/cvmfs/sw.el7/gcc/6.3/lib/../lib64] ==> [/cvmfs/sw.el7/gcc/6.3/lib64]
+  collapse library dir [/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../../../lib64] ==> [/cvmfs/sw.el7/gcc/6.3/lib64]
+  collapse library dir [/lib/../lib64] ==> [/lib64]
+  collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+  collapse library dir [/cvmfs/sw.el7/gcc63/clhep/2.4.1.3/b01/lib] ==> [/cvmfs/sw.el7/gcc63/clhep/2.4.1.3/b01/lib]
+  collapse library dir [/cvmfs/sw.el7/gcc/6.3/lib64] ==> [/cvmfs/sw.el7/gcc/6.3/lib64]
+  collapse library dir [/cvmfs/sw.el7/gcc/6.3/lib] ==> [/cvmfs/sw.el7/gcc/6.3/lib]
+  collapse library dir [/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../../../x86_64-pc-linux-gnu/lib] ==> [/cvmfs/sw.el7/gcc/6.3/x86_64-pc-linux-gnu/lib]
+  collapse library dir [/cvmfs/sw.el7/gcc/6.3/bin/../lib/gcc/x86_64-pc-linux-gnu/6.3.1/../../..] ==> [/cvmfs/sw.el7/gcc/6.3/lib]
+  implicit libs: [gcc;gcc_s;c;gcc;gcc_s]
+  implicit dirs: [/cvmfs/sw.el7/gcc/6.3/lib/gcc/x86_64-pc-linux-gnu/6.3.1;/cvmfs/sw.el7/gcc/6.3/lib/gcc;/cvmfs/sw.el7/gcc/6.3/lib64;/lib64;/usr/lib64;/cvmfs/sw.el7/gcc63/clhep/2.4.1.3/b01/lib;/cvmfs/sw.el7/gcc/6.3/lib;/cvmfs/sw.el7/gcc/6.3/x86_64-pc-linux-gnu/lib]
+  implicit fwks: []
+
+
+
+
+Detecting C [-std=c11] compiler features compiled with the following output:
+Change Dir: /home/t3atlas/aluisa/Geant4/TileFCC/CMakeFiles/CMakeTmp
+
+Run Build Command:"/bin/gmake" "cmTC_061dd/fast"
+/bin/gmake -f CMakeFiles/cmTC_061dd.dir/build.make CMakeFiles/cmTC_061dd.dir/build
+gmake[1]: Entering directory `/home/t3atlas/aluisa/Geant4/TileFCC/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_061dd.dir/feature_tests.c.o
+/cvmfs/sw.el7/gcc/6.3/bin/gcc   -std=c11 -o CMakeFiles/cmTC_061dd.dir/feature_tests.c.o   -c /home/t3atlas/aluisa/Geant4/TileFCC/CMakeFiles/feature_tests.c
+Linking C executable cmTC_061dd
+/cvmfs/sw.el7/cmake/3.11.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_061dd.dir/link.txt --verbose=1
+/cvmfs/sw.el7/gcc/6.3/bin/gcc      -rdynamic CMakeFiles/cmTC_061dd.dir/feature_tests.c.o  -o cmTC_061dd 
+gmake[1]: Leaving directory `/home/t3atlas/aluisa/Geant4/TileFCC/CMakeFiles/CMakeTmp'
+
+
+    Feature record: C_FEATURE:1c_function_prototypes
+    Feature record: C_FEATURE:1c_restrict
+    Feature record: C_FEATURE:1c_static_assert
+    Feature record: C_FEATURE:1c_variadic_macros
+
+
+Detecting C [-std=c99] compiler features compiled with the following output:
+Change Dir: /home/t3atlas/aluisa/Geant4/TileFCC/CMakeFiles/CMakeTmp
+
+Run Build Command:"/bin/gmake" "cmTC_de55f/fast"
+/bin/gmake -f CMakeFiles/cmTC_de55f.dir/build.make CMakeFiles/cmTC_de55f.dir/build
+gmake[1]: Entering directory `/home/t3atlas/aluisa/Geant4/TileFCC/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_de55f.dir/feature_tests.c.o
+/cvmfs/sw.el7/gcc/6.3/bin/gcc   -std=c99 -o CMakeFiles/cmTC_de55f.dir/feature_tests.c.o   -c /home/t3atlas/aluisa/Geant4/TileFCC/CMakeFiles/feature_tests.c
+Linking C executable cmTC_de55f
+/cvmfs/sw.el7/cmake/3.11.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_de55f.dir/link.txt --verbose=1
+/cvmfs/sw.el7/gcc/6.3/bin/gcc      -rdynamic CMakeFiles/cmTC_de55f.dir/feature_tests.c.o  -o cmTC_de55f 
+gmake[1]: Leaving directory `/home/t3atlas/aluisa/Geant4/TileFCC/CMakeFiles/CMakeTmp'
+
+
+    Feature record: C_FEATURE:1c_function_prototypes
+    Feature record: C_FEATURE:1c_restrict
+    Feature record: C_FEATURE:0c_static_assert
+    Feature record: C_FEATURE:1c_variadic_macros

@@ -257,6 +257,9 @@ Qt5PrintSupport_DIR:PATH=/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/lib/cmake/Qt5Prin
 //The directory containing a CMake configuration file for Qt5Widgets.
 Qt5Widgets_DIR:PATH=/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/lib/cmake/Qt5Widgets
 
+//Dependencies for target
+TileFCCTile_LIB_DEPENDS:STATIC=
+
 //Value Computed by CMake
 TileFCC_BINARY_DIR:STATIC=/home/t3atlas/aluisa/Geant4/TileFCC/build
 
