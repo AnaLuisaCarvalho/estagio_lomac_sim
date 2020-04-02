@@ -718,6 +718,20 @@ G4BlockingList.icc
 
 /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4BlockingList.icc
 
+/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4BooleanSolid.hh
+G4DisplacedSolid.hh
+/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4DisplacedSolid.hh
+G4ThreeVector.hh
+/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4ThreeVector.hh
+G4RotationMatrix.hh
+/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4RotationMatrix.hh
+G4Transform3D.hh
+/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4Transform3D.hh
+G4BooleanSolid.icc
+/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4BooleanSolid.icc
+
+/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4BooleanSolid.icc
+
 /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4BoundingEnvelope.hh
 vector
 -
@@ -795,6 +809,18 @@ G4DataVector.icc
 /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4DataVector.icc
 
 /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4DataVector.icc
+
+/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4DisplacedSolid.hh
+G4VSolid.hh
+/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4VSolid.hh
+G4RotationMatrix.hh
+/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4RotationMatrix.hh
+G4ThreeVector.hh
+/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4ThreeVector.hh
+G4Transform3D.hh
+/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4Transform3D.hh
+G4AffineTransform.hh
+/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4AffineTransform.hh
 
 /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4DynamicParticle.hh
 cmath
@@ -1900,6 +1926,20 @@ G4String.icc
 
 /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4String.icc
 
+/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4SubtractionSolid.hh
+G4BooleanSolid.hh
+/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4BooleanSolid.hh
+G4VSolid.hh
+/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4VSolid.hh
+G4RotationMatrix.hh
+/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4RotationMatrix.hh
+G4ThreeVector.hh
+/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4ThreeVector.hh
+G4Transform3D.hh
+/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4Transform3D.hh
+G4AffineTransform.hh
+/cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4AffineTransform.hh
+
 /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4SystemOfUnits.hh
 CLHEP/Units/SystemOfUnits.h
 -
@@ -2531,4 +2571,8 @@ G4PVPlacement.hh
 /home/t3atlas/aluisa/Geant4/TileFCC/src/G4PVPlacement.hh
 G4SystemOfUnits.hh
 /home/t3atlas/aluisa/Geant4/TileFCC/src/G4SystemOfUnits.hh
+G4SubtractionSolid.hh
+/home/t3atlas/aluisa/Geant4/TileFCC/src/G4SubtractionSolid.hh
+G4ThreeVector.hh
+/home/t3atlas/aluisa/Geant4/TileFCC/src/G4ThreeVector.hh
 

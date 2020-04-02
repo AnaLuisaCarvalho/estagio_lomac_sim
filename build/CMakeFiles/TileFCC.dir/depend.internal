@@ -1948,6 +1948,8 @@ CMakeFiles/TileFCC.dir/src/TileFCCTile.cc.o
  /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4AuxiliaryNavServices.icc
  /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4BlockingList.hh
  /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4BlockingList.icc
+ /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4BooleanSolid.hh
+ /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4BooleanSolid.icc
  /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4BoundingEnvelope.hh
  /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4Box.hh
  /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4Box.icc
@@ -1958,6 +1960,7 @@ CMakeFiles/TileFCC.dir/src/TileFCCTile.cc.o
  /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4DCofThisEvent.hh
  /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4DataVector.hh
  /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4DataVector.icc
+ /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4DisplacedSolid.hh
  /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4DynamicParticle.hh
  /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4DynamicParticle.icc
  /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4ElectronOccupancy.hh
@@ -2079,6 +2082,7 @@ CMakeFiles/TileFCC.dir/src/TileFCCTile.cc.o
  /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4SteppingManager.hh
  /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4String.hh
  /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4String.icc
+ /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4SubtractionSolid.hh
  /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4SystemOfUnits.hh
  /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4Threading.hh
  /cvmfs/sw.el7/gcc63/geant/4.10.06/b01/include/Geant4/G4ThreeVector.hh
