@@ -29,9 +29,10 @@
 
 #include "TileFCCEventAction.hh"
 #include "TileFCCRunAction.hh"
+#include "TileFCCAnalysis.hh"
 
-#include "G4Event.hh"
 #include "G4RunManager.hh"
+#include "G4Event.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,6 +60,13 @@ void TileFCCEventAction::EndOfEventAction(const G4Event*)
 {   
   // accumulate statistics in run action
   fRunAction->AddEdep(fEdep);
+  
+  // get analysis manager                                                                                                 
+  auto analysisManager = G4AnalysisManager::Instance();
+
+  // Fill ntuple
+  analysisManager->FillNtupleDColumn(0, fEdep);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

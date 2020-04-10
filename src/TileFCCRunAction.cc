@@ -28,6 +28,7 @@
 /// \brief Implementation of the TileFCCRunAction class
 
 #include "TileFCCRunAction.hh"
+#include "TileFCCAnalysis.hh"
 #include "TileFCCPrimaryGeneratorAction.hh"
 #include "TileFCCDetectorConstruction.hh"
 // #include "TileFCCRun.hh"
@@ -63,6 +64,19 @@ TileFCCRunAction::TileFCCRunAction()
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
   accumulableManager->RegisterAccumulable(fEdep);
   accumulableManager->RegisterAccumulable(fEdep2); 
+
+  // Create analysis manager
+  auto analysisManager = G4AnalysisManager::Instance();
+  G4cout << "Using " << analysisManager->GetType() << G4endl;
+
+  analysisManager->SetVerboseLevel(1);
+  analysisManager->SetNtupleMerging(true);
+
+  // Book ntuple
+  analysisManager->CreateNtuple("eventTree","eventTree");
+  analysisManager->CreateNtupleDColumn("Edep");
+  analysisManager->FinishNtuple();
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,6 +95,11 @@ void TileFCCRunAction::BeginOfRunAction(const G4Run*)
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
   accumulableManager->Reset();
 
+  // Get analysis manager
+  auto analysisManager = G4AnalysisManager::Instance();
+  // Open output file and give it to analysis manager
+  G4String fileName = "outputNtupleTileFCC";
+  analysisManager->OpenFile(fileName);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -148,6 +167,11 @@ void TileFCCRunAction::EndOfRunAction(const G4Run* run)
      << "------------------------------------------------------------"
      << G4endl
      << G4endl;
+
+  // Close file
+  auto analysisManager = G4AnalysisManager::Instance();
+  analysisManager->CloseFile();
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

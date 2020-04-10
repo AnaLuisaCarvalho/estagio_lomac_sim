@@ -43,8 +43,7 @@
 
 TileFCCPrimaryGeneratorAction::TileFCCPrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),
-  fParticleGun(0), 
-  fEnvelopeBox(0)
+  fParticleGun(0)
 {
   G4int n_particle = 1;
   fParticleGun  = new G4ParticleGun(n_particle);
@@ -53,10 +52,10 @@ TileFCCPrimaryGeneratorAction::TileFCCPrimaryGeneratorAction()
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
   G4ParticleDefinition* particle
-    = particleTable->FindParticle(particleName="gamma");
+    = particleTable->FindParticle(particleName="e-");
   fParticleGun->SetParticleDefinition(particle);
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  fParticleGun->SetParticleEnergy(6.*MeV);
+  fParticleGun->SetParticleEnergy(0.4*MeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,36 +75,29 @@ void TileFCCPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // In order to avoid dependence of PrimaryGeneratorAction
   // on DetectorConstruction class we get Envelope volume
   // from G4LogicalVolumeStore.
-  
-  G4double envSizeXY = 0;
-  G4double envSizeZ = 0;
+  G4double worldZHalfLength = 0.;
+  auto worldLV = G4LogicalVolumeStore::GetInstance()->GetVolume("World");
 
-  if (!fEnvelopeBox)
-  {
-    G4LogicalVolume* envLV
-      = G4LogicalVolumeStore::GetInstance()->GetVolume("Envelope");
-    if ( envLV ) fEnvelopeBox = dynamic_cast<G4Box*>(envLV->GetSolid());
+  // Check that the world volume has box shape                                                                            
+  G4Box* worldBox = nullptr;
+  if (  worldLV ) {
+    worldBox = dynamic_cast<G4Box*>(worldLV->GetSolid());
   }
 
-  if ( fEnvelopeBox ) {
-    envSizeXY = fEnvelopeBox->GetXHalfLength()*2.;
-    envSizeZ = fEnvelopeBox->GetZHalfLength()*2.;
-  }  
+  if ( worldBox ) {
+    worldZHalfLength = worldBox->GetZHalfLength();
+  }
   else  {
     G4ExceptionDescription msg;
-    msg << "Envelope volume of box shape not found.\n"; 
-    msg << "Perhaps you have changed geometry.\n";
-    msg << "The gun will be place at the center.";
-    G4Exception("TileFCCPrimaryGeneratorAction::GeneratePrimaries()",
-     "MyCode0002",JustWarning,msg);
+    msg << "World volume of box shape not found." << G4endl;
+    msg << "Perhaps you have changed geometry." << G4endl;
+    msg << "The gun will be place in the center.";
+    G4Exception("B4PrimaryGeneratorAction::GeneratePrimaries()",
+		"MyCode0002", JustWarning, msg);
   }
 
-  G4double size = 0.8; 
-  G4double x0 = size * envSizeXY * (G4UniformRand()-0.5);
-  G4double y0 = size * envSizeXY * (G4UniformRand()-0.5);
-  G4double z0 = -0.5 * envSizeZ;
-  
-  fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+  // Set particle gun position
+  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., -worldZHalfLength));
 
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }

@@ -29,7 +29,6 @@
 
 #include "TileFCCDetectorConstruction.hh"
 #include "TileFCCActionInitialization.hh"
-#include "TileFCCTile.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -38,6 +37,7 @@
 #endif
 
 #include "G4UImanager.hh"
+#include "G4UIcommand.hh"
 #include "QBBC.hh"
 
 #include "G4VisExecutive.hh"
@@ -47,13 +47,46 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+namespace {
+  void PrintUsage() {
+    G4cerr << " Usage: " << G4endl;
+    G4cerr << " exampleB4a [-m macro ] [-u UIsession] [-t nThreads]" << G4endl;
+    G4cerr << "   note: -t option is available only for multi-threaded mode."
+           << G4endl;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 int main(int argc,char** argv)
 {
+
+  PrintUsage();
+
+  G4String macro;
+  G4String session;
+#ifdef G4MULTITHREADED
+  G4int nThreads = 0;
+#endif
+  for ( G4int i=1; i<argc; i=i+2 ) {
+    if      ( G4String(argv[i]) == "-m" ) macro = argv[i+1];
+    else if ( G4String(argv[i]) == "-u" ) session = argv[i+1];
+#ifdef G4MULTITHREADED
+    else if ( G4String(argv[i]) == "-t" ) {
+      nThreads = G4UIcommand::ConvertToInt(argv[i+1]);
+    }
+#endif
+    else {
+      PrintUsage();
+      return 1;
+    }
+  }
+
   // Detect interactive mode (if no arguments) and define UI session
   //
-  G4UIExecutive* ui = 0;
-  if ( argc == 1 ) {
-    ui = new G4UIExecutive(argc, argv);
+  G4UIExecutive* ui = nullptr;
+  if ( ! macro.size() ) {
+    ui = new G4UIExecutive(argc, argv, session);
   }
 
   // Optionally: choose a different Random engine...
@@ -92,19 +125,21 @@ int main(int argc,char** argv)
 
   // Process macro or start UI session
   //
-  if ( ! ui ) { 
-    // batch mode
+  if ( macro.size() ) {
+    // batch mode                                                                                                         
     G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
+    UImanager->ApplyCommand(command+macro);
   }
-  else { 
-    // interactive mode
+  else  {
+    // interactive mode : define UI session                                                                               
     UImanager->ApplyCommand("/control/execute init_vis.mac");
+    if (ui->IsGUI()) {
+      UImanager->ApplyCommand("/control/execute gui.mac");
+    }
     ui->SessionStart();
     delete ui;
   }
-
+  
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
   // owned and deleted by the run manager, so they should not be deleted 

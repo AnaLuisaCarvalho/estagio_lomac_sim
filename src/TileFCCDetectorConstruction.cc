@@ -60,18 +60,13 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   // Get nist material manager
   G4NistManager* nist = G4NistManager::Instance();
   
-  // Envelope parameters
-  //
-  G4double env_sizeXY = 20*cm, env_sizeZ = 30*cm;
-  G4Material* env_mat = nist->FindOrBuildMaterial("G4_WATER");
-   
   // Option to switch on/off checking of volumes overlaps
-  //
   G4bool checkOverlaps = true;
 
   //     
   // World
   //
+  G4double env_sizeXY = 50*cm, env_sizeZ = 50*cm;
   G4double world_sizeXY = 1.2*env_sizeXY;
   G4double world_sizeZ  = 1.2*env_sizeZ;
   G4Material* world_mat = nist->FindOrBuildMaterial("G4_AIR");
@@ -100,6 +95,8 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4LogicalVolume *tile_vol = tile_obj->Construct();
   // Place it in world
   G4VPhysicalVolume *tile_phys = new G4PVPlacement(0,G4ThreeVector(),tile_vol,"tile_vol",logicWorld,false,0,checkOverlaps);
+
+  fScoringVolume = tile_vol;
 
   return physWorld;
 }
