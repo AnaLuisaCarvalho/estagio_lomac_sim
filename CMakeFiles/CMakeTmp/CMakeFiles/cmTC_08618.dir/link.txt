@@ -1,1 +1,0 @@
-/cvmfs/sw.el7/gcc/6.3/bin/gcc      -rdynamic CMakeFiles/cmTC_08618.dir/feature_tests.c.o  -o cmTC_08618 
