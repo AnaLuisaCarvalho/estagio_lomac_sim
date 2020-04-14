@@ -39,7 +39,10 @@
 TileFCCEventAction::TileFCCEventAction(TileFCCRunAction* runAction)
 : G4UserEventAction(),
   fRunAction(runAction),
-  fEdep(0.)
+  fEdep(0.),
+  fHitX(-999.),
+  fHitY(-999.),
+  fHitZ(-999.)  
 {} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,6 +55,9 @@ TileFCCEventAction::~TileFCCEventAction()
 void TileFCCEventAction::BeginOfEventAction(const G4Event*)
 {    
   fEdep = 0.;
+  fHitX = -999.;
+  fHitY = -999.;
+  fHitZ = -999.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,6 +72,10 @@ void TileFCCEventAction::EndOfEventAction(const G4Event*)
 
   // Fill ntuple
   analysisManager->FillNtupleDColumn(0, fEdep);
+  analysisManager->FillNtupleDColumn(1, fHitX);
+  analysisManager->FillNtupleDColumn(2, fHitY);
+  analysisManager->FillNtupleDColumn(3, fHitZ);
+  analysisManager->AddNtupleRow();
 
 }
 

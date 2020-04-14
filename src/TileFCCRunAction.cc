@@ -46,7 +46,10 @@
 TileFCCRunAction::TileFCCRunAction()
 : G4UserRunAction(),
   fEdep(0.),
-  fEdep2(0.)
+  fEdep2(0.),
+  fHitX(-999.),
+  fHitY(-999.),
+  fHitZ(-999.)
 { 
   // add new units for dose
   // 
@@ -75,6 +78,9 @@ TileFCCRunAction::TileFCCRunAction()
   // Book ntuple
   analysisManager->CreateNtuple("eventTree","eventTree");
   analysisManager->CreateNtupleDColumn("Edep");
+  analysisManager->CreateNtupleDColumn("HitX");
+  analysisManager->CreateNtupleDColumn("HitY");
+  analysisManager->CreateNtupleDColumn("HitZ");
   analysisManager->FinishNtuple();
 
 }
@@ -170,6 +176,7 @@ void TileFCCRunAction::EndOfRunAction(const G4Run* run)
 
   // Close file
   auto analysisManager = G4AnalysisManager::Instance();
+  analysisManager->Write();
   analysisManager->CloseFile();
 
 }
@@ -182,6 +189,12 @@ void TileFCCRunAction::AddEdep(G4double edep)
   fEdep2 += edep*edep;
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void TileFCCRunAction::AddHit(G4double hitX, G4double hitY, G4double hitZ){
+
+  fHitX = hitX;
+  fHitY = hitY;
+  fHitZ = hitZ;
+
+}

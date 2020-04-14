@@ -71,6 +71,14 @@ void TileFCCSteppingAction::UserSteppingAction(const G4Step* step)
   // collect energy deposited in this step
   G4double edepStep = step->GetTotalEnergyDeposit();
   fEventAction->AddEdep(edepStep);  
+
+  // save hit position
+  G4ThreeVector vec_hit = step->GetTrack()->GetPosition();
+  G4double x_hit = vec_hit.x();
+  G4double y_hit = vec_hit.y();
+  G4double z_hit = vec_hit.z();
+  fEventAction->AddHit(x_hit,y_hit,z_hit);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

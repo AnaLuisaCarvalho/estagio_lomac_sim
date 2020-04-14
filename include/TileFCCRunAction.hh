@@ -53,10 +53,15 @@ class TileFCCRunAction : public G4UserRunAction
     virtual void   EndOfRunAction(const G4Run*);
 
     void AddEdep (G4double edep); 
+    void AddHit(G4double hitX, G4double hitY, G4double hitZ);
 
   private:
     G4Accumulable<G4double> fEdep;
     G4Accumulable<G4double> fEdep2;
+    G4double fHitX;
+    G4double fHitY;
+    G4double fHitZ;
+
 };
 
 #endif

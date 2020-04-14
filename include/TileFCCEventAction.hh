@@ -48,10 +48,19 @@ class TileFCCEventAction : public G4UserEventAction
     virtual void EndOfEventAction(const G4Event* event);
 
     void AddEdep(G4double edep) { fEdep += edep; }
+    void AddHit(G4double hitX, G4double hitY, G4double hitZ) {
+      fHitX = hitX;
+      fHitY = hitY;
+      fHitZ = hitZ;
+    }
 
   private:
     TileFCCRunAction* fRunAction;
     G4double     fEdep;
+    G4double fHitX;
+    G4double fHitY;
+    G4double fHitZ;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
