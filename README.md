@@ -9,7 +9,10 @@ At fermi/pauli (following http://geant4-userdoc.web.cern.ch/geant4-userdoc/Users
 - cd build
 - cmake -DGeant4_DIR=<path to geant installation> <path to CMakeLists.txt> or -DGeant4_DIR=`which geant`
 - make
-- ./TileFCC -m run.mac -u vis.mac 
+- ./TileFCC -m ../run.mac -u ../vis.mac
+  - Macros located in mother directory (TileFCC)
+  - run.mac: runs over 1000 events and writes output to root file 
+  - vis.mac: runs over (small number of)events and should include visualization, not working properly yet.  
 
 Current strategy for building the experimental setup:
 - TileFCCDetectorConstruction.cc is the file where we collect all the pieces and place them in the correct position
