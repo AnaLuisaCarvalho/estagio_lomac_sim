@@ -70,6 +70,7 @@ endforeach()
 # example standalone
 #
 add_custom_target(Tile DEPENDS TileFCC)
+add_custom_target(UVA DEPENDS userVisAction)
 
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX

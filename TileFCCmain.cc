@@ -42,8 +42,10 @@
 
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+//#include "UVA_VisAction.hh"
 
 #include "Randomize.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -118,6 +120,7 @@ int main(int argc,char** argv)
   G4VisManager* visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   // G4VisManager* visManager = new G4VisExecutive("Quiet");
+  //visManager->RegisterRunDurationUserVisAction("My nice logo",new UVA_VisAction,G4VisExtent(-20*cm,-10*cm,-25*cm,-15*cm,20*cm,40*cm));
   visManager->Initialize();
 
   // Get the pointer to the User Interface manager
@@ -147,6 +150,8 @@ int main(int argc,char** argv)
   
   delete visManager;
   delete runManager;
+
+  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
