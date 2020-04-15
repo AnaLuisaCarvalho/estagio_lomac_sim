@@ -6,6 +6,7 @@ Starting from geant4 example B1: https://gitlab.cern.ch/geant4/geant4/tree/maste
 
 At fermi/pauli (following http://geant4-userdoc.web.cern.ch/geant4-userdoc/UsersGuides/ForApplicationDeveloper/html/GettingStarted/makeFile.html):
 - source setup.sh (does module load of geant4, cmake11 and root6)
+- mkdir build
 - cd build
 - cmake -DGeant4_DIR=<path to geant installation> <path to CMakeLists.txt> or -DGeant4_DIR=`which geant`
 - make
