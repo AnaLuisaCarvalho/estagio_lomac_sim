@@ -54,8 +54,8 @@ TileFCCPrimaryGeneratorAction::TileFCCPrimaryGeneratorAction()
   G4ParticleDefinition* particle
     = particleTable->FindParticle(particleName="e-");
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  fParticleGun->SetParticleEnergy(0.4*MeV);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
+  fParticleGun->SetParticleEnergy(0.5*MeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -97,7 +97,7 @@ void TileFCCPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   }
 
   // Set particle gun position
-  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., -worldZHalfLength));
+  fParticleGun->SetParticlePosition(G4ThreeVector(-worldZHalfLength, 0., 0.));
 
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }

@@ -1,5 +1,5 @@
-# Macro file for the visualization setting for the initialization phase 
-# of the B4 example when running in interactive mode
+# Macro file for the visualization setting in the initialization phase 
+# of the B1 example when running in interactive mode
 #
 
 # Use these open statements to open selected visualization
@@ -8,7 +8,7 @@
 /vis/open OGL 600x600-0+0
 #
 # Use this open statement to create an OpenInventor view:
-#/vis/open OIX
+#/vis/open OI
 #
 # Use this open statement to create a .prim file suitable for
 # viewing in DAWN:
@@ -28,21 +28,17 @@
 /vis/verbose errors
 #
 # Draw geometry:
-/vis/drawVolume
+/vis/drawVolume World
+/vis/drawVolume TileFCC
 #
 # Specify view angle:
-/vis/viewer/set/viewpointThetaPhi 120. 150.
-#
-# Specify zoom value:
-#/vis/viewer/zoom 2.
+/vis/viewer/set/viewpointVector -1 0 0
+/vis/viewer/set/lightsVector -1 0 0
 #
 # Specify style (surface, wireframe, auxiliary edges,...)
 #/vis/viewer/set/style wireframe
 #/vis/viewer/set/auxiliaryEdge true
 #/vis/viewer/set/lineSegmentsPerCircle 100
-#
-# Draw coordinate axes:
-#/vis/scene/add/axes 0 0 0 1 m
 #
 # Draw smooth trajectories at end of event, showing trajectory points
 # as markers 2 pixels wide:
@@ -53,7 +49,7 @@
 # (if too many tracks cause core dump => /tracking/storeTrajectory 0)
 #
 # Draw hits at end of event:
-#/vis/scene/add/hits
+/vis/scene/add/hits
 #
 # To draw only gammas:
 #/vis/filtering/trajectories/create/particleFilter
@@ -74,7 +70,6 @@
 # To superimpose all of the events from a given run:
 /vis/scene/endOfEventAction accumulate
 #
-
 # Decorations
 # Name
 /vis/set/textColour green
@@ -99,17 +94,28 @@
 /vis/scene/add/frame   # Simple frame around the view
 /vis/set/colour        # Revert to default colour (white)
 /vis/set/lineWidth     # Revert to default line width (1.)
-
+#
+# Attach text to one edge of Shape1, with a small, fixed offset
+#/vis/scene/add/text 0 6 -4 cm 18 4 4 Shape1
+# Attach text to one corner of Shape2, with a small, fixed offset
+#/vis/scene/add/text 6 7 10 cm 18 4 4 Shape2
+#
+# To get nice view
+# Make the "World" box invisible
+#/vis/geometry/set/visibility World 0 false
+# "Envelope" is transparent blue to represent water
+#/vis/geometry/set/colour Envelope 0 0 0 1 .3
+#/vis/viewer/set/style surface
+#/vis/viewer/set/hiddenMarker true
+#/vis/viewer/set/viewpointThetaPhi 120 150
+#
 # Re-establish auto refreshing and verbosity:
 /vis/viewer/set/autoRefresh true
 /vis/verbose warnings
 #
 # For file-based drivers, use this to create an empty detector view:
+#/tracking/storeTrajectory 1
+#/run/initialize
+#/run/beamOn 1
 
-#/gun/particle e-
-#/gun/energy 5 MeV
-#/gun/position 0 0 0 cm
-#/gun/direction -1 0 0
-
-/run/beamOn 1
 /vis/viewer/flush

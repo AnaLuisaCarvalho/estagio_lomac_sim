@@ -129,16 +129,13 @@ int main(int argc,char** argv)
   // Process macro or start UI session
   //
   if ( macro.size() ) {
-    // batch mode                                                                                                         
+    // batch mode                                                                                                        
     G4String command = "/control/execute ";
     UImanager->ApplyCommand(command+macro);
   }
   else  {
-    // interactive mode : define UI session                                                                               
+    // interactive mode : define UI session                                                                              
     UImanager->ApplyCommand("/control/execute init_vis.mac");
-    if (ui->IsGUI()) {
-      UImanager->ApplyCommand("/control/execute gui.mac");
-    }
     ui->SessionStart();
     delete ui;
   }
