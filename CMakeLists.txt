@@ -34,15 +34,15 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 #----------------------------------------------------------------------------
 # Create libraries
-add_library(TileFCCTile SHARED
-  src/TileFCCTile.cc
-)
+#add_library(TileFCCTile SHARED
+#  src/TileFCCTile.cc
+#)
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(TileFCC TileFCCmain.cc ${sources} ${headers})
-target_link_libraries(TileFCC ${Geant4_LIBRARIES} TileFCCTile)
+target_link_libraries(TileFCC ${Geant4_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
