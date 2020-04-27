@@ -39,6 +39,10 @@
 #include "G4UImanager.hh"
 #include "G4UIcommand.hh"
 #include "QBBC.hh"
+#include "FTFP_BERT.hh"
+
+#include "G4OpticalPhysics.hh"
+#include "G4EmStandardPhysics_option4.hh"
 
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
@@ -108,7 +112,19 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new TileFCCDetectorConstruction());
 
   // Physics list
-  G4VModularPhysicsList* physicsList = new QBBC;
+  G4VModularPhysicsList* physicsList = new FTFP_BERT;
+  physicsList->ReplacePhysics(new G4EmStandardPhysics_option4);
+  // Optical physics
+  G4OpticalPhysics *opticalPhysics = new G4OpticalPhysics();
+  opticalPhysics->SetWLSTimeProfile("delta");
+  opticalPhysics->SetScintillationYieldFactor(1.0);
+  opticalPhysics->SetScintillationExcitationRatio(0.0);
+  opticalPhysics->SetMaxNumPhotonsPerStep(100);
+  opticalPhysics->SetMaxBetaChangePerStep(10.0);
+  opticalPhysics->SetTrackSecondariesFirst(kScintillation,true);
+  
+  physicsList->RegisterPhysics(opticalPhysics);
+
   physicsList->SetVerboseLevel(1);
   runManager->SetUserInitialization(physicsList);
     
