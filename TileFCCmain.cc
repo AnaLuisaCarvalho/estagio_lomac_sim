@@ -119,7 +119,7 @@ int main(int argc,char** argv)
   opticalPhysics->SetWLSTimeProfile("delta");
   opticalPhysics->SetScintillationYieldFactor(1.0);
   opticalPhysics->SetScintillationExcitationRatio(0.0);
-  opticalPhysics->SetMaxNumPhotonsPerStep(100);
+  opticalPhysics->SetMaxNumPhotonsPerStep(10);
   opticalPhysics->SetMaxBetaChangePerStep(10.0);
   opticalPhysics->SetTrackSecondariesFirst(kScintillation,true);
   
@@ -147,6 +147,7 @@ int main(int argc,char** argv)
   if ( macro.size() ) {
     // batch mode                                                                                                        
     G4String command = "/control/execute ";
+
     UImanager->ApplyCommand(command+macro);
   }
   else  {
