@@ -102,6 +102,9 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   // Polystyrene (PS)                                                    
   G4Material *polystyrene = nist->FindOrBuildMaterial("G4_POLYSTYRENE");
 
+  // Polyethylene
+  G4Material *polyethylene = nist->FindOrBuildMaterial("G4_POLYETHYLENE");
+
   // Polytetrafluoroethylene  
   G4double dFP = 1.43*g/cm3;    
   G4Material *FP = new G4Material("FP",dFP,2);
@@ -173,30 +176,28 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
 
   // Geometric parameters for tile+wrapper      
   G4double small_side = 288*mm, big_side = 302*mm, height = 147*mm, thickness = 5*mm;
+  G4double d_side = (big_side-small_side)/2;
+  G4double alpha = atan(d_side/height);
   G4double e = 200*um; // thickness of the wrapper                                              
+  // Geometric parameters for fiber          
+  G4double diam_out = 1*mm; // fiber full diameter including both claddings                      
+  G4double diam_in = (1-(2*0.02))*mm;
+  G4double diam_core = (1-(4*0.02))*mm;  
+  G4double fiber_length = 300*mm; //20 cm ? Does this make sense?
 
-  // 
-  // Tile
-  // 
-  // Material: compound (polystyrene+PTP(1.5%)+POPOP(0.05%)) 
-  //G4double dTile = 1.0*g/cm3; // Approximate only, should get more precise values
-  G4Material *tile_mat = polyvinyltoluene;
-  // G4Material *tile_mat = new G4Material("tile_mat",dTile,3);
-  // tile_mat->AddMaterial(polystyrene,98.45*perCent);
-  // tile_mat->AddMaterial(PTP,1.5*perCent);
-  // tile_mat->AddMaterial(POPOP,0.05*perCent);
-
-  // Create tile volume            
-  G4Trd *tile_shape = new G4Trd("tile",thickness/2,thickness/2,small_side/2,big_side/2,height/2);
-  // Create logical volume (geometric volume + material)   
-  G4LogicalVolume *tile_vol = new G4LogicalVolume(tile_shape,tile_mat,"tile");
+  //
+  // Wrapper
+  //
+  G4Material *wrap_mat = polyethylene;
+  G4Trd *wrap_shape = new G4Trd("tile",(thickness+e)/2,(thickness+e)/2,(small_side+e+diam_out)/2,(big_side+e+diam_out)/2,(height+e)/2);
+  G4LogicalVolume *wrap_vol = new G4LogicalVolume(wrap_shape,wrap_mat,"wrap");
 
   G4OpticalSurface* tile_wrap = new G4OpticalSurface("tile_wrap");
   // Add properties                                                                                                   
   tile_wrap->SetType(dielectric_LUT);
   tile_wrap->SetModel(LUT);
   tile_wrap->SetFinish(polishedtyvekair);
-  G4LogicalSkinSurface* tile_surf = new G4LogicalSkinSurface("tile_wrap",tile_vol,tile_wrap); 
+  G4LogicalSkinSurface* tile_surf = new G4LogicalSkinSurface("tile_wrap",wrap_vol,tile_wrap); 
   G4MaterialPropertiesTable *tile_wrap_MPT = new G4MaterialPropertiesTable();
 
   std::vector<double> reflectivity(energy_eV.size(),1.0); // Maybe should be replaced with more realistic number
@@ -206,18 +207,24 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   tile_wrap_MPT->AddProperty("EFFICIENCY",&(energy_eV[0]),&(efficiency[0]),energy_eV.size());
   tile_wrap->SetMaterialPropertiesTable(tile_wrap_MPT);
 
-  // Create physical volume
-  G4VPhysicalVolume* tile_phys = new G4PVPlacement(0,G4ThreeVector(),tile_vol,"tile",logicWorld,false,0,checkOverlaps);
+  // Wrapper physical volume
+  G4VPhysicalVolume *wrap_phys = new G4PVPlacement(0,G4ThreeVector(),wrap_vol,"wrap",logicWorld,false,0,checkOverlaps);
+
+  // 
+  // Tile
+  // 
+  // Material: compound (polystyrene+PTP(1.5%)+POPOP(0.05%)) 
+  G4Material *tile_mat = polyvinyltoluene;
+  // Create tile volume            
+  G4Trd *tile_shape = new G4Trd("tile",thickness/2,thickness/2,small_side/2,big_side/2,height/2);
+  // Create logical volume (geometric volume + material)   
+  G4LogicalVolume *tile_vol = new G4LogicalVolume(tile_shape,tile_mat,"tile");
+  // Create physical volume and place it inside wrapper
+  G4VPhysicalVolume* tile_phys = new G4PVPlacement(0,G4ThreeVector(),tile_vol,"tile",wrap_vol,false,0,checkOverlaps);
 
   //
   // Fiber
   //
-  // Geometric parameters for fiber          
-  G4double diam_out = 1*mm; // fiber full diameter including both claddings                      
-  G4double diam_in = (1-(2*0.02))*mm;
-  G4double diam_core = (1-(4*0.02))*mm;  
-  G4double fiber_length = 200*mm; //20 cm ? Does this make sense?
-
   // Outer cladding: fluorinated polymer (FP)
   // Using Polytetrafluoroethylene because it is the simplest and most widely used in optical fibers (ref?)
   G4Tubs *out_clad_shape = new G4Tubs("out_clad_shape",0.,diam_out/2,fiber_length/2,0.,2*M_PI);
@@ -241,8 +248,14 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   core_opsurf->SetFinish(polished); // assumes perfectly smooth surface (does this make sense?)
   G4LogicalSkinSurface *core_surf = new G4LogicalSkinSurface("core_surf",core_vol,core_opsurf);
 
+  // Fiber rotation matrices
+  G4RotationMatrix *fiber_rot = new G4RotationMatrix();
+  fiber_rot->rotateX(alpha*rad); // rotation around x axis
+  fiber_rot->rotateY(0.*rad);
+  fiber_rot->rotateZ(0.*rad);
+  
   // Create fiber physical volume (outer cladding, other will be placed inside)
-  G4VPhysicalVolume *fiber_phys = new G4PVPlacement(0,G4ThreeVector(),out_clad_vol,"fiber",logicWorld,false,0,checkOverlaps);
+  G4VPhysicalVolume *fiber_phys = new G4PVPlacement(fiber_rot,G4ThreeVector(0.,(big_side/2)-((fiber_length/2)*sin(alpha)),(height/2)-((fiber_length/2)*cos(alpha))),out_clad_vol,"fiber",wrap_vol,false,0,checkOverlaps);
   // Place inner cladding inside
   G4VPhysicalVolume *in_clad_phys = new G4PVPlacement(0,G4ThreeVector(),in_clad_vol,"in_clad",out_clad_vol,false,0,checkOverlaps);
   // Place core
