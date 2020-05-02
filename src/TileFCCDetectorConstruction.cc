@@ -43,6 +43,9 @@
 #include "G4LogicalBorderSurface.hh"
 #include "G4LogicalSkinSurface.hh"
 #include "G4Tubs.hh"
+#include "G4Para.hh"
+#include "G4VSolid.hh"
+#include "G4SubtractionSolid.hh"
 
 #include <math.h>
 
@@ -183,13 +186,20 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4double diam_out = 1*mm; // fiber full diameter including both claddings                      
   G4double diam_in = (1-(2*0.02))*mm;
   G4double diam_core = (1-(4*0.02))*mm;  
-  G4double fiber_length = 300*mm; //20 cm ? Does this make sense?
+  G4double fiber_length = 30*mm; //20 cm ? Does this make sense?
 
   //
   // Wrapper
   //
+  // Tiny hole for fiber to protrude
+  // G4VSolid *wrap_hole = new G4Para("wrap_hole",(thickness)/2,(diam_out)/2,e/2,0.,alpha,0.);
+  // G4VSolid *wrap_shape_base = new G4Trd("wrap",(thickness+e)/2,(thickness+e)/2,(small_side+e+diam_out)/2,(big_side+e+thickness)/2,(height+e)/2);
+  // G4VSolid *wrap_shape = new G4SubtractionSolid("wrap_shape_base-wrap_hole",wrap_shape_base,wrap_hole,0,G4ThreeVector(0.,0.,(d_side)/2));
+  
+  G4VSolid *wrap_shape = new G4Trd("wrap",(thickness+2*e)/2,(thickness+2*e)/2,(small_side+2*e+2*diam_out)/2,(big_side+2*e+2*diam_out)/2,(height+2*e)/2);
+
   G4Material *wrap_mat = polyethylene;
-  G4Trd *wrap_shape = new G4Trd("tile",(thickness+e)/2,(thickness+e)/2,(small_side+e+diam_out)/2,(big_side+e+diam_out)/2,(height+e)/2);
+  
   G4LogicalVolume *wrap_vol = new G4LogicalVolume(wrap_shape,wrap_mat,"wrap");
 
   G4OpticalSurface* tile_wrap = new G4OpticalSurface("tile_wrap");
@@ -255,7 +265,8 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   fiber_rot->rotateZ(0.*rad);
   
   // Create fiber physical volume (outer cladding, other will be placed inside)
-  G4VPhysicalVolume *fiber_phys = new G4PVPlacement(fiber_rot,G4ThreeVector(0.,(big_side/2)-((fiber_length/2)*sin(alpha)),(height/2)-((fiber_length/2)*cos(alpha))),out_clad_vol,"fiber",wrap_vol,false,0,checkOverlaps);
+  //G4VPhysicalVolume *fiber_phys = new G4PVPlacement(fiber_rot,G4ThreeVector(0.,(big_side/2)-((fiber_length/2)*sin(alpha)),(height/2)-((fiber_length/2)*cos(alpha))),out_clad_vol,"fiber",wrap_vol,false,0,checkOverlaps);
+  G4VPhysicalVolume *fiber_phys = new G4PVPlacement(fiber_rot,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2),0.),out_clad_vol,"fiber",wrap_vol,false,0,checkOverlaps);
   // Place inner cladding inside
   G4VPhysicalVolume *in_clad_phys = new G4PVPlacement(0,G4ThreeVector(),in_clad_vol,"in_clad",out_clad_vol,false,0,checkOverlaps);
   // Place core
