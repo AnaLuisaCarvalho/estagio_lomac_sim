@@ -119,7 +119,7 @@ int main(int argc,char** argv)
   opticalPhysics->SetWLSTimeProfile("delta");
   opticalPhysics->SetScintillationYieldFactor(1.0);
   opticalPhysics->SetScintillationExcitationRatio(0.0);
-  opticalPhysics->SetMaxNumPhotonsPerStep(1);
+  opticalPhysics->SetMaxNumPhotonsPerStep(5);
   opticalPhysics->SetMaxBetaChangePerStep(10.0);
   opticalPhysics->SetTrackSecondariesFirst(kScintillation,true);
   

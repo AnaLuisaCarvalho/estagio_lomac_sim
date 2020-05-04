@@ -46,6 +46,9 @@
 #include "G4Para.hh"
 #include "G4VSolid.hh"
 #include "G4SubtractionSolid.hh"
+#include "G4IntersectionSolid.hh"
+#include "G4Colour.hh"
+#include "G4VisAttributes.hh"
 
 #include <math.h>
 
@@ -181,33 +184,48 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4double small_side = 288*mm, big_side = 302*mm, height = 147*mm, thickness = 5*mm;
   G4double d_side = (big_side-small_side)/2;
   G4double alpha = atan(d_side/height);
-  G4double e = 200*um; // thickness of the wrapper                                              
+  //G4double e = 200*um; // thickness of the wrapper                                              
+  G4double e = 0.2*mm; // thickness of the wrapper                                              
+  G4double e_air = 0.01*mm; // thickness of air layer between tile and tyvek
   // Geometric parameters for fiber          
   G4double diam_out = 1*mm; // fiber full diameter including both claddings                      
   G4double diam_in = (1-(2*0.02))*mm;
   G4double diam_core = (1-(4*0.02))*mm;  
-  G4double fiber_length = 30*mm; //20 cm ? Does this make sense?
 
+  G4double fiber_length = 500*mm;
+  G4double fiber_length_1 = 100*mm;
   //
   // Wrapper
   //
   // Tiny hole for fiber to protrude
-  // G4VSolid *wrap_hole = new G4Para("wrap_hole",(thickness)/2,(diam_out)/2,e/2,0.,alpha,0.);
-  // G4VSolid *wrap_shape_base = new G4Trd("wrap",(thickness+e)/2,(thickness+e)/2,(small_side+e+diam_out)/2,(big_side+e+thickness)/2,(height+e)/2);
-  // G4VSolid *wrap_shape = new G4SubtractionSolid("wrap_shape_base-wrap_hole",wrap_shape_base,wrap_hole,0,G4ThreeVector(0.,0.,(d_side)/2));
+  //G4VSolid *wrap_hole = new G4Para("wrap_hole",(thickness)/2,(diam_out)/2,(2*height)/2,0.,alpha,0.);
+  G4VSolid *wrap_shape_out = new G4Trd("wrap_shape_out",(thickness+2*(e+e_air))/2,(thickness+2*(e+e_air))/2,(small_side+2*(e+e_air)+2*diam_out)/2,(big_side+2*(e+e_air)+2*diam_out)/2,(height+2*(e+e_air))/2);
+  G4VSolid *wrap_shape_in = new G4Trd("wrap_shape_in",(thickness+2*e_air)/2,(thickness+2*e_air)/2,(small_side+2*e_air+2*diam_out)/2,(big_side+2*e_air+2*diam_out)/2,(height+2*e_air)/2);  
+  G4VSolid *wrap_shape = new G4SubtractionSolid("wrap_shape_out-wrap_shape_in",wrap_shape_out,wrap_shape_in,0,G4ThreeVector());
   
-  G4VSolid *wrap_shape = new G4Trd("wrap",(thickness+2*e)/2,(thickness+2*e)/2,(small_side+2*e+2*diam_out)/2,(big_side+2*e+2*diam_out)/2,(height+2*e)/2);
+  //G4VSolid *wrap_shape = new G4Trd("wrap",(thickness+2*e)/2,(thickness+2*e)/2,(small_side+2*e+2*diam_out)/2,(big_side+2*e+2*diam_out)/2,(height+2*e)/2);
 
   G4Material *wrap_mat = polyethylene;
   
   G4LogicalVolume *wrap_vol = new G4LogicalVolume(wrap_shape,wrap_mat,"wrap");
+  G4VisAttributes *wrap_vol_vis = new G4VisAttributes(G4Colour(1,0,0));
+  wrap_vol->SetVisAttributes(wrap_vol_vis);
 
+  // Wrapper physical volume
+  G4VPhysicalVolume *wrap_phys = new G4PVPlacement(0,G4ThreeVector(),wrap_vol,"wrap",logicWorld,false,0,checkOverlaps);
+  
+  // Air
+  G4Trd *air_shape = new G4Trd("air_shape",(thickness+2*e_air)/2,(thickness+2*e_air)/2,(small_side+2*e_air+2*diam_out)/2,(big_side+2*e_air+2*diam_out)/2,(height+2*e_air)/2);
+  G4LogicalVolume *air_vol = new G4LogicalVolume(air_shape,world_mat,"air_vol");
+  G4VPhysicalVolume *air_phys = new G4PVPlacement(0,G4ThreeVector(),air_vol,"air",wrap_vol,false,0,checkOverlaps);
+  
   G4OpticalSurface* tile_wrap = new G4OpticalSurface("tile_wrap");
   // Add properties                                                                                                   
   tile_wrap->SetType(dielectric_LUT);
   tile_wrap->SetModel(LUT);
   tile_wrap->SetFinish(polishedtyvekair);
-  G4LogicalSkinSurface* tile_surf = new G4LogicalSkinSurface("tile_wrap",wrap_vol,tile_wrap); 
+  //G4LogicalSkinSurface* tile_surf = new G4LogicalSkinSurface("tile_wrap",wrap_vol,tile_wrap); 
+  G4LogicalBorderSurface* tile_surf = new G4LogicalBorderSurface("tile_wrap",wrap_phys,air_phys,tile_wrap); 
   G4MaterialPropertiesTable *tile_wrap_MPT = new G4MaterialPropertiesTable();
 
   std::vector<double> reflectivity(energy_eV.size(),1.0); // Maybe should be replaced with more realistic number
@@ -217,31 +235,38 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   tile_wrap_MPT->AddProperty("EFFICIENCY",&(energy_eV[0]),&(efficiency[0]),energy_eV.size());
   tile_wrap->SetMaterialPropertiesTable(tile_wrap_MPT);
 
-  // Wrapper physical volume
-  G4VPhysicalVolume *wrap_phys = new G4PVPlacement(0,G4ThreeVector(),wrap_vol,"wrap",logicWorld,false,0,checkOverlaps);
-
   // 
   // Tile
   // 
   // Material: compound (polystyrene+PTP(1.5%)+POPOP(0.05%)) 
   G4Material *tile_mat = polyvinyltoluene;
   // Create tile volume            
-  G4Trd *tile_shape = new G4Trd("tile",thickness/2,thickness/2,small_side/2,big_side/2,height/2);
+  G4Trd *tile_shape = new G4Trd("tile_shape",thickness/2,thickness/2,small_side/2,big_side/2,height/2);
   // Create logical volume (geometric volume + material)   
   G4LogicalVolume *tile_vol = new G4LogicalVolume(tile_shape,tile_mat,"tile");
+  G4VisAttributes* tile_vol_vis = new G4VisAttributes(G4Colour(0,1,1));
+  tile_vol->SetVisAttributes(tile_vol_vis);
   // Create physical volume and place it inside wrapper
-  G4VPhysicalVolume* tile_phys = new G4PVPlacement(0,G4ThreeVector(),tile_vol,"tile",wrap_vol,false,0,checkOverlaps);
+  G4VPhysicalVolume* tile_phys = new G4PVPlacement(0,G4ThreeVector(),tile_vol,"tile",air_vol,false,0,checkOverlaps);
 
   //
   // Fiber
   //
+  // Fiber rotation matrices
+  G4RotationMatrix *fiber_rot = new G4RotationMatrix();
+  fiber_rot->rotateX(alpha*rad); // rotation around x axis
+  fiber_rot->rotateY(0.*rad);
+  fiber_rot->rotateZ(0.*rad);
+  G4ThreeVector fiber_tran = G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2),0.);
   // Outer cladding: fluorinated polymer (FP)
   // Using Polytetrafluoroethylene because it is the simplest and most widely used in optical fibers (ref?)
-  G4Tubs *out_clad_shape = new G4Tubs("out_clad_shape",0.,diam_out/2,fiber_length/2,0.,2*M_PI);
+  G4Tubs *out_clad_shape_single = new G4Tubs("out_clad_shape_single",0.,diam_out/2,fiber_length/2,0.,2*M_PI); 
+  G4VSolid *out_clad_shape = new G4IntersectionSolid("out_clad_shape_single&&air_shape",air_shape,out_clad_shape_single,fiber_rot,G4ThreeVector());
   G4LogicalVolume *out_clad_vol = new G4LogicalVolume(out_clad_shape,FP,"out_clad_vol");
 
   // Inner cladding: polymethylmethacrylate (PMMA)                                                                       
-  G4Tubs *in_clad_shape = new G4Tubs("in_clad_shape",0.,diam_in/2,fiber_length/2,0.,2*M_PI);
+  G4Tubs *in_clad_shape_single = new G4Tubs("in_clad_shape_single",0.,diam_in/2,fiber_length/2,0.,2*M_PI);
+  G4VSolid *in_clad_shape = new G4IntersectionSolid("in_clad_shape_single&&air_shape",air_shape,in_clad_shape_single,fiber_rot,G4ThreeVector());
   G4LogicalVolume *in_clad_vol = new G4LogicalVolume(in_clad_shape,PMMA,"in_clad_vol");
   G4OpticalSurface *in_clad_opsurf = new G4OpticalSurface("in_clad_opsurf");
   in_clad_opsurf->SetType(dielectric_dielectric);
@@ -250,27 +275,34 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4LogicalSkinSurface *in_clad_surf = new G4LogicalSkinSurface("in_clad_surf",in_clad_vol,in_clad_opsurf);
 
   // Core: polystylene (PS)
-  G4Tubs *core_shape = new G4Tubs("core_shape",0.,diam_core/2,fiber_length/2,0.,2*M_PI);
+  G4Tubs *core_shape_single = new G4Tubs("core_shape_single",0.,diam_core/2,fiber_length/2,0.,2*M_PI);
+  G4VSolid *core_shape = new G4IntersectionSolid("core_shape_single&&air_shape",air_shape,core_shape_single,fiber_rot,G4ThreeVector());
   G4LogicalVolume *core_vol = new G4LogicalVolume(core_shape,polystyrene,"core_vol");
   G4OpticalSurface *core_opsurf = new G4OpticalSurface("core_opsurf");
   core_opsurf->SetType(dielectric_dielectric);
   core_opsurf->SetModel(glisur); 
   core_opsurf->SetFinish(polished); // assumes perfectly smooth surface (does this make sense?)
   G4LogicalSkinSurface *core_surf = new G4LogicalSkinSurface("core_surf",core_vol,core_opsurf);
-
-  // Fiber rotation matrices
-  G4RotationMatrix *fiber_rot = new G4RotationMatrix();
-  fiber_rot->rotateX(alpha*rad); // rotation around x axis
-  fiber_rot->rotateY(0.*rad);
-  fiber_rot->rotateZ(0.*rad);
   
   // Create fiber physical volume (outer cladding, other will be placed inside)
-  //G4VPhysicalVolume *fiber_phys = new G4PVPlacement(fiber_rot,G4ThreeVector(0.,(big_side/2)-((fiber_length/2)*sin(alpha)),(height/2)-((fiber_length/2)*cos(alpha))),out_clad_vol,"fiber",wrap_vol,false,0,checkOverlaps);
-  G4VPhysicalVolume *fiber_phys = new G4PVPlacement(fiber_rot,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2),0.),out_clad_vol,"fiber",wrap_vol,false,0,checkOverlaps);
+  // No rotation needed here because it was already applied when creating the intersection solid (fiber+air volume)
+  G4VPhysicalVolume *fiber_phys = new G4PVPlacement(0,fiber_tran,out_clad_vol,"fiber",air_vol,false,0,checkOverlaps);
   // Place inner cladding inside
   G4VPhysicalVolume *in_clad_phys = new G4PVPlacement(0,G4ThreeVector(),in_clad_vol,"in_clad",out_clad_vol,false,0,checkOverlaps);
   // Place core
   G4VPhysicalVolume *core_phys = new G4PVPlacement(0,G4ThreeVector(),core_vol,"core",in_clad_vol,false,0,checkOverlaps);
+
+  //
+  // Fiber 1 - fiber segment that crosses the wrapper
+  //
+  // G4Tubs *out_clad_shape_single_1 = new G4Tubs("out_clad_shape_single_1",0.,diam_out/2,fiber_length_1/2,0.,2*M_PI);
+  // G4VSolid *out_clad_shape_1 = new G4IntersectionSolid("out_clad_shape_single_1&&wrap_shape",wrap_shape,out_clad_shape_single_1,fiber_rot,G4ThreeVector(0.,0.,-((height/2)+e_air+(e/2))));
+  // G4LogicalVolume *out_clad_vol_1 = new G4LogicalVolume(out_clad_shape_1,FP,"out_clad_vol_1");
+
+  // G4cout << "TINY FIBER:" << out_clad_shape_1->GetSurfaceArea() << G4endl;
+
+  // // Place this bit of the fiber
+  // G4VPhysicalVolume *fiber_phys_1 = new G4PVPlacement(0,G4ThreeVector(0.,(small_side/2)-((e/2)*tan(alpha)),0.),out_clad_vol_1,"fiber_1",wrap_vol,false,0,checkOverlaps);
 
   fScoringVolume = tile_vol;
   
@@ -278,4 +310,3 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

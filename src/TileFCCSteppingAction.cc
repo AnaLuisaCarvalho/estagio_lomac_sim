@@ -64,7 +64,7 @@ void TileFCCSteppingAction::UserSteppingAction(const G4Step* step)
   G4LogicalVolume* volume 
     = step->GetPreStepPoint()->GetTouchableHandle()
       ->GetVolume()->GetLogicalVolume();
-      
+
   // check if we are in scoring volume
   if (volume != fScoringVolume) return;
 
