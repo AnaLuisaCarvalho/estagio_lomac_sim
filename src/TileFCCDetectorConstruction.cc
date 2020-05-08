@@ -312,8 +312,8 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4VPhysicalVolume *core_phys = new G4PVPlacement(0,G4ThreeVector(),core_vol,"core",in_clad_vol,false,0,checkOverlaps);
 
   // Place this bit of the fiber
-  //G4VPhysicalVolume *fiber_phys_1 = new G4PVPlacement(0,G4ThreeVector(0.,(small_side+d_side+(diam_out/cos(alpha))-(height*tan(alpha)))/2,-(height+2*e_air)),out_clad_vol,"fiber_1",logicWorld,false,0,checkOverlaps);
-  G4VPhysicalVolume *fiber_phys_1 = new G4PVPlacement(0,G4ThreeVector(0.,(small_side-d_side-(diam_out/cos(alpha))-(height*tan(alpha)))/2,-(height+2*e_air)),out_clad_vol,"fiber_1",logicWorld,false,0,checkOverlaps);
+  G4VPhysicalVolume *fiber_phys_1 = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)-((height+2*e_air)*tan(alpha)),-(height+2*e_air)),out_clad_vol,"fiber_1",logicWorld,false,0,checkOverlaps);
+  //G4VPhysicalVolume *fiber_phys_1 = new G4PVPlacement(0,G4ThreeVector(0.,(small_side-d_side-(diam_out/cos(alpha))-(height*tan(alpha)))/2,-(height+2*e_air)),out_clad_vol,"fiber_1",logicWorld,false,0,checkOverlaps);
   //G4VPhysicalVolume *fiber_phys_1 = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),out_clad_vol,"fiber_1",wrap_vol,false,0,checkOverlaps);
 
   fScoringVolume = tile_vol;
