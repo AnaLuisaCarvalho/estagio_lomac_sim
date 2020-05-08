@@ -182,26 +182,51 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
 
   // Geometric parameters for tile+wrapper      
   G4double small_side = 288*mm, big_side = 302*mm, height = 147*mm, thickness = 5*mm;
+  G4double height1 = 300*mm;
   G4double d_side = (big_side-small_side)/2;
   G4double alpha = atan(d_side/height);
   //G4double e = 200*um; // thickness of the wrapper                                              
-  G4double e = 0.2*mm; // thickness of the wrapper                                              
-  G4double e_air = 0.01*mm; // thickness of air layer between tile and tyvek
+  G4double e = 10*mm; // thickness of the wrapper                                              
+  G4double e_air = 10*mm; // thickness of air layer between tile and tyvek
   // Geometric parameters for fiber          
   G4double diam_out = 1*mm; // fiber full diameter including both claddings                      
   G4double diam_in = (1-(2*0.02))*mm;
   G4double diam_core = (1-(4*0.02))*mm;  
 
   G4double fiber_length = 500*mm;
-  G4double fiber_length_1 = 100*mm;
+  G4double fiber_length_1 = 500*mm;
+
+  // Fiber rotation matrices
+  G4RotationMatrix *fiber_rot = new G4RotationMatrix();
+  fiber_rot->rotateX(alpha*rad); // rotation around x axis
+  fiber_rot->rotateY(0.*rad);
+  fiber_rot->rotateZ(0.*rad);
+  G4ThreeVector fiber_tran = G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2),0.);
+
   //
   // Wrapper
   //
   // Tiny hole for fiber to protrude
   //G4VSolid *wrap_hole = new G4Para("wrap_hole",(thickness)/2,(diam_out)/2,(2*height)/2,0.,alpha,0.);
+
+  // Air
+  G4Trd *air_shape = new G4Trd("air_shape",(thickness+2*e_air)/2,(thickness+2*e_air)/2,(small_side+2*e_air+2*diam_out)/2,(big_side+2*e_air+2*diam_out)/2,(height+2*e_air)/2);
+  G4LogicalVolume *air_vol = new G4LogicalVolume(air_shape,world_mat,"air_vol");
+
   G4VSolid *wrap_shape_out = new G4Trd("wrap_shape_out",(thickness+2*(e+e_air))/2,(thickness+2*(e+e_air))/2,(small_side+2*(e+e_air)+2*diam_out)/2,(big_side+2*(e+e_air)+2*diam_out)/2,(height+2*(e+e_air))/2);
+
+  G4VSolid *wrap_shape_out_max = new G4Trd("wrap_shape_out",(thickness+2*(e+e_air))/2,(thickness+2*(e+e_air))/2,(small_side+2*(e+e_air)+2*diam_out)/2,(big_side+2*(e+e_air)+2*diam_out)/2,(height1+2*(e+e_air))/2);
+
+    //
+  // Fiber 1 - fiber segment that crosses the wrapper
+  //
+  G4Tubs *out_clad_shape_single_1 = new G4Tubs("out_clad_shape_single_1",0.,diam_out/2,fiber_length_1/2,0.,2*M_PI);
+  //G4VSolid *out_clad_shape_1 = new G4IntersectionSolid("out_clad_shape_single_1&&wrap_shape",wrap_shape,out_clad_shape_single_1,fiber_rot,G4ThreeVector(0.,0.,-((height/2)+e_air+(e/2))));
+  G4VSolid *out_clad_shape_1 = new G4IntersectionSolid("out_clad_shape_single_1&&wrap_shape",wrap_shape_out_max,out_clad_shape_single_1,fiber_rot,G4ThreeVector());
+
   G4VSolid *wrap_shape_in = new G4Trd("wrap_shape_in",(thickness+2*e_air)/2,(thickness+2*e_air)/2,(small_side+2*e_air+2*diam_out)/2,(big_side+2*e_air+2*diam_out)/2,(height+2*e_air)/2);  
-  G4VSolid *wrap_shape = new G4SubtractionSolid("wrap_shape_out-wrap_shape_in",wrap_shape_out,wrap_shape_in,0,G4ThreeVector());
+  G4VSolid *wrap_shape_aux = new G4SubtractionSolid("wrap_shape_out-wrap_shape_in",wrap_shape_out,wrap_shape_in,0,G4ThreeVector());
+  G4VSolid *wrap_shape = new G4SubtractionSolid("wrap_shape",wrap_shape_aux,out_clad_shape_1,0,fiber_tran);
   
   //G4VSolid *wrap_shape = new G4Trd("wrap",(thickness+2*e)/2,(thickness+2*e)/2,(small_side+2*e+2*diam_out)/2,(big_side+2*e+2*diam_out)/2,(height+2*e)/2);
 
@@ -215,25 +240,25 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4VPhysicalVolume *wrap_phys = new G4PVPlacement(0,G4ThreeVector(),wrap_vol,"wrap",logicWorld,false,0,checkOverlaps);
   
   // Air
-  G4Trd *air_shape = new G4Trd("air_shape",(thickness+2*e_air)/2,(thickness+2*e_air)/2,(small_side+2*e_air+2*diam_out)/2,(big_side+2*e_air+2*diam_out)/2,(height+2*e_air)/2);
-  G4LogicalVolume *air_vol = new G4LogicalVolume(air_shape,world_mat,"air_vol");
+  //G4Trd *air_shape = new G4Trd("air_shape",(thickness+2*e_air)/2,(thickness+2*e_air)/2,(small_side+2*e_air+2*diam_out)/2,(big_side+2*e_air+2*diam_out)/2,(height+2*e_air)/2);
+  //G4LogicalVolume *air_vol = new G4LogicalVolume(air_shape,world_mat,"air_vol");
   G4VPhysicalVolume *air_phys = new G4PVPlacement(0,G4ThreeVector(),air_vol,"air",wrap_vol,false,0,checkOverlaps);
   
-  G4OpticalSurface* tile_wrap = new G4OpticalSurface("tile_wrap");
-  // Add properties                                                                                                   
-  tile_wrap->SetType(dielectric_LUT);
-  tile_wrap->SetModel(LUT);
-  tile_wrap->SetFinish(polishedtyvekair);
-  //G4LogicalSkinSurface* tile_surf = new G4LogicalSkinSurface("tile_wrap",wrap_vol,tile_wrap); 
-  G4LogicalBorderSurface* tile_surf = new G4LogicalBorderSurface("tile_wrap",wrap_phys,air_phys,tile_wrap); 
-  G4MaterialPropertiesTable *tile_wrap_MPT = new G4MaterialPropertiesTable();
+  // G4OpticalSurface* tile_wrap = new G4OpticalSurface("tile_wrap");
+  // // Add properties                                                                                                   
+  // tile_wrap->SetType(dielectric_LUT);
+  // tile_wrap->SetModel(LUT);
+  // tile_wrap->SetFinish(polishedtyvekair);
+  // //G4LogicalSkinSurface* tile_surf = new G4LogicalSkinSurface("tile_wrap",wrap_vol,tile_wrap); 
+  // G4LogicalBorderSurface* tile_surf = new G4LogicalBorderSurface("tile_wrap",wrap_phys,air_phys,tile_wrap); 
+  // G4MaterialPropertiesTable *tile_wrap_MPT = new G4MaterialPropertiesTable();
 
-  std::vector<double> reflectivity(energy_eV.size(),1.0); // Maybe should be replaced with more realistic number
-  std::vector<double> efficiency(energy_eV.size(),0.0);
+  // std::vector<double> reflectivity(energy_eV.size(),1.0); // Maybe should be replaced with more realistic number
+  // std::vector<double> efficiency(energy_eV.size(),0.0);
   
-  tile_wrap_MPT->AddProperty("REFLECTIVITY",&(energy_eV[0]),&(reflectivity[0]),energy_eV.size());
-  tile_wrap_MPT->AddProperty("EFFICIENCY",&(energy_eV[0]),&(efficiency[0]),energy_eV.size());
-  tile_wrap->SetMaterialPropertiesTable(tile_wrap_MPT);
+  // tile_wrap_MPT->AddProperty("REFLECTIVITY",&(energy_eV[0]),&(reflectivity[0]),energy_eV.size());
+  // tile_wrap_MPT->AddProperty("EFFICIENCY",&(energy_eV[0]),&(efficiency[0]),energy_eV.size());
+  // tile_wrap->SetMaterialPropertiesTable(tile_wrap_MPT);
 
   // 
   // Tile
@@ -252,12 +277,6 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   //
   // Fiber
   //
-  // Fiber rotation matrices
-  G4RotationMatrix *fiber_rot = new G4RotationMatrix();
-  fiber_rot->rotateX(alpha*rad); // rotation around x axis
-  fiber_rot->rotateY(0.*rad);
-  fiber_rot->rotateZ(0.*rad);
-  G4ThreeVector fiber_tran = G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2),0.);
   // Outer cladding: fluorinated polymer (FP)
   // Using Polytetrafluoroethylene because it is the simplest and most widely used in optical fibers (ref?)
   G4Tubs *out_clad_shape_single = new G4Tubs("out_clad_shape_single",0.,diam_out/2,fiber_length/2,0.,2*M_PI); 
@@ -292,17 +311,10 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   // Place core
   G4VPhysicalVolume *core_phys = new G4PVPlacement(0,G4ThreeVector(),core_vol,"core",in_clad_vol,false,0,checkOverlaps);
 
-  //
-  // Fiber 1 - fiber segment that crosses the wrapper
-  //
-  // G4Tubs *out_clad_shape_single_1 = new G4Tubs("out_clad_shape_single_1",0.,diam_out/2,fiber_length_1/2,0.,2*M_PI);
-  // G4VSolid *out_clad_shape_1 = new G4IntersectionSolid("out_clad_shape_single_1&&wrap_shape",wrap_shape,out_clad_shape_single_1,fiber_rot,G4ThreeVector(0.,0.,-((height/2)+e_air+(e/2))));
-  // G4LogicalVolume *out_clad_vol_1 = new G4LogicalVolume(out_clad_shape_1,FP,"out_clad_vol_1");
-
-  // G4cout << "TINY FIBER:" << out_clad_shape_1->GetSurfaceArea() << G4endl;
-
-  // // Place this bit of the fiber
-  // G4VPhysicalVolume *fiber_phys_1 = new G4PVPlacement(0,G4ThreeVector(0.,(small_side/2)-((e/2)*tan(alpha)),0.),out_clad_vol_1,"fiber_1",wrap_vol,false,0,checkOverlaps);
+  // Place this bit of the fiber
+  //G4VPhysicalVolume *fiber_phys_1 = new G4PVPlacement(0,G4ThreeVector(0.,(small_side+d_side+(diam_out/cos(alpha))-(height*tan(alpha)))/2,-(height+2*e_air)),out_clad_vol,"fiber_1",logicWorld,false,0,checkOverlaps);
+  G4VPhysicalVolume *fiber_phys_1 = new G4PVPlacement(0,G4ThreeVector(0.,(small_side-d_side-(diam_out/cos(alpha))-(height*tan(alpha)))/2,-(height+2*e_air)),out_clad_vol,"fiber_1",logicWorld,false,0,checkOverlaps);
+  //G4VPhysicalVolume *fiber_phys_1 = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),out_clad_vol,"fiber_1",wrap_vol,false,0,checkOverlaps);
 
   fScoringVolume = tile_vol;
   
