@@ -117,10 +117,14 @@ int main(int argc,char** argv)
   // Optical physics
   G4OpticalPhysics *opticalPhysics = new G4OpticalPhysics();
   opticalPhysics->SetWLSTimeProfile("delta");
+
   opticalPhysics->SetScintillationYieldFactor(1.0);
   opticalPhysics->SetScintillationExcitationRatio(0.0);
-  opticalPhysics->SetMaxNumPhotonsPerStep(5);
+
+  opticalPhysics->SetMaxNumPhotonsPerStep(100);
   opticalPhysics->SetMaxBetaChangePerStep(10.0);
+
+  opticalPhysics->SetTrackSecondariesFirst(kCerenkov,true);
   opticalPhysics->SetTrackSecondariesFirst(kScintillation,true);
   
   physicsList->RegisterPhysics(opticalPhysics);
