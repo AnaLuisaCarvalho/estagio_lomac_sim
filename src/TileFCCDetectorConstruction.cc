@@ -91,12 +91,19 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4double aF = 18.998*g/mole;
   G4Element *elF = new G4Element("Fluor","F",9.,aF);
 
-  // Material             
+  // Material
+  // Air
+  G4Material* world_mat = nist->FindOrBuildMaterial("G4_AIR");
+  G4MaterialPropertiesTable *air_MPT = new G4MaterialPropertiesTable();
+  air_MPT->AddConstProperty("RINDEX",1.0);
+  air_MPT->AddConstProperty("ABSLENGTH",1000*cm);
+
   // PTP (para terphenyl)                                                                             
   G4double dPTP = 1.24*g/cm3;
   G4Material *PTP = new G4Material("PTP",dPTP,2);
   PTP->AddElement(elC,18);
   PTP->AddElement(elH,14);
+  
   // POPOP                                                                                       
   G4double dPOPOP = 1.204*g/cm3;
   G4Material *POPOP = new G4Material("POPOP",dPOPOP,4);
@@ -125,7 +132,6 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   // Optical properties
   G4MaterialPropertiesTable *PMMA_MPT = new G4MaterialPropertiesTable();
 
-
   // Polyvinyk toluene (for scintillator BC-408)
   G4Material *polyvinyltoluene = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
   // Add optical properties
@@ -148,6 +154,8 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   polyvinyltoluene_MPT->AddConstProperty("FASTTIMECONSTANT",10.*ns);
   polyvinyltoluene_MPT->AddProperty("RINDEX",&(energy_eV[0]),&(rindex[0]),energy_eV.size());
   polyvinyltoluene_MPT->AddProperty("ABSLENGTH",&(energy_eV[0]),&(abslength[0]),energy_eV.size());
+  polyvinyltoluene_MPT->AddConstProperty("YIELDRATIO",1.0);
+
   polyvinyltoluene->SetMaterialPropertiesTable(polyvinyltoluene_MPT);
 
   polyvinyltoluene->GetIonisation()->SetBirksConstant(0.126*mm/MeV);
@@ -161,7 +169,6 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4double env_sizeXY = 50*cm, env_sizeZ = 50*cm;
   G4double world_sizeXY = 1.2*env_sizeXY;
   G4double world_sizeZ  = 1.2*env_sizeZ;
-  G4Material* world_mat = nist->FindOrBuildMaterial("G4_AIR");
   
   G4Box* solidWorld =    
     new G4Box("World",                       //its name
@@ -189,7 +196,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4double alpha = atan(d_side/height);
   //G4double e = 200*um; // thickness of the wrapper                                              
   G4double e = 200*um; // thickness of the wrapper                                              
-  G4double e_air = 100*um; // thickness of air layer between tile and tyvek
+  G4double e_air = 100*um; // thickness of air layer between tile and tyvek?
   // Geometric parameters for fiber          
   G4double diam_out = 1*mm; // fiber full diameter including both claddings                      
   G4double diam_in = (1-(2*0.02))*mm;
@@ -215,6 +222,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   // Air that goes inside wrapper volume
   G4Trd *air_shape = new G4Trd("air_shape",(thickness+2*e_air)/2,(thickness+2*e_air)/2,(small_side+2*e_air+2*diam_out)/2,(big_side+2*e_air+2*diam_out)/2,(height+2*e_air)/2);
   G4LogicalVolume *air_vol = new G4LogicalVolume(air_shape,world_mat,"air_vol");
+  //air_vol->SetVisAttributes(G4VisAttributes::GetInvisible());  
 
   // Outer volume of wrapper
   G4VSolid *wrap_shape_out_max = new G4Trd("wrap_shape_out",(thickness+2*(e+e_air))/2,(thickness+2*(e+e_air))/2,(small_side+2*(e+e_air)+2*diam_out)/2,(big_side+2*(e+e_air)+2*diam_out)/2,(height1+2*(e+e_air))/2);
@@ -229,32 +237,33 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   
   // Wrapper material 
   G4Material *wrap_mat = polyethylene;
-  
+
   G4LogicalVolume *wrap_vol = new G4LogicalVolume(wrap_shape,wrap_mat,"wrap");
   G4VisAttributes *wrap_vol_vis = new G4VisAttributes(G4Colour(1,0,0));
   wrap_vol->SetVisAttributes(wrap_vol_vis);
-
+  //wrap_vol->SetVisAttributes(G4VisAttributes::GetInvisible());
+  
   // Wrapper physical volume
   G4VPhysicalVolume *wrap_phys = new G4PVPlacement(0,G4ThreeVector(),wrap_vol,"wrap",logicWorld,false,0,checkOverlaps);
   
   // Air physical volume, placed inside wrapper
   G4VPhysicalVolume *air_phys = new G4PVPlacement(0,G4ThreeVector(),air_vol,"air",wrap_vol,false,0,checkOverlaps);
 
-  // Set optical properties of wrapper
-  G4OpticalSurface* tile_wrap = new G4OpticalSurface("tile_wrap");
+  // Set optical properties of wrapper-air boundary
+  G4OpticalSurface* wrap_air = new G4OpticalSurface("wrap_air");
   // Add properties                                                                                                   
-  tile_wrap->SetType(dielectric_LUT);
-  tile_wrap->SetModel(LUT);
-  tile_wrap->SetFinish(polishedtyvekair);
-  G4LogicalBorderSurface* tile_surf = new G4LogicalBorderSurface("tile_wrap",wrap_phys,air_phys,tile_wrap); 
-  G4MaterialPropertiesTable *tile_wrap_MPT = new G4MaterialPropertiesTable();
+  wrap_air->SetType(dielectric_LUT);
+  wrap_air->SetModel(LUT);
+  wrap_air->SetFinish(polishedtyvekair);
+  G4LogicalBorderSurface* wrap_air_surf = new G4LogicalBorderSurface("wrap_air_surf",wrap_phys,air_phys,wrap_air); 
+  G4MaterialPropertiesTable *wrap_air_MPT = new G4MaterialPropertiesTable();
 
   std::vector<double> reflectivity(energy_eV.size(),1.0); // Maybe should be replaced with more realistic number
   std::vector<double> efficiency(energy_eV.size(),0.0);
   
-  tile_wrap_MPT->AddProperty("REFLECTIVITY",&(energy_eV[0]),&(reflectivity[0]),energy_eV.size());
-  //  tile_wrap_MPT->AddProperty("EFFICIENCY",&(energy_eV[0]),&(efficiency[0]),energy_eV.size());
-  tile_wrap->SetMaterialPropertiesTable(tile_wrap_MPT);
+  wrap_air_MPT->AddProperty("REFLECTIVITY",&(energy_eV[0]),&(reflectivity[0]),energy_eV.size());
+  wrap_air_MPT->AddProperty("EFFICIENCY",&(energy_eV[0]),&(efficiency[0]),energy_eV.size());
+  wrap_air->SetMaterialPropertiesTable(wrap_air_MPT);
 
   // 
   // Tile
@@ -269,6 +278,15 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   tile_vol->SetVisAttributes(tile_vol_vis);
   // Create physical volume and place it inside wrapper
   G4VPhysicalVolume* tile_phys = new G4PVPlacement(0,G4ThreeVector(),tile_vol,"tile",air_vol,false,0,checkOverlaps);
+  
+  // Surface between tile and air
+  G4OpticalSurface* tile_air = new G4OpticalSurface("tile_air");
+  // Add properties                                                                                                   
+  tile_air->SetType(dielectric_dielectric);
+  tile_air->SetModel(glisur);
+  tile_air->SetFinish(polished);
+  G4LogicalBorderSurface* tile_air_surf = new G4LogicalBorderSurface("tile_air_surf",tile_phys,air_phys,tile_air); 
+
 
   //
   // Fiber
@@ -303,6 +321,12 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   // Create fiber physical volume (outer cladding, other will be placed inside)
   // No rotation needed here because it was already applied when creating the intersection solid (fiber+air volume)
   G4VPhysicalVolume *fiber_phys = new G4PVPlacement(0,fiber_tran,out_clad_vol,"fiber",air_vol,false,0,checkOverlaps);
+  G4OpticalSurface *fiber_tile = new G4OpticalSurface("fiber_tile");
+  fiber_tile->SetType(dielectric_dielectric);
+  fiber_tile->SetModel(glisur);
+  fiber_tile->SetFinish(polished);
+  G4LogicalBorderSurface *fiber_tile_surf = new G4LogicalBorderSurface("fiber_tile_surf",fiber_phys,tile_phys,fiber_tile);  
+
   // Place inner cladding inside
   G4VPhysicalVolume *in_clad_phys = new G4PVPlacement(0,G4ThreeVector(),in_clad_vol,"in_clad",out_clad_vol,false,0,checkOverlaps);
   // Place core

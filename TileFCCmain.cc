@@ -116,20 +116,21 @@ int main(int argc,char** argv)
   physicsList->ReplacePhysics(new G4EmStandardPhysics_option4);
   // Optical physics
   G4OpticalPhysics *opticalPhysics = new G4OpticalPhysics();
+
   opticalPhysics->SetWLSTimeProfile("delta");
 
   opticalPhysics->SetScintillationYieldFactor(1.0);
   opticalPhysics->SetScintillationExcitationRatio(0.0);
 
-  opticalPhysics->SetMaxNumPhotonsPerStep(100);
-  opticalPhysics->SetMaxBetaChangePerStep(10.0);
+  //opticalPhysics->SetMaxNumPhotonsPerStep(100);
+  //opticalPhysics->SetMaxBetaChangePerStep(10.0);
 
-  opticalPhysics->SetTrackSecondariesFirst(kCerenkov,true);
+  //opticalPhysics->SetTrackSecondariesFirst(kCerenkov,true);
   opticalPhysics->SetTrackSecondariesFirst(kScintillation,true);
   
   physicsList->RegisterPhysics(opticalPhysics);
 
-  physicsList->SetVerboseLevel(1);
+  physicsList->SetVerboseLevel(2);
   runManager->SetUserInitialization(physicsList);
     
   // User action initialization
