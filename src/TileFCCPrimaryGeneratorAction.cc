@@ -97,7 +97,9 @@ void TileFCCPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   }
 
   // Set particle gun position
-  fParticleGun->SetParticlePosition(G4ThreeVector(-worldZHalfLength, 0., 0.));
+  //fParticleGun->SetParticlePosition(G4ThreeVector(-worldZHalfLength, 0., 0.));
+  fParticleGun->SetParticlePosition(G4ThreeVector(-2.0*cm, 0., 0.));
+  
 
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }

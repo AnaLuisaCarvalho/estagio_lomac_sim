@@ -196,7 +196,8 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4double alpha = atan(d_side/height);
   //G4double e = 200*um; // thickness of the wrapper                                              
   G4double e = 200*um; // thickness of the wrapper                                              
-  G4double e_air = 100*um; // thickness of air layer between tile and tyvek?
+  //G4double e_air = 10*um; // thickness of air layer between tile and tyvek?
+  G4double e_air = 0;
   // Geometric parameters for fiber          
   G4double diam_out = 1*mm; // fiber full diameter including both claddings                      
   G4double diam_in = (1-(2*0.02))*mm;
@@ -245,16 +246,29 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   
   // Wrapper physical volume
   G4VPhysicalVolume *wrap_phys = new G4PVPlacement(0,G4ThreeVector(),wrap_vol,"wrap",logicWorld,false,0,checkOverlaps);
-  
+  G4OpticalSurface *wrap_world = new G4OpticalSurface("wrap_world");
+  wrap_world->SetType(dielectric_dielectric);
+  wrap_world->SetModel(glisur);
+  wrap_world->SetFinish(polished);
+  G4LogicalBorderSurface *wrap_world_surf = new G4LogicalBorderSurface("wrap_world_surf",wrap_phys,physWorld,wrap_world);
+  G4MaterialPropertiesTable *wrap_world_MPT = new G4MaterialPropertiesTable();
+  wrap_world_MPT->AddConstProperty("REFLECTIVITY",0.0);
+  wrap_world_MPT->AddConstProperty("EFFICIENCY",1.0);
+  wrap_world->SetMaterialPropertiesTable(wrap_world_MPT);
+
   // Air physical volume, placed inside wrapper
   G4VPhysicalVolume *air_phys = new G4PVPlacement(0,G4ThreeVector(),air_vol,"air",wrap_vol,false,0,checkOverlaps);
 
   // Set optical properties of wrapper-air boundary
   G4OpticalSurface* wrap_air = new G4OpticalSurface("wrap_air");
   // Add properties                                                                                                   
-  wrap_air->SetType(dielectric_LUT);
-  wrap_air->SetModel(LUT);
-  wrap_air->SetFinish(polishedtyvekair);
+  //wrap_air->SetType(dielectric_LUT);
+  //wrap_air->SetModel(LUT);
+  //wrap_air->SetFinish(polishedtyvekair);
+  
+  wrap_air->SetType(dielectric_dielectric);
+  wrap_air->SetModel(glisur);
+  wrap_air->SetFinish(polished);
   G4LogicalBorderSurface* wrap_air_surf = new G4LogicalBorderSurface("wrap_air_surf",wrap_phys,air_phys,wrap_air); 
   G4MaterialPropertiesTable *wrap_air_MPT = new G4MaterialPropertiesTable();
 
@@ -286,7 +300,26 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   tile_air->SetModel(glisur);
   tile_air->SetFinish(polished);
   G4LogicalBorderSurface* tile_air_surf = new G4LogicalBorderSurface("tile_air_surf",tile_phys,air_phys,tile_air); 
+  G4MaterialPropertiesTable *tile_air_MPT = new G4MaterialPropertiesTable();
+  tile_air_MPT->AddConstProperty("REFLECTIVITY",0.0);
+  tile_air_MPT->AddConstProperty("EFFICIENCY",1.0);
+  tile_air->SetMaterialPropertiesTable(tile_air_MPT);
 
+  // Surface between tile and wrapper (tyvek)
+  G4OpticalSurface* tile_wrap = new G4OpticalSurface("tile_wrap");
+  // Add properties
+  //tile_wrap->SetType(dielectric_LUT);
+  //tile_wrap->SetModel(LUT);
+  //tile_wrap->SetFinish(polishedtyvekair);
+  tile_wrap->SetType(dielectric_dielectric);
+  tile_wrap->SetModel(glisur);
+  tile_wrap->SetFinish(polished);
+  G4LogicalBorderSurface* tile_wrap_surf = new G4LogicalBorderSurface("tile_wrap_surf",wrap_phys,tile_phys,tile_wrap);
+  G4MaterialPropertiesTable *tile_wrap_MPT = new G4MaterialPropertiesTable();
+
+  tile_wrap_MPT->AddProperty("REFLECTIVITY",&(energy_eV[0]),&(reflectivity[0]),energy_eV.size());
+  tile_wrap_MPT->AddProperty("EFFICIENCY",&(energy_eV[0]),&(efficiency[0]),energy_eV.size());
+  tile_wrap->SetMaterialPropertiesTable(tile_wrap_MPT);
 
   //
   // Fiber
