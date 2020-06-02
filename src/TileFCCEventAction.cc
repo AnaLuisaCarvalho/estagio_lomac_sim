@@ -42,7 +42,8 @@ TileFCCEventAction::TileFCCEventAction(TileFCCRunAction* runAction)
   fEdep(0.),
   fHitX(-999.),
   fHitY(-999.),
-  fHitZ(-999.)  
+  fHitZ(-999.),
+  fOpPhotonEdep(0.)
 {} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,6 +76,9 @@ void TileFCCEventAction::EndOfEventAction(const G4Event*)
   analysisManager->FillNtupleDColumn(1, fHitX);
   analysisManager->FillNtupleDColumn(2, fHitY);
   analysisManager->FillNtupleDColumn(3, fHitZ);
+  
+  analysisManager->FillNtupleDColumn(4, fOpPhotonEdep);
+  
   analysisManager->AddNtupleRow();
 
 }

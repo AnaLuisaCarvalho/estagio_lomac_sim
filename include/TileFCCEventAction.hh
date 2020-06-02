@@ -54,13 +54,15 @@ class TileFCCEventAction : public G4UserEventAction
       fHitZ = hitZ;
     }
 
+    void AddOpPhotonEdep(G4double photon_edep) { fOpPhotonEdep += photon_edep; }
+
   private:
     TileFCCRunAction* fRunAction;
     G4double     fEdep;
     G4double fHitX;
     G4double fHitY;
     G4double fHitZ;
-
+    G4double fOpPhotonEdep;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

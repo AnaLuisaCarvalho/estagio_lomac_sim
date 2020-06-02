@@ -35,6 +35,7 @@
 #include "G4Event.hh"
 #include "G4RunManager.hh"
 #include "G4LogicalVolume.hh"
+#include "G4OpticalPhoton.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -60,12 +61,28 @@ void TileFCCSteppingAction::UserSteppingAction(const G4Step* step)
     fScoringVolume = detectorConstruction->GetScoringVolume();   
   }
 
+  const std::vector<const G4Track*>* secondaries = step->GetSecondaryInCurrentStep();
+
+  if (secondaries->size()>0) {
+    for(unsigned int i=0; i<secondaries->size(); ++i) {
+      if (secondaries->at(i)->GetParentID()>0) {
+	if(secondaries->at(i)->GetDynamicParticle()->GetParticleDefinition()
+	   == G4OpticalPhoton::OpticalPhotonDefinition()){
+	  if (secondaries->at(i)->GetCreatorProcess()->GetProcessName() == "Scintillation"){
+
+	    fEventAction->AddOpPhotonEdep(secondaries->at(i)->GetTotalEnergy());
+	  }
+	}
+      }
+    }
+  }
+
   // get volume of the current step
   G4LogicalVolume* volume 
     = step->GetPreStepPoint()->GetTouchableHandle()
       ->GetVolume()->GetLogicalVolume();
 
-  // check if we are in scoring volume
+  // check if we are in scoring volume (tile volume)
   if (volume != fScoringVolume) return;
 
   // collect energy deposited in this step
@@ -77,7 +94,7 @@ void TileFCCSteppingAction::UserSteppingAction(const G4Step* step)
   G4double x_hit = vec_hit.x();
   G4double y_hit = vec_hit.y();
   G4double z_hit = vec_hit.z();
-  fEventAction->AddHit(x_hit,y_hit,z_hit);
+  fEventAction->AddHit(x_hit,y_hit,z_hit);  
 
 }
 

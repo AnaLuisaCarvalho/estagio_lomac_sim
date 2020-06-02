@@ -196,8 +196,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4double alpha = atan(d_side/height);
   //G4double e = 200*um; // thickness of the wrapper                                              
   G4double e = 200*um; // thickness of the wrapper                                              
-  //G4double e_air = 10*um; // thickness of air layer between tile and tyvek?
-  G4double e_air = 0;
+  G4double e_air = 100*um; // thickness of air layer between tile and tyvek? Does not for e_air=0
   // Geometric parameters for fiber          
   G4double diam_out = 1*mm; // fiber full diameter including both claddings                      
   G4double diam_in = (1-(2*0.02))*mm;
@@ -233,8 +232,8 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4VSolid *out_clad_shape_1 = new G4IntersectionSolid("out_clad_shape_single_1&&wrap_shape",wrap_shape_out_max,out_clad_shape_single_1,fiber_rot,G4ThreeVector());
 
   // Creating wrapper with empty hole in the middle and small cylinder hole for fiber
-  G4VSolid *wrap_shape_aux = new G4SubtractionSolid("wrap_shape_out-wrap_shape_in",wrap_shape_out,wrap_shape_in,0,G4ThreeVector());
-  G4VSolid *wrap_shape = new G4SubtractionSolid("wrap_shape",wrap_shape_aux,out_clad_shape_1,0,fiber_tran);
+  //G4VSolid *wrap_shape_aux = new G4SubtractionSolid("wrap_shape_out-wrap_shape_in",wrap_shape_out,wrap_shape_in,0,G4ThreeVector());
+  G4VSolid *wrap_shape = new G4SubtractionSolid("wrap_shape",wrap_shape_out,out_clad_shape_1,0,fiber_tran);
   
   // Wrapper material 
   G4Material *wrap_mat = polyethylene;
@@ -246,7 +245,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   
   // Wrapper physical volume
   G4VPhysicalVolume *wrap_phys = new G4PVPlacement(0,G4ThreeVector(),wrap_vol,"wrap",logicWorld,false,0,checkOverlaps);
-  G4OpticalSurface *wrap_world = new G4OpticalSurface("wrap_world");
+  /*G4OpticalSurface *wrap_world = new G4OpticalSurface("wrap_world");
   wrap_world->SetType(dielectric_dielectric);
   wrap_world->SetModel(glisur);
   wrap_world->SetFinish(polished);
@@ -255,25 +254,22 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   wrap_world_MPT->AddConstProperty("REFLECTIVITY",0.0);
   wrap_world_MPT->AddConstProperty("EFFICIENCY",1.0);
   wrap_world->SetMaterialPropertiesTable(wrap_world_MPT);
-
+  */
   // Air physical volume, placed inside wrapper
   G4VPhysicalVolume *air_phys = new G4PVPlacement(0,G4ThreeVector(),air_vol,"air",wrap_vol,false,0,checkOverlaps);
 
   // Set optical properties of wrapper-air boundary
   G4OpticalSurface* wrap_air = new G4OpticalSurface("wrap_air");
   // Add properties                                                                                                   
-  //wrap_air->SetType(dielectric_LUT);
-  //wrap_air->SetModel(LUT);
-  //wrap_air->SetFinish(polishedtyvekair);
+  wrap_air->SetType(dielectric_LUT);
+  wrap_air->SetModel(LUT);
+  wrap_air->SetFinish(polishedtyvekair);
   
-  wrap_air->SetType(dielectric_dielectric);
-  wrap_air->SetModel(glisur);
-  wrap_air->SetFinish(polished);
   G4LogicalBorderSurface* wrap_air_surf = new G4LogicalBorderSurface("wrap_air_surf",wrap_phys,air_phys,wrap_air); 
   G4MaterialPropertiesTable *wrap_air_MPT = new G4MaterialPropertiesTable();
 
-  std::vector<double> reflectivity(energy_eV.size(),1.0); // Maybe should be replaced with more realistic number
-  std::vector<double> efficiency(energy_eV.size(),0.0);
+  std::vector<double> reflectivity(energy_eV.size(),0.9); // Maybe should be replaced with more realistic number
+  std::vector<double> efficiency(energy_eV.size(),1.0);
   
   wrap_air_MPT->AddProperty("REFLECTIVITY",&(energy_eV[0]),&(reflectivity[0]),energy_eV.size());
   wrap_air_MPT->AddProperty("EFFICIENCY",&(energy_eV[0]),&(efficiency[0]),energy_eV.size());
@@ -294,9 +290,9 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4VPhysicalVolume* tile_phys = new G4PVPlacement(0,G4ThreeVector(),tile_vol,"tile",air_vol,false,0,checkOverlaps);
   
   // Surface between tile and air
-  G4OpticalSurface* tile_air = new G4OpticalSurface("tile_air");
+  //G4OpticalSurface* tile_air = new G4OpticalSurface("tile_air");
   // Add properties                                                                                                   
-  tile_air->SetType(dielectric_dielectric);
+  /*tile_air->SetType(dielectric_dielectric);
   tile_air->SetModel(glisur);
   tile_air->SetFinish(polished);
   G4LogicalBorderSurface* tile_air_surf = new G4LogicalBorderSurface("tile_air_surf",tile_phys,air_phys,tile_air); 
@@ -304,22 +300,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   tile_air_MPT->AddConstProperty("REFLECTIVITY",0.0);
   tile_air_MPT->AddConstProperty("EFFICIENCY",1.0);
   tile_air->SetMaterialPropertiesTable(tile_air_MPT);
-
-  // Surface between tile and wrapper (tyvek)
-  G4OpticalSurface* tile_wrap = new G4OpticalSurface("tile_wrap");
-  // Add properties
-  //tile_wrap->SetType(dielectric_LUT);
-  //tile_wrap->SetModel(LUT);
-  //tile_wrap->SetFinish(polishedtyvekair);
-  tile_wrap->SetType(dielectric_dielectric);
-  tile_wrap->SetModel(glisur);
-  tile_wrap->SetFinish(polished);
-  G4LogicalBorderSurface* tile_wrap_surf = new G4LogicalBorderSurface("tile_wrap_surf",wrap_phys,tile_phys,tile_wrap);
-  G4MaterialPropertiesTable *tile_wrap_MPT = new G4MaterialPropertiesTable();
-
-  tile_wrap_MPT->AddProperty("REFLECTIVITY",&(energy_eV[0]),&(reflectivity[0]),energy_eV.size());
-  tile_wrap_MPT->AddProperty("EFFICIENCY",&(energy_eV[0]),&(efficiency[0]),energy_eV.size());
-  tile_wrap->SetMaterialPropertiesTable(tile_wrap_MPT);
+  */
 
   //
   // Fiber
@@ -334,6 +315,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4Tubs *in_clad_shape_single = new G4Tubs("in_clad_shape_single",0.,diam_in/2,fiber_length/2,0.,2*M_PI);
   G4VSolid *in_clad_shape = new G4IntersectionSolid("in_clad_shape_single&&air_shape",air_shape,in_clad_shape_single,fiber_rot,G4ThreeVector());
   G4LogicalVolume *in_clad_vol = new G4LogicalVolume(in_clad_shape,PMMA,"in_clad_vol");
+
   G4OpticalSurface *in_clad_opsurf = new G4OpticalSurface("in_clad_opsurf");
   in_clad_opsurf->SetType(dielectric_dielectric);
   in_clad_opsurf->SetModel(glisur); 

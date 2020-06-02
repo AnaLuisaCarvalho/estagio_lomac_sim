@@ -54,6 +54,8 @@ class TileFCCRunAction : public G4UserRunAction
 
     void AddEdep (G4double edep); 
     void AddHit(G4double hitX, G4double hitY, G4double hitZ);
+  
+    void AddOpPhotonEdep(G4double photon_edep);
 
   private:
     G4Accumulable<G4double> fEdep;
@@ -61,6 +63,7 @@ class TileFCCRunAction : public G4UserRunAction
     G4double fHitX;
     G4double fHitY;
     G4double fHitZ;
+    G4double fOpPhotonEdep;
 
 };
 

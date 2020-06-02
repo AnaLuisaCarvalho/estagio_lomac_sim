@@ -81,6 +81,10 @@ TileFCCRunAction::TileFCCRunAction()
   analysisManager->CreateNtupleDColumn("HitX");
   analysisManager->CreateNtupleDColumn("HitY");
   analysisManager->CreateNtupleDColumn("HitZ");
+
+  // photon variables
+  analysisManager->CreateNtupleDColumn("OpticalPhotonEdep");
+
   analysisManager->FinishNtuple();
 
 }
@@ -187,6 +191,12 @@ void TileFCCRunAction::AddEdep(G4double edep)
 {
   fEdep  += edep;
   fEdep2 += edep*edep;
+}
+
+void TileFCCRunAction::AddOpPhotonEdep(G4double photon_edep)
+{
+  fOpPhotonEdep += photon_edep;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
