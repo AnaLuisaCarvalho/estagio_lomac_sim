@@ -30,6 +30,7 @@
 #include "TileFCCSteppingAction.hh"
 #include "TileFCCEventAction.hh"
 #include "TileFCCDetectorConstruction.hh"
+#include "TileFCCSteppingMessenger.hh"
 
 #include "G4Step.hh"
 #include "G4Event.hh"
@@ -42,7 +43,8 @@
 TileFCCSteppingAction::TileFCCSteppingAction(TileFCCEventAction* eventAction)
 : G4UserSteppingAction(),
   fEventAction(eventAction),
-  fScoringVolume(0)
+  fScoringVolume(0),
+  fOneStepPrimaries(true)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,7 +63,13 @@ void TileFCCSteppingAction::UserSteppingAction(const G4Step* step)
     fScoringVolume = detectorConstruction->GetScoringVolume();   
   }
 
+  G4Track *track = step->GetTrack();
+  G4StepPoint* PrePoint = step->GetPreStepPoint();
+  G4VPhysicalVolume* PrePV = PrePoint->GetPhysicalVolume();
+  
+  // Get secondaries
   const std::vector<const G4Track*>* secondaries = step->GetSecondaryInCurrentStep();
+  //G4cout<<"Secondaries at this step:"<<secondaries->size()<<G4endl;
 
   if (secondaries->size()>0) {
     for(unsigned int i=0; i<secondaries->size(); ++i) {
@@ -77,6 +85,16 @@ void TileFCCSteppingAction::UserSteppingAction(const G4Step* step)
     }
   }
 
+  // Primary track
+  /*if(track->GetParentID()==0){
+
+    if(fOneStepPrimaries && PrePV->GetName()=="tile"){
+      track->SetTrackStatus(fStopAndKill);
+
+    }
+
+    }*/
+
   // get volume of the current step
   G4LogicalVolume* volume 
     = step->GetPreStepPoint()->GetTouchableHandle()
@@ -84,6 +102,8 @@ void TileFCCSteppingAction::UserSteppingAction(const G4Step* step)
 
   // check if we are in scoring volume (tile volume)
   if (volume != fScoringVolume) return;
+  
+  if(track->GetParentID()!=0) return;
 
   // collect energy deposited in this step
   G4double edepStep = step->GetTotalEnergyDeposit();

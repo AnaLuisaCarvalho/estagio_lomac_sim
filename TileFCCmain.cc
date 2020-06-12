@@ -130,7 +130,7 @@ int main(int argc,char** argv)
   
   physicsList->RegisterPhysics(opticalPhysics);
 
-  physicsList->SetVerboseLevel(2);
+  //physicsList->SetVerboseLevel(2);
   runManager->SetUserInitialization(physicsList);
     
   // User action initialization

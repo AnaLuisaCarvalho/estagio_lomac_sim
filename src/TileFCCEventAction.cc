@@ -56,6 +56,7 @@ TileFCCEventAction::~TileFCCEventAction()
 void TileFCCEventAction::BeginOfEventAction(const G4Event*)
 {    
   fEdep = 0.;
+  fOpPhotonEdep = 0.;
   fHitX = -999.;
   fHitY = -999.;
   fHitZ = -999.;
@@ -67,6 +68,7 @@ void TileFCCEventAction::EndOfEventAction(const G4Event*)
 {   
   // accumulate statistics in run action
   fRunAction->AddEdep(fEdep);
+  fRunAction->AddOpPhotonEdep(fOpPhotonEdep);
   
   // get analysis manager                                                                                                 
   auto analysisManager = G4AnalysisManager::Instance();

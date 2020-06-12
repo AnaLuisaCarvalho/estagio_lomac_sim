@@ -46,7 +46,9 @@ class TileFCCDetectorConstruction : public G4VUserDetectorConstruction
     virtual ~TileFCCDetectorConstruction();
 
     virtual G4VPhysicalVolume* Construct();
-    
+
+    std::pair<std::vector<double>,std::vector<double>> GetScintSpectrum(std::string file_name);
+
     G4LogicalVolume* GetScoringVolume() const { return fScoringVolume; }
 
   protected:

@@ -51,6 +51,10 @@
 #include "G4VisAttributes.hh"
 
 #include <math.h>
+#include <stdio.h>
+#include <dirent.h>
+#include <stdlib.h>
+#include <algorithm>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -112,8 +116,20 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   POPOP->AddElement(elN,2);
   POPOP->AddElement(elO,2);
 
-  // Polystyrene (PS)                                                    
+  // Polystyrene (PS) - fiber core                                                    
   G4Material *polystyrene = nist->FindOrBuildMaterial("G4_POLYSTYRENE");
+  // G4MaterialPropertiesTable *polystyrene_MPT = G4MaterialPropertiesTable();
+
+  // std::pair<std::vector<double>,std::vector<double>> tmpAbs = GetScintSpectrum("../WLSfiberAbs.csv");
+
+  // std::vector<double> energy_eV = tmp.first; // photon energy in eV
+  // std::vector<double> scint_fast = tmp.second; // scintillator emission spectrum (relative yields)
+
+  // polysterene_MPT->AddProperty("RINDEX",);
+  // polysterene_MPT->AddProperty("WLSABSLENGTH",);
+  // polysterene_MPT->AddProperty("WLSCOMPONENT",);
+  // polysterene_MPT->AddConstProperty("WLSTIMECONSTANT",0.5*ns);
+
 
   // Polyethylene
   G4Material *polyethylene = nist->FindOrBuildMaterial("G4_POLYETHYLENE");
@@ -136,12 +152,19 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4Material *polyvinyltoluene = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
   // Add optical properties
   G4MaterialPropertiesTable *polyvinyltoluene_MPT = new G4MaterialPropertiesTable();
+  
+  std::pair<std::vector<double>,std::vector<double>> tmp = GetScintSpectrum("../scint.csv");
+  std::vector<double> energy_eV = tmp.first; // photon energy in eV
+  std::vector<double> scint_fast = tmp.second; // scintillator emission spectrum (relative yields)
 
-  // Photon energy in eV
-  std::vector<double> energy_eV{3.36*eV,3.22*eV,3.14*eV,3.09*eV,3.06*eV,3.04*eV,3.02*eV,3.0*eV,2.98*eV,2.95*eV,2.89*eV,2.83*eV,2.82*eV,2.80*eV,2.77*eV,2.71*eV,2.66*eV,2.62*eV,2.55*eV,2.46*eV};
+  // Set energy units
+  for(int j=0; j<energy_eV.size(); j++){
 
-  // Scintillator emission spectrum
-  std::vector<double> scint_fast{0.036,0.086,0.16,0.26,0.35,0.45,0.56,0.66,0.76,0.87,0.995,0.85,0.74,0.64,0.53,0.42,0.30,0.20,0.12,0.052};
+    energy_eV[j] *= eV;
+
+  }
+
+  G4cout<<energy_eV[0]<<";"<<scint_fast[0]<<G4endl;
 
   // Refractive index
   std::vector<double> rindex(energy_eV.size(),1.58);
@@ -149,6 +172,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   std::vector<double> abslength(energy_eV.size(),380.*cm);
 
   polyvinyltoluene_MPT->AddProperty("FASTCOMPONENT",&(energy_eV[0]),&(scint_fast[0]),energy_eV.size());
+  //polyvinyltoluene_MPT->AddConstProperty("SCINTILLATIONYIELD",10000./MeV);
   polyvinyltoluene_MPT->AddConstProperty("SCINTILLATIONYIELD",10000./MeV);
   polyvinyltoluene_MPT->AddConstProperty("RESOLUTIONSCALE",1.0);
   polyvinyltoluene_MPT->AddConstProperty("FASTTIMECONSTANT",10.*ns);
@@ -268,8 +292,8 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4LogicalBorderSurface* wrap_air_surf = new G4LogicalBorderSurface("wrap_air_surf",wrap_phys,air_phys,wrap_air); 
   G4MaterialPropertiesTable *wrap_air_MPT = new G4MaterialPropertiesTable();
 
-  std::vector<double> reflectivity(energy_eV.size(),0.9); // Maybe should be replaced with more realistic number
-  std::vector<double> efficiency(energy_eV.size(),1.0);
+  std::vector<double> reflectivity(energy_eV.size(),0.8); // Maybe should be replaced with more realistic number
+  std::vector<double> efficiency(energy_eV.size(),0.0);
   
   wrap_air_MPT->AddProperty("REFLECTIVITY",&(energy_eV[0]),&(reflectivity[0]),energy_eV.size());
   wrap_air_MPT->AddProperty("EFFICIENCY",&(energy_eV[0]),&(efficiency[0]),energy_eV.size());
@@ -356,3 +380,40 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+std::pair<std::vector<double>,std::vector<double>> TileFCCDetectorConstruction::GetScintSpectrum(std::string file_name){
+
+  G4cout<<"Reading csv file for scintilator"<<G4endl;
+  
+  // Get file
+  std::fstream file(file_name);
+
+  std::pair<std::vector<double>,std::vector<double>> out_vecs;
+  
+  std::string line, colname;
+  std::vector<double> temp_energy, temp_factor;
+  
+  while(std::getline(file,line)){
+    
+    std::vector<double> temp;
+    std::stringstream ss(line);
+    while(std::getline(ss,colname,',')){
+
+      temp.push_back(atof(colname.c_str()));
+      
+    } // End of loop over colums (for each line)
+
+    temp_energy.push_back(temp[1]);
+    temp_factor.push_back(temp[2]);    
+
+  } // End of loop over lines
+  
+  std::reverse(temp_energy.begin(),temp_energy.end());
+  std::reverse(temp_factor.begin(),temp_factor.end());
+
+  out_vecs.first = temp_energy;
+  out_vecs.second = temp_factor;
+
+  return out_vecs;
+
+}

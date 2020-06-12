@@ -34,7 +34,7 @@
 #include "globals.hh"
 
 class TileFCCEventAction;
-
+class TileFCCSteppingMessenger;
 class G4LogicalVolume;
 
 /// Stepping action class
@@ -49,7 +49,11 @@ class TileFCCSteppingAction : public G4UserSteppingAction
     // method from the base class
     virtual void UserSteppingAction(const G4Step*);
 
+    void SetOneStepPrimaries(G4bool b){fOneStepPrimaries=b;}
+    G4bool GetOneStepPrimaries(){return fOneStepPrimaries;}
+
   private:
+    G4bool fOneStepPrimaries;
     TileFCCEventAction*  fEventAction;
     G4LogicalVolume* fScoringVolume;
 };

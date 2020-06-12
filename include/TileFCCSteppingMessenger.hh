@@ -24,35 +24,32 @@
 // ********************************************************************
 //
 //
-/// \file B1DetectorConstruction.hh
-/// \brief Definition of the B1DetectorConstruction class
+/// \file optical/TileFCC/include/TileFCCSteppingMessenger.hh
+/// \brief Definition of the TileFCCSteppingMessenger class
+//
+//
+#ifndef TileFCCSteppingMessenger_h
+#define TileFCCSteppingMessenger_h 1
 
-//#ifndef TileFCCDetectorConstruction_h
-//#define TileFCCDetectorConstruction_h 
-
-//#include "G4VUserDetectorConstruction.hh"
+#include "G4UImessenger.hh"
 #include "globals.hh"
 
-class G4VPhysicalVolume;
-class G4LogicalVolume;
+class TileFCCSteppingAction;
+class G4UIcmdWithABool;
 
-/// Detector construction class to define materials and geometry.
-
-class TileFCCTile
+class TileFCCSteppingMessenger: public G4UImessenger
 {
   public:
-    TileFCCTile();
-    virtual ~TileFCCTile();
+    TileFCCSteppingMessenger(TileFCCSteppingAction*);
+    virtual ~TileFCCSteppingMessenger();
+ 
+    virtual void SetNewValue(G4UIcommand*, G4String);
 
-    virtual G4LogicalVolume* Construct();
-    
-    G4LogicalVolume* GetScoringVolume() const { return fScoringVolume; }
+  private:
 
-  protected:
-    G4LogicalVolume*  fScoringVolume;
+    TileFCCSteppingAction*        fStepping;
+    G4UIcmdWithABool*  fOneStepPrimariesCmd;
+ 
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-##endif
-
+#endif

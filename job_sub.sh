@@ -7,7 +7,7 @@
 #$ -v SGEIN1=../TileFCC
 
 # Transfer output files from the execution machine
-#....#$ -v SGEOUT1=                                                                                                      
+#....#$ -v SGEOUT1=../build/outputNtupleTileFCC.root
 
 # By default a job will run o lipq queue. If you are authorized to use other queues a user should uncomment this option specifying the queue_name.
 #....#$ -l lipq                                                                                                         
@@ -30,4 +30,3 @@ cd build
 cmake -DGeant4_DIR=`which geant` ../
 make
 ./TileFCC -m run.mac
-
