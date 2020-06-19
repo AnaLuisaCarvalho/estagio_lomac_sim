@@ -48,6 +48,7 @@ class TileFCCEventAction : public G4UserEventAction
     virtual void EndOfEventAction(const G4Event* event);
 
     void AddEdep(G4double edep) { fEdep += edep; }
+    void AddEdepFiber(G4double edep_fiber) { fEdepFiber += edep_fiber; }
     void AddHit(G4double hitX, G4double hitY, G4double hitZ) {
       fHitX = hitX;
       fHitY = hitY;
@@ -55,14 +56,17 @@ class TileFCCEventAction : public G4UserEventAction
     }
 
     void AddOpPhotonEdep(G4double photon_edep) { fOpPhotonEdep += photon_edep; }
+    void AddWLSPhotonEdep(G4double wlsphoton_edep) { fWLSPhotonEdep += wlsphoton_edep; }
 
   private:
     TileFCCRunAction* fRunAction;
     G4double     fEdep;
+    G4double fEdepFiber;
     G4double fHitX;
     G4double fHitY;
     G4double fHitZ;
     G4double fOpPhotonEdep;
+    G4double fWLSPhotonEdep;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

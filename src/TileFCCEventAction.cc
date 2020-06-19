@@ -40,10 +40,12 @@ TileFCCEventAction::TileFCCEventAction(TileFCCRunAction* runAction)
 : G4UserEventAction(),
   fRunAction(runAction),
   fEdep(0.),
+  fEdepFiber(0.),
   fHitX(-999.),
   fHitY(-999.),
   fHitZ(-999.),
-  fOpPhotonEdep(0.)
+  fOpPhotonEdep(0.),
+  fWLSPhotonEdep(0.)
 {} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,6 +59,7 @@ void TileFCCEventAction::BeginOfEventAction(const G4Event*)
 {    
   fEdep = 0.;
   fOpPhotonEdep = 0.;
+  fWLSPhotonEdep = 0.;
   fHitX = -999.;
   fHitY = -999.;
   fHitZ = -999.;
@@ -68,18 +71,22 @@ void TileFCCEventAction::EndOfEventAction(const G4Event*)
 {   
   // accumulate statistics in run action
   fRunAction->AddEdep(fEdep);
+  fRunAction->AddEdepFiber(fEdepFiber);
   fRunAction->AddOpPhotonEdep(fOpPhotonEdep);
-  
-  // get analysis manager                                                                                                 
+  fRunAction->AddWLSPhotonEdep(fWLSPhotonEdep);  
+
+  // get analysis manager  
   auto analysisManager = G4AnalysisManager::Instance();
 
   // Fill ntuple
   analysisManager->FillNtupleDColumn(0, fEdep);
-  analysisManager->FillNtupleDColumn(1, fHitX);
-  analysisManager->FillNtupleDColumn(2, fHitY);
-  analysisManager->FillNtupleDColumn(3, fHitZ);
+  analysisManager->FillNtupleDColumn(1, fEdepFiber);
+  analysisManager->FillNtupleDColumn(2, fHitX);
+  analysisManager->FillNtupleDColumn(3, fHitY);
+  analysisManager->FillNtupleDColumn(4, fHitZ);
   
-  analysisManager->FillNtupleDColumn(4, fOpPhotonEdep);
+  analysisManager->FillNtupleDColumn(5, fOpPhotonEdep);
+  analysisManager->FillNtupleDColumn(6, fWLSPhotonEdep);
   
   analysisManager->AddNtupleRow();
 

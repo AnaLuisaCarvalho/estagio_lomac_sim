@@ -44,6 +44,7 @@ TileFCCSteppingAction::TileFCCSteppingAction(TileFCCEventAction* eventAction)
 : G4UserSteppingAction(),
   fEventAction(eventAction),
   fScoringVolume(0),
+  fFiberVolume(0),
   fOneStepPrimaries(true)
 {}
 
@@ -76,15 +77,30 @@ void TileFCCSteppingAction::UserSteppingAction(const G4Step* step)
       if (secondaries->at(i)->GetParentID()>0) {
 	if(secondaries->at(i)->GetDynamicParticle()->GetParticleDefinition()
 	   == G4OpticalPhoton::OpticalPhotonDefinition()){
+	  
 	  if (secondaries->at(i)->GetCreatorProcess()->GetProcessName() == "Scintillation"){
 
 	    fEventAction->AddOpPhotonEdep(secondaries->at(i)->GetTotalEnergy());
+
+	  }else if(secondaries->at(i)->GetCreatorProcess()->GetProcessName() == "OpWLS"){
+	    
+	    fEventAction->AddWLSPhotonEdep(secondaries->at(i)->GetTotalEnergy());
+
 	  }
 	}
       }
     }
   }
 
+  //G4ParticleDefinition* particleType = track->GetDefinition();
+ 
+
+  /*if(particleType==G4OpticalPhoton::OpticalPhotonDefinition()){
+
+    
+
+    }*/
+  
   // Primary track
   /*if(track->GetParentID()==0){
 
@@ -96,26 +112,31 @@ void TileFCCSteppingAction::UserSteppingAction(const G4Step* step)
     }*/
 
   // get volume of the current step
-  G4LogicalVolume* volume 
-    = step->GetPreStepPoint()->GetTouchableHandle()
-      ->GetVolume()->GetLogicalVolume();
-
-  // check if we are in scoring volume (tile volume)
-  if (volume != fScoringVolume) return;
-  
-  if(track->GetParentID()!=0) return;
+  G4LogicalVolume* volume = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume();
 
   // collect energy deposited in this step
   G4double edepStep = step->GetTotalEnergyDeposit();
-  fEventAction->AddEdep(edepStep);  
 
-  // save hit position
-  G4ThreeVector vec_hit = step->GetTrack()->GetPosition();
-  G4double x_hit = vec_hit.x();
-  G4double y_hit = vec_hit.y();
-  G4double z_hit = vec_hit.z();
-  fEventAction->AddHit(x_hit,y_hit,z_hit);  
+  // check if we are in scoring volume (tile volume)
+  if (volume == fScoringVolume){
+  
+    if(track->GetParentID()==0){
 
+      fEventAction->AddEdep(edepStep);  
+      
+      // save hit position
+      G4ThreeVector vec_hit = step->GetTrack()->GetPosition();
+      G4double x_hit = vec_hit.x();
+      G4double y_hit = vec_hit.y();
+      G4double z_hit = vec_hit.z();
+      fEventAction->AddHit(x_hit,y_hit,z_hit);
+    }
+    
+  }else if(volume == fFiberVolume){
+
+    fEventAction->AddEdepFiber(edepStep);
+
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

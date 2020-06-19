@@ -56,6 +56,7 @@ class TileFCCSteppingAction : public G4UserSteppingAction
     G4bool fOneStepPrimaries;
     TileFCCEventAction*  fEventAction;
     G4LogicalVolume* fScoringVolume;
+    G4LogicalVolume* fFiberVolume;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -78,12 +78,15 @@ TileFCCRunAction::TileFCCRunAction()
   // Book ntuple
   analysisManager->CreateNtuple("eventTree","eventTree");
   analysisManager->CreateNtupleDColumn("Edep");
+  analysisManager->CreateNtupleDColumn("EdepFiber");
   analysisManager->CreateNtupleDColumn("HitX");
   analysisManager->CreateNtupleDColumn("HitY");
   analysisManager->CreateNtupleDColumn("HitZ");
 
   // photon variables
   analysisManager->CreateNtupleDColumn("OpticalPhotonEdep");
+
+  analysisManager->CreateNtupleDColumn("WLSPhotonEdep");
 
   analysisManager->FinishNtuple();
 
@@ -193,11 +196,23 @@ void TileFCCRunAction::AddEdep(G4double edep)
   fEdep2 += edep*edep;
 }
 
+void TileFCCRunAction::AddEdepFiber(G4double edep_fiber)
+{
+  fEdepFiber  += edep_fiber;
+}
+
 void TileFCCRunAction::AddOpPhotonEdep(G4double photon_edep)
 {
   fOpPhotonEdep += photon_edep;
 
 }
+
+void TileFCCRunAction::AddWLSPhotonEdep(G4double wlsphoton_edep)
+{
+  fWLSPhotonEdep += wlsphoton_edep;
+
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
