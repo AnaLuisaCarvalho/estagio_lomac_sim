@@ -31,6 +31,7 @@
 #include "TileFCCAnalysis.hh"
 #include "TileFCCPrimaryGeneratorAction.hh"
 #include "TileFCCDetectorConstruction.hh"
+#include "TileFCCEventAction.hh"
 // #include "TileFCCRun.hh"
 
 #include "G4RunManager.hh"
@@ -43,8 +44,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TileFCCRunAction::TileFCCRunAction()
+TileFCCRunAction::TileFCCRunAction(TileFCCEventAction* eventAction)
 : G4UserRunAction(),
+  fEventAction(eventAction),
   fEdep(0.),
   fEdep2(0.),
   fHitX(-999.),
@@ -57,7 +59,7 @@ TileFCCRunAction::TileFCCRunAction()
   const G4double microgray = 1.e-6*gray;
   const G4double nanogray  = 1.e-9*gray;  
   const G4double picogray  = 1.e-12*gray;
-   
+
   new G4UnitDefinition("milligray", "milliGy" , "Dose", milligray);
   new G4UnitDefinition("microgray", "microGy" , "Dose", microgray);
   new G4UnitDefinition("nanogray" , "nanoGy"  , "Dose", nanogray);
@@ -85,8 +87,12 @@ TileFCCRunAction::TileFCCRunAction()
 
   // photon variables
   analysisManager->CreateNtupleDColumn("OpticalPhotonEdep");
-
   analysisManager->CreateNtupleDColumn("WLSPhotonEdep");
+
+  analysisManager->CreateNtupleDColumn("NScintPhotons");
+  analysisManager->CreateNtupleDColumn("NWLSPhotons");
+
+  analysisManager->CreateNtupleDColumn("TileHitsEdep",fEventAction->GetTileEdep());
 
   analysisManager->FinishNtuple();
 
@@ -213,6 +219,17 @@ void TileFCCRunAction::AddWLSPhotonEdep(G4double wlsphoton_edep)
 
 }
 
+void TileFCCRunAction::AddSecondaryScint()
+{
+  fNScintPhotons += 1;
+
+}
+
+void TileFCCRunAction::AddSecondaryWLS()
+{
+  fNWLSPhotons += 1;
+
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

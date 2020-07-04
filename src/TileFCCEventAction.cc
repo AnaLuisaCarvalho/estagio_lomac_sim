@@ -30,15 +30,37 @@
 #include "TileFCCEventAction.hh"
 #include "TileFCCRunAction.hh"
 #include "TileFCCAnalysis.hh"
+#include "TileFCCTileHit.hh"
 
 #include "G4RunManager.hh"
 #include "G4Event.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TileFCCEventAction::TileFCCEventAction(TileFCCRunAction* runAction)
+// Find hit collection
+G4VHitsCollection* GetHC(const G4Event* event, G4int collId){
+  auto hce = event->GetHCofThisEvent();
+  if (!hce) {
+    G4ExceptionDescription msg;
+    msg << "No hits collection of this event found." << G4endl;
+    G4Exception("B5EventAction::EndOfEventAction()",
+		"B5Code001", JustWarning, msg);
+    return nullptr;
+  }
+
+  auto hc = hce->GetHC(collId);
+  if ( ! hc) {
+    G4ExceptionDescription msg;
+    msg << "Hits collection " << collId << " of this event not found." << G4endl;
+    G4Exception("B5EventAction::EndOfEventAction()",
+                "B5Code001", JustWarning, msg);
+  }
+  return hc;
+}
+
+TileFCCEventAction::TileFCCEventAction()
 : G4UserEventAction(),
-  fRunAction(runAction),
   fEdep(0.),
   fEdepFiber(0.),
   fHitX(-999.),
@@ -60,6 +82,8 @@ void TileFCCEventAction::BeginOfEventAction(const G4Event*)
   fEdep = 0.;
   fOpPhotonEdep = 0.;
   fWLSPhotonEdep = 0.;
+  fNScintPhotons = 0;
+  fNWLSPhotons = 0;
   fHitX = -999.;
   fHitY = -999.;
   fHitZ = -999.;
@@ -67,27 +91,46 @@ void TileFCCEventAction::BeginOfEventAction(const G4Event*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TileFCCEventAction::EndOfEventAction(const G4Event*)
+void TileFCCEventAction::EndOfEventAction(const G4Event* event)
 {   
   // accumulate statistics in run action
-  fRunAction->AddEdep(fEdep);
-  fRunAction->AddEdepFiber(fEdepFiber);
-  fRunAction->AddOpPhotonEdep(fOpPhotonEdep);
-  fRunAction->AddWLSPhotonEdep(fWLSPhotonEdep);  
+  // fRunAction->AddEdep(fEdep);
+  // fRunAction->AddEdepFiber(fEdepFiber);
+  // fRunAction->AddOpPhotonEdep(fOpPhotonEdep);
+  // fRunAction->AddWLSPhotonEdep(fWLSPhotonEdep);  
+  // fRunAction->AddSecondaryScint();
+  // fRunAction->AddSecondaryWLS();
 
+  G4int eventID = event->GetEventID();
+  G4VHitsCollection* hc = event->GetHCofThisEvent()->GetHC(0);
+  
+  //std::vector<G4double> fTileEdep = {};
+  // Loop over collection
+  for(int i=0; i<hc->GetSize(); i++){
+
+    auto hit = static_cast<TileFCCTileHit*>(hc->GetHit(i));
+    G4double edep = hit->GetEdep();
+
+    fTileEdep.push_back(edep/eV);
+
+  }
+  
   // get analysis manager  
   auto analysisManager = G4AnalysisManager::Instance();
 
   // Fill ntuple
-  analysisManager->FillNtupleDColumn(0, fEdep);
-  analysisManager->FillNtupleDColumn(1, fEdepFiber);
+  analysisManager->FillNtupleDColumn(0, fEdep/eV);
+  analysisManager->FillNtupleDColumn(1, fEdepFiber/eV);
   analysisManager->FillNtupleDColumn(2, fHitX);
   analysisManager->FillNtupleDColumn(3, fHitY);
   analysisManager->FillNtupleDColumn(4, fHitZ);
   
-  analysisManager->FillNtupleDColumn(5, fOpPhotonEdep);
-  analysisManager->FillNtupleDColumn(6, fWLSPhotonEdep);
-  
+  analysisManager->FillNtupleDColumn(5, fOpPhotonEdep/eV);
+  analysisManager->FillNtupleDColumn(6, fWLSPhotonEdep/eV);
+
+  analysisManager->FillNtupleDColumn(7, fNScintPhotons);
+  analysisManager->FillNtupleDColumn(8, fNWLSPhotons);
+
   analysisManager->AddNtupleRow();
 
 }

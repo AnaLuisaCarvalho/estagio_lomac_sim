@@ -48,7 +48,9 @@ TileFCCActionInitialization::~TileFCCActionInitialization()
 
 void TileFCCActionInitialization::BuildForMaster() const
 {
-  TileFCCRunAction* runAction = new TileFCCRunAction;
+
+  TileFCCEventAction* eventAction = new TileFCCEventAction();
+  TileFCCRunAction* runAction = new TileFCCRunAction(eventAction);
   SetUserAction(runAction);
 }
 
@@ -57,14 +59,14 @@ void TileFCCActionInitialization::BuildForMaster() const
 void TileFCCActionInitialization::Build() const
 {
   SetUserAction(new TileFCCPrimaryGeneratorAction);
-
-  TileFCCRunAction* runAction = new TileFCCRunAction;
+ 
+  TileFCCEventAction* eventAction = new TileFCCEventAction();
+  SetUserAction(eventAction);
+ 
+  TileFCCRunAction* runAction = new TileFCCRunAction(eventAction);
   SetUserAction(runAction);
   
-  TileFCCEventAction* eventAction = new TileFCCEventAction(runAction);
-  SetUserAction(eventAction);
-  
-  SetUserAction(new TileFCCSteppingAction(eventAction));
+  //SetUserAction(new TileFCCSteppingAction(eventAction));
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -81,10 +81,12 @@ void TileFCCSteppingAction::UserSteppingAction(const G4Step* step)
 	  if (secondaries->at(i)->GetCreatorProcess()->GetProcessName() == "Scintillation"){
 
 	    fEventAction->AddOpPhotonEdep(secondaries->at(i)->GetTotalEnergy());
+	    fEventAction->AddSecondaryScint();
 
 	  }else if(secondaries->at(i)->GetCreatorProcess()->GetProcessName() == "OpWLS"){
 	    
 	    fEventAction->AddWLSPhotonEdep(secondaries->at(i)->GetTotalEnergy());
+	    fEventAction->AddSecondaryWLS();
 
 	  }
 	}

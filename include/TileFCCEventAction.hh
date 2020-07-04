@@ -33,7 +33,9 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class TileFCCRunAction;
+#include <vector>
+
+//class TileFCCRunAction;
 
 /// Event action class
 ///
@@ -41,7 +43,7 @@ class TileFCCRunAction;
 class TileFCCEventAction : public G4UserEventAction
 {
   public:
-    TileFCCEventAction(TileFCCRunAction* runAction);
+    TileFCCEventAction();
     virtual ~TileFCCEventAction();
 
     virtual void BeginOfEventAction(const G4Event* event);
@@ -58,8 +60,13 @@ class TileFCCEventAction : public G4UserEventAction
     void AddOpPhotonEdep(G4double photon_edep) { fOpPhotonEdep += photon_edep; }
     void AddWLSPhotonEdep(G4double wlsphoton_edep) { fWLSPhotonEdep += wlsphoton_edep; }
 
+    void AddSecondaryScint() { fNScintPhotons+=1; }
+    void AddSecondaryWLS() { fNWLSPhotons+=1; }
+
+    std::vector<G4double>& GetTileEdep(){ return fTileEdep; } 
+  
   private:
-    TileFCCRunAction* fRunAction;
+  //TileFCCRunAction* fRunAction;
     G4double     fEdep;
     G4double fEdepFiber;
     G4double fHitX;
@@ -67,6 +74,10 @@ class TileFCCEventAction : public G4UserEventAction
     G4double fHitZ;
     G4double fOpPhotonEdep;
     G4double fWLSPhotonEdep;
+    G4int fNScintPhotons;
+    G4int fNWLSPhotons;
+    std::vector<G4double> fTileEdep;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

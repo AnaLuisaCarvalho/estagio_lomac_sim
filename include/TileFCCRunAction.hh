@@ -34,6 +34,8 @@
 #include "G4Accumulable.hh"
 #include "globals.hh"
 
+class TileFCCEventAction;
+
 class G4Run;
 
 /// Run action class
@@ -45,7 +47,7 @@ class G4Run;
 class TileFCCRunAction : public G4UserRunAction
 {
   public:
-    TileFCCRunAction();
+    TileFCCRunAction(TileFCCEventAction* eventAction);
     virtual ~TileFCCRunAction();
 
     // virtual G4Run* GenerateRun();
@@ -58,6 +60,9 @@ class TileFCCRunAction : public G4UserRunAction
   
     void AddOpPhotonEdep(G4double photon_edep);
     void AddWLSPhotonEdep(G4double wlsphoton_edep);
+  
+    void AddSecondaryScint();
+    void AddSecondaryWLS();
 
   private:
     G4Accumulable<G4double> fEdep;
@@ -68,6 +73,10 @@ class TileFCCRunAction : public G4UserRunAction
     G4double fHitZ;
     G4double fOpPhotonEdep;
     G4double fWLSPhotonEdep;
+    G4double fNScintPhotons;
+    G4double fNWLSPhotons;
+    TileFCCEventAction* fEventAction;
+
 };
 
 #endif
