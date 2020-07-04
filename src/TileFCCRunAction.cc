@@ -90,6 +90,10 @@ TileFCCRunAction::TileFCCRunAction(TileFCCEventAction* eventAction)
   analysisManager->CreateNtupleDColumn("NScintPhotons");
   analysisManager->CreateNtupleDColumn("TileHitsEdep",fEventAction->GetTileEdep());
 
+  // WLS photons
+  analysisManager->CreateNtupleDColumn("NWLSPhotons");
+  analysisManager->CreateNtupleDColumn("FiberHitsEdep",fEventAction->GetFiberEdep());
+
   analysisManager->FinishNtuple();
 
 }

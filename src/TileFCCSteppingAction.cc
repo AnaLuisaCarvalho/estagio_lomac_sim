@@ -57,6 +57,8 @@ TileFCCSteppingAction::~TileFCCSteppingAction()
 
 void TileFCCSteppingAction::UserSteppingAction(const G4Step* step)
 {
+  G4Track *track = step->GetTrack();
+
   if (!fScoringVolume) { 
     const TileFCCDetectorConstruction* detectorConstruction
       = static_cast<const TileFCCDetectorConstruction*>
@@ -64,7 +66,6 @@ void TileFCCSteppingAction::UserSteppingAction(const G4Step* step)
     fScoringVolume = detectorConstruction->GetScoringVolume();   
   }
 
-  G4Track *track = step->GetTrack();
   G4StepPoint* PrePoint = step->GetPreStepPoint();
   G4VPhysicalVolume* PrePV = PrePoint->GetPhysicalVolume();
   

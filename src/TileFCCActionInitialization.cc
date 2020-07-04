@@ -65,6 +65,8 @@ void TileFCCActionInitialization::Build() const
  
   TileFCCRunAction* runAction = new TileFCCRunAction(eventAction);
   SetUserAction(runAction);
+
+  SetUserAction(new TileFCCSteppingAction(eventAction));
   
   //SetUserAction(new TileFCCSteppingAction(eventAction));
 }  

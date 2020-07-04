@@ -31,8 +31,10 @@
 #include "TileFCCRunAction.hh"
 #include "TileFCCAnalysis.hh"
 #include "TileFCCTileHit.hh"
+#include "TileFCCFiberHit.hh"
 
 #include "G4RunManager.hh"
+#include "G4SDManager.hh"
 #include "G4Event.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -86,7 +88,7 @@ void TileFCCEventAction::BeginOfEventAction(const G4Event*)
   fNWLSPhotons = 0;
   fHitX = -999.;
   fHitY = -999.;
-  fHitZ = -999.;
+  fHitZ = -999.;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -100,16 +102,21 @@ void TileFCCEventAction::EndOfEventAction(const G4Event* event)
   // fRunAction->AddWLSPhotonEdep(fWLSPhotonEdep);  
   // fRunAction->AddSecondaryScint();
   // fRunAction->AddSecondaryWLS();
-
+  
   G4int eventID = event->GetEventID();
-  G4VHitsCollection* hc = event->GetHCofThisEvent()->GetHC(0);
+
+  G4int id_tile = G4SDManager::GetSDMpointer()->GetCollectionID("TileHitsCollection");
+  G4VHitsCollection* hc_tile = event->GetHCofThisEvent()->GetHC(id_tile);
+
+  G4int id_fiber = G4SDManager::GetSDMpointer()->GetCollectionID("FiberHitsCollection");
+  G4VHitsCollection* hc_fiber = event->GetHCofThisEvent()->GetHC(id_fiber);  
 
   G4int count_scint_photons = 0;
   //std::vector<G4double> fTileEdep = {};
   // Loop over collection
-  for(int i=0; i<hc->GetSize(); i++){
+  for(int i=0; i<hc_tile->GetSize(); i++){
 
-    auto hit = static_cast<TileFCCTileHit*>(hc->GetHit(i));
+    auto hit = static_cast<TileFCCTileHit*>(hc_tile->GetHit(i));
     G4double edep = hit->GetEdep();
     
     // If it is primary particle (electron)
@@ -128,9 +135,27 @@ void TileFCCEventAction::EndOfEventAction(const G4Event* event)
       fTileEdep.push_back(edep/eV);
       
     }
+
   } // End of loop over hits
 
   fNScintPhotons = count_scint_photons;  
+
+  G4int count_wls_photons = 0;
+  for(int i = 0; i<hc_fiber->GetSize(); i++){
+
+    auto hit = static_cast<TileFCCFiberHit*>(hc_fiber->GetHit(i));
+    G4double edep = hit->GetEdep();
+
+    if(hit->GetProcess() == "OpWLS"){
+
+      count_wls_photons += 1;
+      fFiberEdep.push_back(edep/eV);
+      
+    }
+
+  }
+
+  fNWLSPhotons = count_wls_photons;
 
   // get analysis manager  
   auto analysisManager = G4AnalysisManager::Instance();
@@ -142,6 +167,7 @@ void TileFCCEventAction::EndOfEventAction(const G4Event* event)
   analysisManager->FillNtupleDColumn(3, fHitZ);
   
   analysisManager->FillNtupleDColumn(4, fNScintPhotons);
+  analysisManager->FillNtupleDColumn(6, fNWLSPhotons);
   
   analysisManager->AddNtupleRow();
 

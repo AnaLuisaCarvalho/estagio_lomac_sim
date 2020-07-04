@@ -64,6 +64,7 @@ class TileFCCEventAction : public G4UserEventAction
     void AddSecondaryWLS() { fNWLSPhotons+=1; }
 
     std::vector<G4double>& GetTileEdep(){ return fTileEdep; } 
+    std::vector<G4double>& GetFiberEdep(){ return fFiberEdep; } 
   
   private:
   //TileFCCRunAction* fRunAction;
@@ -77,6 +78,7 @@ class TileFCCEventAction : public G4UserEventAction
     G4int fNScintPhotons;
     G4int fNWLSPhotons;
     std::vector<G4double> fTileEdep;
+    std::vector<G4double> fFiberEdep;
 
 };
 
