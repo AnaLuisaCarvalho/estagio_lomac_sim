@@ -103,34 +103,46 @@ void TileFCCEventAction::EndOfEventAction(const G4Event* event)
 
   G4int eventID = event->GetEventID();
   G4VHitsCollection* hc = event->GetHCofThisEvent()->GetHC(0);
-  
+
+  G4int count_scint_photons = 0;
   //std::vector<G4double> fTileEdep = {};
   // Loop over collection
   for(int i=0; i<hc->GetSize(); i++){
 
     auto hit = static_cast<TileFCCTileHit*>(hc->GetHit(i));
     G4double edep = hit->GetEdep();
+    
+    // If it is primary particle (electron)
+    if(hit->GetID()==0){
+      
+      fEdep = edep;
+      fHitX = hit->GetPos().x();
+      fHitY = hit->GetPos().y();
+      fHitZ = hit->GetPos().z();
 
-    fTileEdep.push_back(edep/eV);
+    }
 
-  }
-  
+    if(hit->GetProcess() == "Scintillation"){
+
+      count_scint_photons += 1;
+      fTileEdep.push_back(edep/eV);
+      
+    }
+  } // End of loop over hits
+
+  fNScintPhotons = count_scint_photons;  
+
   // get analysis manager  
   auto analysisManager = G4AnalysisManager::Instance();
 
   // Fill ntuple
   analysisManager->FillNtupleDColumn(0, fEdep/eV);
-  analysisManager->FillNtupleDColumn(1, fEdepFiber/eV);
-  analysisManager->FillNtupleDColumn(2, fHitX);
-  analysisManager->FillNtupleDColumn(3, fHitY);
-  analysisManager->FillNtupleDColumn(4, fHitZ);
+  analysisManager->FillNtupleDColumn(1, fHitX);
+  analysisManager->FillNtupleDColumn(2, fHitY);
+  analysisManager->FillNtupleDColumn(3, fHitZ);
   
-  analysisManager->FillNtupleDColumn(5, fOpPhotonEdep/eV);
-  analysisManager->FillNtupleDColumn(6, fWLSPhotonEdep/eV);
-
-  analysisManager->FillNtupleDColumn(7, fNScintPhotons);
-  analysisManager->FillNtupleDColumn(8, fNWLSPhotons);
-
+  analysisManager->FillNtupleDColumn(4, fNScintPhotons);
+  
   analysisManager->AddNtupleRow();
 
 }

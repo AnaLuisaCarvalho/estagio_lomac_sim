@@ -27,6 +27,9 @@ TileFCCTileHit::TileFCCTileHit(const TileFCCTileHit& hit)
 {
   fEdep      = hit.fEdep;
   fPos       = hit.fPos;
+  fID        = hit.fID;
+  fProcess   = hit.fProcess;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -35,6 +38,8 @@ const TileFCCTileHit& TileFCCTileHit::operator=(const TileFCCTileHit& hit)
 {
   fEdep      = hit.fEdep;
   fPos       = hit.fPos;
+  fID        = hit.fID;
+  fProcess   = hit.fProcess;
 
   return *this;
 }

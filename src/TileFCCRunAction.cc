@@ -79,19 +79,15 @@ TileFCCRunAction::TileFCCRunAction(TileFCCEventAction* eventAction)
 
   // Book ntuple
   analysisManager->CreateNtuple("eventTree","eventTree");
+  
+  // Primary particles (electrons)
   analysisManager->CreateNtupleDColumn("Edep");
-  analysisManager->CreateNtupleDColumn("EdepFiber");
   analysisManager->CreateNtupleDColumn("HitX");
   analysisManager->CreateNtupleDColumn("HitY");
   analysisManager->CreateNtupleDColumn("HitZ");
 
-  // photon variables
-  analysisManager->CreateNtupleDColumn("OpticalPhotonEdep");
-  analysisManager->CreateNtupleDColumn("WLSPhotonEdep");
-
+  // Scintilation photons
   analysisManager->CreateNtupleDColumn("NScintPhotons");
-  analysisManager->CreateNtupleDColumn("NWLSPhotons");
-
   analysisManager->CreateNtupleDColumn("TileHitsEdep",fEventAction->GetTileEdep());
 
   analysisManager->FinishNtuple();

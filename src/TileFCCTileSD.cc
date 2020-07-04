@@ -4,7 +4,8 @@
 #include "G4ThreeVector.hh"
 #include "G4SDManager.hh"
 #include "G4ios.hh"
-
+#include "G4VProcess.hh"
+ 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TileFCCTileSD::TileFCCTileSD(const G4String& name,const G4String& hitsCollectionName)
@@ -40,6 +41,13 @@ G4bool TileFCCTileSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 
   newHit->SetEdep(edep);
   newHit->SetPos (aStep->GetPostStepPoint()->GetPosition());
+  newHit->SetID(aStep->GetTrack()->GetParentID());
+  
+  if(aStep->GetTrack()->GetCreatorProcess()==NULL){
+    newHit->SetProcess("NULL");
+  }else{ 
+    newHit->SetProcess(aStep->GetTrack()->GetCreatorProcess()->GetProcessName());
+  }
 
   fHitsCollection->insert( newHit );
 
