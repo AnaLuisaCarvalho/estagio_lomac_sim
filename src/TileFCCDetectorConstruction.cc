@@ -430,7 +430,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4LogicalVolume *mirror_vol = new G4LogicalVolume(mirror_shape,Al,"mirror_vol");
 
   // Reflecting PMT at the end of the fiber
-  G4Tubs *PMT_shape_single = new G4Tubs("PMT_shape_single",0.,(diam_out*10)/2,(2.0*mm),0.,2*M_PI);
+  G4Tubs *PMT_shape_single = new G4Tubs("PMT_shape_single",0.,(diam_out*10)/2,(2.0*mm)/2,0.,2*M_PI);
   G4VSolid *PMT_shape = new G4IntersectionSolid("PMT_shape",air_shape,PMT_shape_single,fiber_rot,G4ThreeVector());
   G4LogicalVolume *PMT_vol = new G4LogicalVolume(PMT_shape,FP,"PMT_vol");
     
@@ -479,12 +479,12 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   Al_surf_MPT->AddProperty("IMAGINARYRINDEX",wls_Energy,rindex_im_Al,wlsnum);
   Al_surf->SetMaterialPropertiesTable(Al_surf_MPT);
 
-  // Place mirror at the end
-  G4VPhysicalVolume *PMT_phys = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)+((height+2*e_air)*tan(alpha)/2)-(height*tan(alpha)/2),(height+2*e_air)-(height/2)),PMT_vol,"PMT_top",logicWorld,false,0,checkOverlaps);
-
   // Place fiber that comes out of wrapper
   G4VPhysicalVolume *fiber_phys_1_top = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)-((height+2*e_air)*tan(alpha)),-(height+2*e_air)),out_clad_vol,"fiber_1_top",logicWorld,false,0,checkOverlaps);
   //G4VPhysicalVolume *fiber_phys_1_bottom = new G4PVPlacement(0,G4ThreeVector(0.,-(((small_side+d_side+(diam_out/cos(alpha)))/2)-((height+2*e_air)*tan(alpha))),-(height+2*e_air)),out_clad_vol1,"fiber_1_bottom",logicWorld,false,0,checkOverlaps);
+
+  // Place fiber that comes out of wrapper
+  G4VPhysicalVolume *PMT_phys = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)-((height+2*e_air)*tan(alpha))-((height*tan(alpha))/2)-(2.*mm*tan(alpha)),-(height+2*e_air)-(height/2)-(2.*mm)),PMT_vol,"PMT_top",logicWorld,false,0,checkOverlaps);
   
   // // Surface between inner and outer cladding
   // G4OpticalSurface *in_clad_opsurf = new G4OpticalSurface("in_clad_opsurf");
