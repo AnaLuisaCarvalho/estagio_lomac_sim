@@ -23,3 +23,14 @@ Geant 4 application to simulate experimental setup to test calorimeter tile ligh
 - ``./TileFCC -m run.mac``: will not produce graphical output
 
 - the following times you can just ``cd build`` (no need to recreate ``build`` directory)
+
+## Keeping track of your work
+
+It is a good practice to keep the remote copy of your repository up to date to what you have locally. This means commiting your code often and especially when making some major changes. To do that:
+
+- got to the main project folder
+- ``git add --all``
+- ``git commit -m <explanotory message for your future self>``
+- ``git push origin <name of your branch>``
+
+This way even if you accidentally delete some file you will have a copy on the web!
