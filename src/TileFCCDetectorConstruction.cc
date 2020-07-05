@@ -286,7 +286,6 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4double alpha = atan(d_side/height);
   G4double e = 200*um; // thickness of the wrapper                                              
   G4double e_air = 100*um; // thickness of air layer between tile and tyvek? Does not for e_air=0
-  //G4double e_air = 10*mm;
   // Geometric parameters for fiber          
   G4double diam_out = 1*mm; // fiber full diameter including both claddings                      
   G4double diam_in = (1-(2*0.02))*mm;
