@@ -74,7 +74,6 @@ void TileFCCSteppingAction::UserSteppingAction(const G4Step* step)
   
   // Get secondaries
   const std::vector<const G4Track*>* secondaries = step->GetSecondaryInCurrentStep();
-  //G4cout<<"Secondaries at this step:"<<secondaries->size()<<G4endl;
 
   if (secondaries->size()>0) {
     for(unsigned int i=0; i<secondaries->size(); ++i) {
@@ -97,25 +96,6 @@ void TileFCCSteppingAction::UserSteppingAction(const G4Step* step)
       }
     }
   }
-
-  //G4ParticleDefinition* particleType = track->GetDefinition();
- 
-
-  /*if(particleType==G4OpticalPhoton::OpticalPhotonDefinition()){
-
-    
-
-    }*/
-  
-  // Primary track
-  /*if(track->GetParentID()==0){
-
-    if(fOneStepPrimaries && PrePV->GetName()=="tile"){
-      track->SetTrackStatus(fStopAndKill);
-
-    }
-
-    }*/
 
   // get volume of the current step
   G4LogicalVolume* volume = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume();
