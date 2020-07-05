@@ -148,15 +148,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4double AbsFiberClad[]={20.0*m,20.0*m,20.0*m,20.0*m};
   assert(sizeof(AbsFiberClad) == sizeof(wls_Energy));
   G4double EmissionFib[]={1.0, 1.0, 0.0, 0.0};
-  //G4double EmissionFib[]={10.0, 10.0, 10.0, 10.0};
   assert(sizeof(EmissionFib) == sizeof(wls_Energy));
-  // G4double AbsFiberClad[]={1000.*cm,1000.*cm,1000.*cm,1000.*cm};
-  // assert(sizeof(AbsFiberClad) == sizeof(wls_Energy));
-
-  /*std::pair<std::vector<double>,std::vector<double>> tmpAbs = GetScintSpectrum("../WLSfiberAbs.csv");
-  std::vector<double> energy_eV = tmp.first; // photon energy in eV
-  std::vector<double> scint_fast = tmp.second; // scintillator emission spectrum (relative yields)
-  */
 
   polystyrene_MPT->AddProperty("RINDEX",wls_Energy,RefractiveIndexFiber,wlsnum);
   polystyrene_MPT->AddProperty("WLSABSLENGTH",wls_Energy,AbsFiber,wlsnum);
@@ -167,10 +159,6 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
 
   // Polyethylene
   G4Material *polyethylene = nist->FindOrBuildMaterial("G4_POLYETHYLENE");
-  // G4MaterialPropertiesTable *polyethylene_MPT = new G4MaterialPropertiesTable();
-  // G4double RefractiveIndexTyvek[] = {1.0, 1.0, 1.0, 1.0};
-  // polyethylene_MPT->AddProperty("RINDEX",wls_Energy,RefractiveIndexTyvek,wlsnum);
-  // polyethylene->SetMaterialPropertiesTable(polyethylene_MPT);
 
   // Polytetrafluoroethylene  
   G4double dFP = 1.43*g/cm3;    
@@ -205,33 +193,6 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   // Add optical properties
   G4MaterialPropertiesTable *polyvinyltoluene_MPT = new G4MaterialPropertiesTable();
   
-  // std::pair<std::vector<double>,std::vector<double>> tmp = GetScintSpectrum("../scint.csv");
-  // std::vector<double> energy_eV = tmp.first; // photon energy in eV
-  // std::vector<double> scint_fast = tmp.second; // scintillator emission spectrum (relative yields)
-
-  // // Set energy units
-  // for(int j=0; j<energy_eV.size(); j++){
-
-  //   energy_eV[j] *= eV;
-  //   scint_fast[j] *= 0.01;
-
-  // }
-
-  // G4cout<<energy_eV[0]<<";"<<scint_fast[0]<<G4endl;
-
-  // // Refractive index
-  // std::vector<double> rindex(energy_eV.size(),1.58);
-  // // Bulk absorption length
-  // std::vector<double> abslength(energy_eV.size(),380.*cm);
-
-  // polyvinyltoluene_MPT->AddProperty("FASTCOMPONENT",&(energy_eV[0]),&(scint_fast[0]),energy_eV.size());
-  // polyvinyltoluene_MPT->AddConstProperty("SCINTILLATIONYIELD",10000./MeV);
-  // polyvinyltoluene_MPT->AddConstProperty("RESOLUTIONSCALE",1.0);
-  // polyvinyltoluene_MPT->AddConstProperty("FASTTIMECONSTANT",10.*ns);
-  // polyvinyltoluene_MPT->AddProperty("RINDEX",&(energy_eV[0]),&(rindex[0]),energy_eV.size());
-  // polyvinyltoluene_MPT->AddProperty("ABSLENGTH",&(energy_eV[0]),&(abslength[0]),energy_eV.size());
-  // polyvinyltoluene_MPT->AddConstProperty("YIELDRATIO",1.0);
-
   G4double rIndexPstyrene[]={ 1.58, 1.58, 1.58, 1.58};
   assert(sizeof(rIndexPstyrene) == sizeof(wls_Energy));
   G4double absorption1[]={380.*cm, 380.*cm, 380.*cm, 380.*cm};
@@ -328,13 +289,10 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4VSolid *out_clad_shape_2 = new G4IntersectionSolid("out_clad_shape_2",wrap_shape_out_max,out_clad_shape_single_1,fiber_rot1,G4ThreeVector());
 
   // Creating wrapper with empty hole in the middle and small cylinder hole for fiber
-  //G4VSolid *wrap_shape_aux = new G4SubtractionSolid("wrap_shape_aux",wrap_shape_out,out_clad_shape_1,0,fiber_tran);
   G4VSolid *wrap_shape = new G4SubtractionSolid("wrap_shape",wrap_shape_out,out_clad_shape_1,0,fiber_tran);
-  //G4VSolid *wrap_shape = new G4SubtractionSolid("wrap_shape",wrap_shape_aux,out_clad_shape_2,0,fiber_tran1);
   
   // Wrapper material 
   G4Material *wrap_mat = polyethylene;
-  //G4Material *wrap_mat = world_mat; 
 
   G4LogicalVolume *wrap_vol = new G4LogicalVolume(wrap_shape,wrap_mat,"wrap");
   G4VisAttributes *wrap_vol_vis = new G4VisAttributes(G4Colour(1,0,0));
@@ -343,16 +301,6 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   
   // Wrapper physical volume
   G4VPhysicalVolume *wrap_phys = new G4PVPlacement(0,G4ThreeVector(),wrap_vol,"wrap",logicWorld,false,0,checkOverlaps);
-  /*G4OpticalSurface *wrap_world = new G4OpticalSurface("wrap_world");
-  wrap_world->SetType(dielectric_dielectric);
-  wrap_world->SetModel(glisur);
-  wrap_world->SetFinish(polished);
-  G4LogicalBorderSurface *wrap_world_surf = new G4LogicalBorderSurface("wrap_world_surf",wrap_phys,physWorld,wrap_world);
-  G4MaterialPropertiesTable *wrap_world_MPT = new G4MaterialPropertiesTable();
-  wrap_world_MPT->AddConstProperty("REFLECTIVITY",0.0);
-  wrap_world_MPT->AddConstProperty("EFFICIENCY",1.0);
-  wrap_world->SetMaterialPropertiesTable(wrap_world_MPT);
-  */
   // Air physical volume, placed inside wrapper
   G4VPhysicalVolume *air_phys = new G4PVPlacement(0,G4ThreeVector(),air_vol,"air",wrap_vol,false,0,checkOverlaps);
 
@@ -365,9 +313,6 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   
   G4LogicalBorderSurface* wrap_air_surf = new G4LogicalBorderSurface("wrap_air_surf",air_phys,wrap_phys,wrap_air); 
   G4MaterialPropertiesTable *wrap_air_MPT = new G4MaterialPropertiesTable();
-
-  //std::vector<double> reflectivity(energy_eV.size(),1.0); // Maybe should be replaced with more realistic number
-  //std::vector<double> efficiency(energy_eV.size(),1.0);
 
   G4double reflectivity[] = {1.0, 1.0, 1.0, 1.0};  
   G4double efficiency[] = {1.0, 1.0, 1.0, 1.0};  
@@ -416,7 +361,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   // Fiber
   //
   // Outer cladding: fluorinated polymer (FP)
-  // Using Polytetrafluoroethylene because it is the simplest and most widely used in optical fibers (ref?)
+  // Using Polytetrafluoroethylene because it is the simplest and most widely used in optical fibers
   G4Tubs *out_clad_shape_single = new G4Tubs("out_clad_shape_single",0.,diam_out/2,fiber_length/2,0.,2*M_PI); 
   G4VSolid *out_clad_shape = new G4IntersectionSolid("out_clad_shape_single&&air_shape",air_shape,out_clad_shape_single,fiber_rot,G4ThreeVector());
   G4VSolid *out_clad_shape1 = new G4IntersectionSolid("out_clad_shape1",air_shape,out_clad_shape_single,fiber_rot1,G4ThreeVector());
@@ -447,24 +392,14 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4LogicalVolume *core_vol = new G4LogicalVolume(core_shape,polystyrene,"core_vol");
   G4LogicalVolume *core_vol1 = new G4LogicalVolume(core_shape1,polystyrene,"core_vol1");
   
-  /*G4OpticalSurface *core_opsurf = new G4OpticalSurface("core_opsurf");
-  core_opsurf->SetType(dielectric_dielectric);
-  core_opsurf->SetModel(glisur); 
-  core_opsurf->SetFinish(polished); // assumes perfectly smooth surface (does this make sense?)
-  G4LogicalSkinSurface *core_surf = new G4LogicalSkinSurface("core_surf",core_vol,core_opsurf);
-  */
-
   // Create fiber physical volume (outer cladding, other will be placed inside)
   // No rotation needed here because it was already applied when creating the intersection solid (fiber+air volume)
   G4VPhysicalVolume *fiber_phys = new G4PVPlacement(0,fiber_tran,out_clad_vol,"fiber_top",air_vol,false,0,checkOverlaps);
-  //G4VPhysicalVolume *fiber_phys1 = new G4PVPlacement(0,fiber_tran1,out_clad_vol1,"fiber_bottom",air_vol,false,0,checkOverlaps);
  
   // Place inner cladding inside
   G4VPhysicalVolume *in_clad_phys = new G4PVPlacement(0,G4ThreeVector(),in_clad_vol,"in_clad_top",out_clad_vol,false,0,checkOverlaps);
-  //G4VPhysicalVolume *in_clad_phys1 = new G4PVPlacement(0,G4ThreeVector(),in_clad_vol1,"in_clad_bottom",out_clad_vol1,false,0,checkOverlaps);
   // Place core
   G4VPhysicalVolume *core_phys = new G4PVPlacement(0,G4ThreeVector(),core_vol,"core_top",in_clad_vol,false,0,checkOverlaps);
-  //G4VPhysicalVolume *core_phys1 = new G4PVPlacement(0,G4ThreeVector(),core_vol1,"core_top",in_clad_vol1,false,0,checkOverlaps);
   // Place mirror at the end
   G4VPhysicalVolume *mirror_phys = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)+((height+2*e_air)*tan(alpha))/2,(height+2*e_air)/2),mirror_vol,"mirror_top",logicWorld,false,0,checkOverlaps);
 
@@ -480,23 +415,10 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
 
   // Place fiber that comes out of wrapper
   G4VPhysicalVolume *fiber_phys_1_top = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)-((height+2*e_air)*tan(alpha)),-(height+2*e_air)),out_clad_vol,"fiber_1_top",logicWorld,false,0,checkOverlaps);
-  //G4VPhysicalVolume *fiber_phys_1_bottom = new G4PVPlacement(0,G4ThreeVector(0.,-(((small_side+d_side+(diam_out/cos(alpha)))/2)-((height+2*e_air)*tan(alpha))),-(height+2*e_air)),out_clad_vol1,"fiber_1_bottom",logicWorld,false,0,checkOverlaps);
 
   // Place fiber that comes out of wrapper
   G4VPhysicalVolume *PMT_phys = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)-((height+2*e_air)*tan(alpha))-((height*tan(alpha))/2)-(2.*mm*tan(alpha)),-(height+2*e_air)-(height/2)-(2.*mm)),PMT_vol,"PMT_top",logicWorld,false,0,checkOverlaps);
   
-  // // Surface between inner and outer cladding
-  // G4OpticalSurface *in_clad_opsurf = new G4OpticalSurface("in_clad_opsurf");
-  // in_clad_opsurf->SetType(dielectric_dielectric);
-  // in_clad_opsurf->SetModel(glisur); 
-  // in_clad_opsurf->SetFinish(polished); 
-  // G4LogicalBorderSurface *in_clad_surf = new G4LogicalBorderSurface("in_clad_surf",in_clad_phys,fiber_phys,in_clad_opsurf);
-  
-  // G4MaterialPropertiesTable *in_clad_opsurf_MPT = new G4MaterialPropertiesTable();
-  // in_clad_opsurf_MPT->AddProperty("REFLECTIVITY",wls_Energy,reflectivity,wlsnum);
-  // in_clad_opsurf_MPT->AddProperty("EFFICIENCY",wls_Energy,efficiency,wlsnum);
-  // in_clad_opsurf->SetMaterialPropertiesTable(in_clad_opsurf_MPT);
-
   // Create sensitive detector
   TileFCCFiberSD *fiber_sens = new TileFCCFiberSD("fiber_sens","FiberHitsCollection");
   core_vol->SetSensitiveDetector(fiber_sens);
@@ -511,43 +433,4 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   fFiberVolume = core_vol;
    
   return physWorld;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-std::pair<std::vector<double>,std::vector<double>> TileFCCDetectorConstruction::GetScintSpectrum(std::string file_name){
-
-  G4cout<<"Reading csv file for scintilator"<<G4endl;
-  
-  // Get file
-  std::fstream file(file_name);
-
-  std::pair<std::vector<double>,std::vector<double>> out_vecs;
-  
-  std::string line, colname;
-  std::vector<double> temp_energy, temp_factor;
-  
-  while(std::getline(file,line)){
-    
-    std::vector<double> temp;
-    std::stringstream ss(line);
-    while(std::getline(ss,colname,',')){
-
-      temp.push_back(atof(colname.c_str()));
-      
-    } // End of loop over colums (for each line)
-
-    temp_energy.push_back(temp[1]);
-    temp_factor.push_back(temp[2]);    
-
-  } // End of loop over lines
-  
-  std::reverse(temp_energy.begin(),temp_energy.end());
-  std::reverse(temp_factor.begin(),temp_factor.end());
-
-  out_vecs.first = temp_energy;
-  out_vecs.second = temp_factor;
-
-  return out_vecs;
-
 }
