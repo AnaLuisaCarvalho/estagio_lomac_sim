@@ -1,6 +1,6 @@
-# Geant4TileFCC
+# LIP Summer Internship 2020 - LOMAC simulation
 
-Geant 4 application to simulate experimental setup to test FCC calorimeter tile light yield response  
+Geant 4 application to simulate experimental setup to test calorimeter tile light yield response  
 
 ## How to get the code
 
@@ -8,10 +8,11 @@ Geant 4 application to simulate experimental setup to test FCC calorimeter tile 
 - go to your prefered working directory or create a new one
 - clone the repository: ``git clone https://github.com/AnaLuisaCarvalho/estagio_lomac_sim.git``
 - create a new branch: ``git checkout -b <name of your branch>``
-  - a branch is a copy of the repository that you can change withou interfering with the original repository
+  - a branch is a copy of the repository that you can change without interfering with the original repository
+- 
 - source setup.sh (does module load of geant4, cmake11 and root6)
-- mkdir build
-- cd build
+- ``mkdir build``
+- ``cd build``
 - ``cmake -DGeant4_DIR=`which geant` ../``
  **or** ``cmake -DGeant4_DIR=<path to geant installation> <path to CMakeLists.txt> ``
 - ``make``
