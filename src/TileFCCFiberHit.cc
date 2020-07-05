@@ -29,6 +29,7 @@ TileFCCFiberHit::TileFCCFiberHit(const TileFCCFiberHit& hit)
   fPos       = hit.fPos;
   fID        = hit.fID;
   fProcess   = hit.fProcess;
+  fTrackStatus = hit.fTrackStatus;
 
 }
 
@@ -40,6 +41,7 @@ const TileFCCFiberHit& TileFCCFiberHit::operator=(const TileFCCFiberHit& hit)
   fPos       = hit.fPos;
   fID        = hit.fID;
   fProcess   = hit.fProcess;
+  fTrackStatus = hit.fTrackStatus;
 
   return *this;
 }

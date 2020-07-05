@@ -32,6 +32,7 @@
 #include "TileFCCAnalysis.hh"
 #include "TileFCCTileHit.hh"
 #include "TileFCCFiberHit.hh"
+#include "TileFCCPmtHit.hh"
 
 #include "G4RunManager.hh"
 #include "G4SDManager.hh"
@@ -111,6 +112,9 @@ void TileFCCEventAction::EndOfEventAction(const G4Event* event)
   G4int id_fiber = G4SDManager::GetSDMpointer()->GetCollectionID("FiberHitsCollection");
   G4VHitsCollection* hc_fiber = event->GetHCofThisEvent()->GetHC(id_fiber);  
 
+  G4int id_pmt = G4SDManager::GetSDMpointer()->GetCollectionID("PmtHitsCollection");
+  G4VHitsCollection* hc_pmt = event->GetHCofThisEvent()->GetHC(id_pmt);  
+
   G4int count_scint_photons = 0;
   //std::vector<G4double> fTileEdep = {};
   // Loop over collection
@@ -146,7 +150,7 @@ void TileFCCEventAction::EndOfEventAction(const G4Event* event)
     auto hit = static_cast<TileFCCFiberHit*>(hc_fiber->GetHit(i));
     G4double edep = hit->GetEdep();
 
-    if(hit->GetProcess() == "OpWLS"){
+    if(hit->GetProcess() == "OpWLS" && hit->GetTrackStatus()==2){
 
       count_wls_photons += 1;
       fFiberEdep.push_back(edep/eV);
@@ -156,6 +160,19 @@ void TileFCCEventAction::EndOfEventAction(const G4Event* event)
   }
 
   fNWLSPhotons = count_wls_photons;
+
+  G4int count_pmt_photons = 0;
+  for(int i = 0; i<hc_pmt->GetSize(); i++){
+
+    auto hit = static_cast<TileFCCPmtHit*>(hc_pmt->GetHit(i));
+    G4double edep = hit->GetEdep();
+
+    count_pmt_photons += 1;
+    fPMTEdep.push_back(edep/eV);
+      
+  }
+
+  fNPMTPhotons = count_pmt_photons;
 
   // get analysis manager  
   auto analysisManager = G4AnalysisManager::Instance();
@@ -168,6 +185,7 @@ void TileFCCEventAction::EndOfEventAction(const G4Event* event)
   
   analysisManager->FillNtupleDColumn(4, fNScintPhotons);
   analysisManager->FillNtupleDColumn(6, fNWLSPhotons);
+  analysisManager->FillNtupleDColumn(8, fNPMTPhotons);
   
   analysisManager->AddNtupleRow();
 

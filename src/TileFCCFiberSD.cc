@@ -42,6 +42,8 @@ G4bool TileFCCFiberSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   newHit->SetEdep(edep);
   newHit->SetPos (aStep->GetPostStepPoint()->GetPosition());
   newHit->SetID(aStep->GetTrack()->GetParentID());
+
+  newHit->SetTrackStatus(aStep->GetTrack()->GetTrackStatus());
   
   if(aStep->GetTrack()->GetCreatorProcess()==NULL){
     newHit->SetProcess("NULL");

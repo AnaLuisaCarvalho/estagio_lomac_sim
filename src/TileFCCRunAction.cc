@@ -94,6 +94,10 @@ TileFCCRunAction::TileFCCRunAction(TileFCCEventAction* eventAction)
   analysisManager->CreateNtupleDColumn("NWLSPhotons");
   analysisManager->CreateNtupleDColumn("FiberHitsEdep",fEventAction->GetFiberEdep());
 
+  // PMT photons
+  analysisManager->CreateNtupleDColumn("NPMTPhotons");
+  analysisManager->CreateNtupleDColumn("PMTHitsEdep",fEventAction->GetPMTEdep());
+
   analysisManager->FinishNtuple();
 
 }
