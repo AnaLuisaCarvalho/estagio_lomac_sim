@@ -65,6 +65,7 @@ class TileFCCEventAction : public G4UserEventAction
 
     std::vector<G4double>& GetTileEdep(){ return fTileEdep; } 
     std::vector<G4double>& GetFiberEdep(){ return fFiberEdep; } 
+    std::vector<G4double>& GetPMTEdep(){ return fPMTEdep; } 
   
   private:
   //TileFCCRunAction* fRunAction;
@@ -77,9 +78,10 @@ class TileFCCEventAction : public G4UserEventAction
     G4double fWLSPhotonEdep;
     G4int fNScintPhotons;
     G4int fNWLSPhotons;
+    G4int fNPMTPhotons;
     std::vector<G4double> fTileEdep;
     std::vector<G4double> fFiberEdep;
-
+    std::vector<G4double> fPMTEdep;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

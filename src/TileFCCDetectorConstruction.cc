@@ -30,6 +30,7 @@
 #include "TileFCCDetectorConstruction.hh"
 #include "TileFCCTileSD.hh"
 #include "TileFCCFiberSD.hh"
+#include "TileFCCPmtSD.hh"
 
 #include "G4RunManager.hh"
 #include "G4NistManager.hh"
@@ -427,6 +428,11 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4Tubs *mirror_shape_single = new G4Tubs("mirror_shape_single",0.,diam_out/2,1.0*mm,0.,2*M_PI);
   G4VSolid *mirror_shape = new G4IntersectionSolid("mirror_shape",air_shape,mirror_shape_single,fiber_rot,G4ThreeVector());
   G4LogicalVolume *mirror_vol = new G4LogicalVolume(mirror_shape,Al,"mirror_vol");
+
+  // Reflecting PMT at the end of the fiber
+  G4Tubs *PMT_shape_single = new G4Tubs("PMT_shape_single",0.,(diam_out*10)/2,(2.0*mm),0.,2*M_PI);
+  G4VSolid *PMT_shape = new G4IntersectionSolid("PMT_shape",air_shape,PMT_shape_single,fiber_rot,G4ThreeVector());
+  G4LogicalVolume *PMT_vol = new G4LogicalVolume(PMT_shape,FP,"PMT_vol");
     
   // Inner cladding: polymethylmethacrylate (PMMA)                                              
   G4Tubs *in_clad_shape_single = new G4Tubs("in_clad_shape_single",0.,diam_in/2,fiber_length/2,0.,2*M_PI);
@@ -473,6 +479,9 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   Al_surf_MPT->AddProperty("IMAGINARYRINDEX",wls_Energy,rindex_im_Al,wlsnum);
   Al_surf->SetMaterialPropertiesTable(Al_surf_MPT);
 
+  // Place mirror at the end
+  G4VPhysicalVolume *PMT_phys = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)+((height+2*e_air)*tan(alpha)/2)-(height*tan(alpha)/2),(height+2*e_air)-(height/2)),PMT_vol,"PMT_top",logicWorld,false,0,checkOverlaps);
+
   // Place fiber that comes out of wrapper
   G4VPhysicalVolume *fiber_phys_1_top = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)-((height+2*e_air)*tan(alpha)),-(height+2*e_air)),out_clad_vol,"fiber_1_top",logicWorld,false,0,checkOverlaps);
   //G4VPhysicalVolume *fiber_phys_1_bottom = new G4PVPlacement(0,G4ThreeVector(0.,-(((small_side+d_side+(diam_out/cos(alpha)))/2)-((height+2*e_air)*tan(alpha))),-(height+2*e_air)),out_clad_vol1,"fiber_1_bottom",logicWorld,false,0,checkOverlaps);
@@ -493,6 +502,11 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   TileFCCFiberSD *fiber_sens = new TileFCCFiberSD("fiber_sens","FiberHitsCollection");
   core_vol->SetSensitiveDetector(fiber_sens);
   G4SDManager::GetSDMpointer()->AddNewDetector(fiber_sens);
+
+  // Create sensitive detector
+  TileFCCPmtSD *PMT_sens = new TileFCCPmtSD("PMT_sens","PmtHitsCollection");
+  PMT_vol->SetSensitiveDetector(PMT_sens);
+  G4SDManager::GetSDMpointer()->AddNewDetector(PMT_sens);
 
   fScoringVolume = tile_vol;
   fFiberVolume = core_vol;

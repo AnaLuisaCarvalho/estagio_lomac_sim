@@ -1,5 +1,5 @@
-#ifndef TileFCCFiberHit_h
-#define TileFCCFiberHit_h 1
+#ifndef TileFCCPmtHit_h
+#define TileFCCPmtHit_h 1
 
 #include "G4VHit.hh"
 #include "G4THitsCollection.hh"
@@ -8,16 +8,16 @@
 #include "tls.hh"
 #include "G4String.hh"
 
-class TileFCCFiberHit : public G4VHit
+class TileFCCPmtHit : public G4VHit
 {
 public:
-  TileFCCFiberHit();
-  TileFCCFiberHit(const TileFCCFiberHit&);
-  virtual ~TileFCCFiberHit();
+  TileFCCPmtHit();
+  TileFCCPmtHit(const TileFCCPmtHit&);
+  virtual ~TileFCCPmtHit();
 
   // operators                               
-  const TileFCCFiberHit& operator=(const TileFCCFiberHit&);
-  //G4bool operator==(const TileFCCFiberHit&) const;
+  const TileFCCPmtHit& operator=(const TileFCCPmtHit&);
+  //G4bool operator==(const TileFCCPmtHit&) const;
 
   inline void* operator new(size_t);
   inline void  operator delete(void*);
@@ -30,14 +30,12 @@ public:
   void SetPos      (G4ThreeVector xyz){ fPos = xyz; };
   void SetID       (G4int id)         { fID = id;   };
   void SetProcess  (G4String p)       { fProcess = p; };
-  void SetTrackStatus  (G4int stat)       { fTrackStatus = stat; };
 
   // Get methods                                                                                 
   G4double GetEdep() const     { return fEdep; };
   G4ThreeVector GetPos() const { return fPos; };
   G4int GetID() const          { return fID;  };  
   G4String GetProcess() const  { return fProcess; };
-  G4int GetTrackStatus() const  { return fTrackStatus; };
 
 private:
 
@@ -45,27 +43,26 @@ private:
   G4ThreeVector fPos;
   G4int         fID;
   G4String      fProcess;
-  G4int      fTrackStatus;
 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......     
-typedef G4THitsCollection<TileFCCFiberHit> TileFCCFiberHitsCollection;
+typedef G4THitsCollection<TileFCCPmtHit> TileFCCPmtHitsCollection;
 
-extern G4ThreadLocal G4Allocator<TileFCCFiberHit>* TileFCCFiberHitAllocator;
+extern G4ThreadLocal G4Allocator<TileFCCPmtHit>* TileFCCPmtHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......    
-inline void* TileFCCFiberHit::operator new(size_t)
+inline void* TileFCCPmtHit::operator new(size_t)
 {
-  if(!TileFCCFiberHitAllocator)
-    TileFCCFiberHitAllocator = new G4Allocator<TileFCCFiberHit>;
-  return (void *) TileFCCFiberHitAllocator->MallocSingle();
+  if(!TileFCCPmtHitAllocator)
+    TileFCCPmtHitAllocator = new G4Allocator<TileFCCPmtHit>;
+  return (void *) TileFCCPmtHitAllocator->MallocSingle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......            
-inline void TileFCCFiberHit::operator delete(void *hit)
+inline void TileFCCPmtHit::operator delete(void *hit)
 {
-  TileFCCFiberHitAllocator->FreeSingle((TileFCCFiberHit*) hit);
+  TileFCCPmtHitAllocator->FreeSingle((TileFCCPmtHit*) hit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......    
