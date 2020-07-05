@@ -115,6 +115,12 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
 
   world_mat->SetMaterialPropertiesTable(air_MPT);
 
+  // Aluminum
+  G4Material *Al = nist->FindOrBuildMaterial("G4_Al");
+  //G4MaterialPropertiesTable *Al_MPT = new G4MaterialPropertiesTable();
+  G4double rindex_real_Al[] = {1.19,0.58,0.53,0.36};
+  G4double rindex_im_Al[] = {7.07,5.18,4.97,4.19};
+
   // PTP (para terphenyl)                                                                             
   G4double dPTP = 1.24*g/cm3;
   G4Material *PTP = new G4Material("PTP",dPTP,2);
@@ -277,12 +283,11 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4double height1 = 300*mm;
   G4double d_side = (big_side-small_side)/2;
   G4double alpha = atan(d_side/height);
-  //G4double e = 200*um; // thickness of the wrapper                                              
-  G4double e = 20*mm; // thickness of the wrapper                                                
-  //G4double e_air = 100*um; // thickness of air layer between tile and tyvek? Does not for e_air=0
-  G4double e_air = 10*mm;
+  G4double e = 200*um; // thickness of the wrapper                                              
+  G4double e_air = 100*um; // thickness of air layer between tile and tyvek? Does not for e_air=0
+  //G4double e_air = 10*mm;
   // Geometric parameters for fiber          
-  G4double diam_out = 5*mm; // fiber full diameter including both claddings                      
+  G4double diam_out = 1*mm; // fiber full diameter including both claddings                      
   G4double diam_in = (1-(2*0.02))*mm;
   G4double diam_core = (1-(4*0.02))*mm;  
 
@@ -323,8 +328,9 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4VSolid *out_clad_shape_2 = new G4IntersectionSolid("out_clad_shape_2",wrap_shape_out_max,out_clad_shape_single_1,fiber_rot1,G4ThreeVector());
 
   // Creating wrapper with empty hole in the middle and small cylinder hole for fiber
-  G4VSolid *wrap_shape_aux = new G4SubtractionSolid("wrap_shape_aux",wrap_shape_out,out_clad_shape_1,0,fiber_tran);
-  G4VSolid *wrap_shape = new G4SubtractionSolid("wrap_shape",wrap_shape_aux,out_clad_shape_2,0,fiber_tran1);
+  //G4VSolid *wrap_shape_aux = new G4SubtractionSolid("wrap_shape_aux",wrap_shape_out,out_clad_shape_1,0,fiber_tran);
+  G4VSolid *wrap_shape = new G4SubtractionSolid("wrap_shape",wrap_shape_out,out_clad_shape_1,0,fiber_tran);
+  //G4VSolid *wrap_shape = new G4SubtractionSolid("wrap_shape",wrap_shape_aux,out_clad_shape_2,0,fiber_tran1);
   
   // Wrapper material 
   G4Material *wrap_mat = polyethylene;
@@ -417,6 +423,11 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4LogicalVolume *out_clad_vol = new G4LogicalVolume(out_clad_shape,FP,"out_clad_vol");
   G4LogicalVolume *out_clad_vol1 = new G4LogicalVolume(out_clad_shape1,FP,"out_clad_vol1");
 
+  // Reflecting mirror at the end of the fiber
+  G4Tubs *mirror_shape_single = new G4Tubs("mirror_shape_single",0.,diam_out/2,1.0*mm,0.,2*M_PI);
+  G4VSolid *mirror_shape = new G4IntersectionSolid("mirror_shape",air_shape,mirror_shape_single,fiber_rot,G4ThreeVector());
+  G4LogicalVolume *mirror_vol = new G4LogicalVolume(mirror_shape,Al,"mirror_vol");
+    
   // Inner cladding: polymethylmethacrylate (PMMA)                                              
   G4Tubs *in_clad_shape_single = new G4Tubs("in_clad_shape_single",0.,diam_in/2,fiber_length/2,0.,2*M_PI);
   G4VSolid *in_clad_shape = new G4IntersectionSolid("in_clad_shape_single&&air_shape",air_shape,in_clad_shape_single,fiber_rot,G4ThreeVector());
@@ -441,18 +452,30 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   // Create fiber physical volume (outer cladding, other will be placed inside)
   // No rotation needed here because it was already applied when creating the intersection solid (fiber+air volume)
   G4VPhysicalVolume *fiber_phys = new G4PVPlacement(0,fiber_tran,out_clad_vol,"fiber_top",air_vol,false,0,checkOverlaps);
-  G4VPhysicalVolume *fiber_phys1 = new G4PVPlacement(0,fiber_tran1,out_clad_vol1,"fiber_bottom",air_vol,false,0,checkOverlaps);
+  //G4VPhysicalVolume *fiber_phys1 = new G4PVPlacement(0,fiber_tran1,out_clad_vol1,"fiber_bottom",air_vol,false,0,checkOverlaps);
  
   // Place inner cladding inside
   G4VPhysicalVolume *in_clad_phys = new G4PVPlacement(0,G4ThreeVector(),in_clad_vol,"in_clad_top",out_clad_vol,false,0,checkOverlaps);
-  G4VPhysicalVolume *in_clad_phys1 = new G4PVPlacement(0,G4ThreeVector(),in_clad_vol1,"in_clad_bottom",out_clad_vol1,false,0,checkOverlaps);
+  //G4VPhysicalVolume *in_clad_phys1 = new G4PVPlacement(0,G4ThreeVector(),in_clad_vol1,"in_clad_bottom",out_clad_vol1,false,0,checkOverlaps);
   // Place core
   G4VPhysicalVolume *core_phys = new G4PVPlacement(0,G4ThreeVector(),core_vol,"core_top",in_clad_vol,false,0,checkOverlaps);
-  G4VPhysicalVolume *core_phys1 = new G4PVPlacement(0,G4ThreeVector(),core_vol1,"core_top",in_clad_vol1,false,0,checkOverlaps);
+  //G4VPhysicalVolume *core_phys1 = new G4PVPlacement(0,G4ThreeVector(),core_vol1,"core_top",in_clad_vol1,false,0,checkOverlaps);
+  // Place mirror at the end
+  G4VPhysicalVolume *mirror_phys = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)+((height+2*e_air)*tan(alpha))/2,(height+2*e_air)/2),mirror_vol,"mirror_top",logicWorld,false,0,checkOverlaps);
+
+  G4OpticalSurface *Al_surf = new G4OpticalSurface("Al_mirror_surf");
+  Al_surf->SetType(dielectric_metal);
+  Al_surf->SetFinish(polished);
+  Al_surf->SetModel(glisur);
+  G4LogicalBorderSurface* mirror_fiber_surf = new G4LogicalBorderSurface("mirror_fiber_surf",fiber_phys,mirror_phys,Al_surf);
+  G4MaterialPropertiesTable *Al_surf_MPT = new G4MaterialPropertiesTable();
+  Al_surf_MPT->AddProperty("REALRINDEX",wls_Energy,rindex_real_Al,wlsnum);
+  Al_surf_MPT->AddProperty("IMAGINARYRINDEX",wls_Energy,rindex_im_Al,wlsnum);
+  Al_surf->SetMaterialPropertiesTable(Al_surf_MPT);
 
   // Place fiber that comes out of wrapper
   G4VPhysicalVolume *fiber_phys_1_top = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)-((height+2*e_air)*tan(alpha)),-(height+2*e_air)),out_clad_vol,"fiber_1_top",logicWorld,false,0,checkOverlaps);
-  G4VPhysicalVolume *fiber_phys_1_bottom = new G4PVPlacement(0,G4ThreeVector(0.,-(((small_side+d_side+(diam_out/cos(alpha)))/2)-((height+2*e_air)*tan(alpha))),-(height+2*e_air)),out_clad_vol1,"fiber_1_bottom",logicWorld,false,0,checkOverlaps);
+  //G4VPhysicalVolume *fiber_phys_1_bottom = new G4PVPlacement(0,G4ThreeVector(0.,-(((small_side+d_side+(diam_out/cos(alpha)))/2)-((height+2*e_air)*tan(alpha))),-(height+2*e_air)),out_clad_vol1,"fiber_1_bottom",logicWorld,false,0,checkOverlaps);
   
   // // Surface between inner and outer cladding
   // G4OpticalSurface *in_clad_opsurf = new G4OpticalSurface("in_clad_opsurf");
