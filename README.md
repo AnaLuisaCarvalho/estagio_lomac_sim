@@ -2,7 +2,11 @@
 
 Geant 4 application to simulate experimental setup to test FCC calorimeter tile light yield response  
 
-At fermi/pauli machines: 
+## How to get the code
+
+- log into the pauli machines at LIP: ssh -XY <username>@pauli.ncg.ingrid.pt
+- go to the repository following this [link](https://gitlab.cern.ch/amoreira/geant4tilefcc/-/tree/EstagioLIP2020) 
+
 - source setup.sh (does module load of geant4, cmake11 and root6)
 - mkdir build
 - cd build
