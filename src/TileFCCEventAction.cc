@@ -87,6 +87,7 @@ void TileFCCEventAction::BeginOfEventAction(const G4Event*)
   fWLSPhotonEdep = 0.;
   fNScintPhotons = 0;
   fNWLSPhotons = 0;
+  fNPMTPhotons = 0;
   fHitX = -999.;
   fHitY = -999.;
   fHitZ = -999.;  

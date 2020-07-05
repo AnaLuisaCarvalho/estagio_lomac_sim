@@ -68,6 +68,9 @@ void TileFCCSteppingAction::UserSteppingAction(const G4Step* step)
 
   G4StepPoint* PrePoint = step->GetPreStepPoint();
   G4VPhysicalVolume* PrePV = PrePoint->GetPhysicalVolume();
+
+  G4StepPoint* PostPoint = step->GetPostStepPoint();
+  G4VPhysicalVolume* PostPV = PrePoint->GetPhysicalVolume();
   
   // Get secondaries
   const std::vector<const G4Track*>* secondaries = step->GetSecondaryInCurrentStep();
@@ -116,6 +119,13 @@ void TileFCCSteppingAction::UserSteppingAction(const G4Step* step)
 
   // get volume of the current step
   G4LogicalVolume* volume = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume();
+
+  if(PostPV->GetName()=="PMT_top"){
+
+    // Kill photons once they hit the PMT
+    track->SetTrackStatus(fKillTrackAndSecondaries);
+
+  }
 
   // collect energy deposited in this step
   G4double edepStep = step->GetTotalEnergyDeposit();
