@@ -121,7 +121,7 @@ void TileFCCRunAction::BeginOfRunAction(const G4Run*)
   // Get analysis manager
   auto analysisManager = G4AnalysisManager::Instance();
   // Open output file and give it to analysis manager
-  G4String fileName = "/lstore/calo/aluisa/outputNtupleTileFCC";
+  G4String fileName = "./outputNtupleTileFCC";
   analysisManager->OpenFile(fileName);
 }
 
