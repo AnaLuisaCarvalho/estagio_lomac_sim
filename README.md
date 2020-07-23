@@ -34,3 +34,15 @@ It is a good practice to keep the remote copy of your repository up to date to w
 - ``git push origin <name of your branch>``
 
 This way even if you accidentally delete some file you will have a copy on the web!
+
+## Output of the code
+
+At the moment (July 2020, before internships started) the code creates a ROOT output file. This file contains a TTree with the following branches:
+
+- Edep: total energy deposited in the scintillator tile
+- HitX/Y/Z: position in X/Y/Z in the tile where the incident (primary) particle hit
+- NScintPhotons: number of scintillation photons produced in the tile
+- TileHitsEdep: vector quantity with the energy of each of the scintillation photons 
+- NWLSPhotons: number of wavelength shifiting photons produced in the fiber
+- FiberHitsEdep: vector quantity with the energy of each of the wave length shfiting photons produced in the fiber
+- NPMTPhotons: number of photons hitting the photomultiplier
