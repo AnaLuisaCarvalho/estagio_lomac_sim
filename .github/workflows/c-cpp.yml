@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: make
+    - name: test1
       run: pwd
+    - name: test2
       run: ls
