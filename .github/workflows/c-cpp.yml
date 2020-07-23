@@ -12,7 +12,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: test1
-      run: pwd
-    - name: test2
-      run: ls
+    - name: make build
+      run: mkdir build
+    - name: cd to build
+      run: cd build
+    - name: cmake
+      run: cmake ../
+    - name: make
+      run: make
