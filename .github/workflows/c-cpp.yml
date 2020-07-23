@@ -13,6 +13,6 @@ jobs:
 
     steps:
     - name: setup
-      run: source setup.sh
+      run: source ../setup.sh
     - name: make
       run: make
