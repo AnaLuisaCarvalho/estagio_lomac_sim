@@ -289,7 +289,8 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4VSolid *out_clad_shape_2 = new G4IntersectionSolid("out_clad_shape_2",wrap_shape_out_max,out_clad_shape_single_1,fiber_rot1,G4ThreeVector());
 
   // Creating wrapper with empty hole in the middle and small cylinder hole for fiber
-  G4VSolid *wrap_shape = new G4SubtractionSolid("wrap_shape",wrap_shape_out,out_clad_shape_1,0,fiber_tran);
+  G4VSolid *wrap_shape_aux = new G4SubtractionSolid("wrap_shape_aux",wrap_shape_out,out_clad_shape_1,0,fiber_tran);
+  G4VSolid *wrap_shape = new G4SubtractionSolid("wrap_shape",wrap_shape_aux,out_clad_shape_2,0,fiber_tran1);
   
   // Wrapper material 
   G4Material *wrap_mat = polyethylene;
@@ -371,7 +372,10 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   // Reflecting mirror at the end of the fiber
   G4Tubs *mirror_shape_single = new G4Tubs("mirror_shape_single",0.,diam_out/2,1.0*mm,0.,2*M_PI);
   G4VSolid *mirror_shape = new G4IntersectionSolid("mirror_shape",air_shape,mirror_shape_single,fiber_rot,G4ThreeVector());
+  G4VSolid *mirror_shape1 = new G4IntersectionSolid("mirror_shape1",air_shape,mirror_shape_single,fiber_rot1,G4ThreeVector());
+
   G4LogicalVolume *mirror_vol = new G4LogicalVolume(mirror_shape,Al,"mirror_vol");
+  G4LogicalVolume *mirror_vol1 = new G4LogicalVolume(mirror_shape1,Al,"mirror_vol1");
 
   // Reflecting PMT at the end of the fiber
   G4Tubs *PMT_shape_single = new G4Tubs("PMT_shape_single",0.,(diam_out*10)/2,(2.0*mm)/2,0.,2*M_PI);
@@ -395,13 +399,18 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   // Create fiber physical volume (outer cladding, other will be placed inside)
   // No rotation needed here because it was already applied when creating the intersection solid (fiber+air volume)
   G4VPhysicalVolume *fiber_phys = new G4PVPlacement(0,fiber_tran,out_clad_vol,"fiber_top",air_vol,false,0,checkOverlaps);
- 
+  G4VPhysicalVolume *fiber_phys1 = new G4PVPlacement(0,fiber_tran1,out_clad_vol1,"fiber_bottom",air_vol,false,0,checkOverlaps);
+
   // Place inner cladding inside
   G4VPhysicalVolume *in_clad_phys = new G4PVPlacement(0,G4ThreeVector(),in_clad_vol,"in_clad_top",out_clad_vol,false,0,checkOverlaps);
+  G4VPhysicalVolume *in_clad_phys1 = new G4PVPlacement(0,G4ThreeVector(),in_clad_vol1,"in_clad_bottom",out_clad_vol1,false,0,checkOverlaps);
+
   // Place core
   G4VPhysicalVolume *core_phys = new G4PVPlacement(0,G4ThreeVector(),core_vol,"core_top",in_clad_vol,false,0,checkOverlaps);
+  G4VPhysicalVolume *core_phys1 = new G4PVPlacement(0,G4ThreeVector(),core_vol1,"core_top",in_clad_vol1,false,0,checkOverlaps);
   // Place mirror at the end
   G4VPhysicalVolume *mirror_phys = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)+((height+2*e_air)*tan(alpha))/2,(height+2*e_air)/2),mirror_vol,"mirror_top",logicWorld,false,0,checkOverlaps);
+  G4VPhysicalVolume *mirror_phys1 = new G4PVPlacement(0,G4ThreeVector(0.,-(((small_side+d_side+(diam_out/cos(alpha)))/2)+((height+2*e_air)*tan(alpha))/2),(height+2*e_air)/2),mirror_vol1,"mirror_bottom",logicWorld,false,0,checkOverlaps);
 
   G4OpticalSurface *Al_surf = new G4OpticalSurface("Al_mirror_surf");
   Al_surf->SetType(dielectric_metal);
@@ -415,8 +424,9 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
 
   // Place fiber that comes out of wrapper
   G4VPhysicalVolume *fiber_phys_1_top = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)-((height+2*e_air)*tan(alpha)),-(height+2*e_air)),out_clad_vol,"fiber_1_top",logicWorld,false,0,checkOverlaps);
+  G4VPhysicalVolume *fiber_phys_1_bottom = new G4PVPlacement(0,G4ThreeVector(0.,-(((small_side+d_side+(diam_out/cos(alpha)))/2)-((height+2*e_air)*tan(alpha))),-(height+2*e_air)),out_clad_vol1,"fiber_1_bottom",logicWorld,false,0,checkOverlaps);
 
-  // Place fiber that comes out of wrapper
+  // Place PMT on top fiber
   G4VPhysicalVolume *PMT_phys = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)-((height+2*e_air)*tan(alpha))-((height*tan(alpha))/2)-(2.*mm*tan(alpha)),-(height+2*e_air)-(height/2)-(2.*mm)),PMT_vol,"PMT_top",logicWorld,false,0,checkOverlaps);
   
   // Create sensitive detector
