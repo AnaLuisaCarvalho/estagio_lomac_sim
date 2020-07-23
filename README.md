@@ -9,7 +9,7 @@ Geant 4 application to simulate experimental setup to test calorimeter tile ligh
 - clone the repository: ``git clone https://github.com/AnaLuisaCarvalho/estagio_lomac_sim.git``
 - create a new branch: ``git checkout -b <name of your branch>``
   - a branch is a copy of the repository that you can change without interfering with the original repository 
-- source setup.sh (does module load of geant4, cmake11 and root6)
+- ``source setup.sh`` (does module load of geant4, cmake11 and root6)
 - ``mkdir build``
 - ``cd build``
 - ``cmake -DGeant4_DIR=`which geant` ../``

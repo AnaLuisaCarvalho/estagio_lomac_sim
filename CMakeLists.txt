@@ -50,8 +50,8 @@ target_link_libraries(TileFCC ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(SCRIPTS
-  exampleTileFCC.in
-  exampleTileFCC.out
+  #exampleTileFCC.in
+  #exampleTileFCC.out
   init_vis.mac
   run.mac
   vis.mac
