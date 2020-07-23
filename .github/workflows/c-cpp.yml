@@ -12,7 +12,5 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: setup
-      run: source ../setup.sh
     - name: make
       run: make
