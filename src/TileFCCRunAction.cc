@@ -76,6 +76,7 @@ TileFCCRunAction::TileFCCRunAction(TileFCCEventAction* eventAction)
 
   analysisManager->SetVerboseLevel(1);
   analysisManager->SetNtupleMerging(true);
+  analysisManager->SetFileName("./outputNtupleTileFCC.root");
 
   // Book ntuple
   analysisManager->CreateNtuple("eventTree","eventTree");
@@ -121,8 +122,8 @@ void TileFCCRunAction::BeginOfRunAction(const G4Run*)
   // Get analysis manager
   auto analysisManager = G4AnalysisManager::Instance();
   // Open output file and give it to analysis manager
-  G4String fileName = "./outputNtupleTileFCC.root";
-  analysisManager->OpenFile(fileName);
+  //G4String fileName = "./outputNtupleTileFCC.root";
+  analysisManager->OpenFile();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

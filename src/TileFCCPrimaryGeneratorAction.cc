@@ -54,6 +54,7 @@ TileFCCPrimaryGeneratorAction::TileFCCPrimaryGeneratorAction()
   G4ParticleDefinition* particle
     = particleTable->FindParticle(particleName="e-");
   fParticleGun->SetParticleDefinition(particle);
+  fParticleGun->SetParticlePosition(G4ThreeVector(-2.0*cm, 0., 0.)); 
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
   fParticleGun->SetParticleEnergy(0.5*MeV);
 }
@@ -78,7 +79,7 @@ void TileFCCPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double worldZHalfLength = 0.;
   auto worldLV = G4LogicalVolumeStore::GetInstance()->GetVolume("World");
 
-  // Check that the world volume has box shape                                                                            
+  // Check that the world volume has box shape 
   G4Box* worldBox = nullptr;
   if (  worldLV ) {
     worldBox = dynamic_cast<G4Box*>(worldLV->GetSolid());
@@ -98,9 +99,7 @@ void TileFCCPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   // Set particle gun position
   //fParticleGun->SetParticlePosition(G4ThreeVector(-worldZHalfLength, 0., 0.));
-  fParticleGun->SetParticlePosition(G4ThreeVector(-2.0*cm, 0., 0.));
   
-
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 

@@ -314,8 +314,8 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4LogicalBorderSurface* wrap_air_surf = new G4LogicalBorderSurface("wrap_air_surf",air_phys,wrap_phys,wrap_air); 
   G4MaterialPropertiesTable *wrap_air_MPT = new G4MaterialPropertiesTable();
 
-  G4double reflectivity[] = {1.0, 1.0, 1.0, 1.0};  
-  G4double efficiency[] = {1.0, 1.0, 1.0, 1.0};  
+  G4double reflectivity[] = {.9, .9, .9, .9};  
+  G4double efficiency[] = {.9, .9, .9, .9};  
 
   wrap_air_MPT->AddProperty("REFLECTIVITY",wls_Energy,reflectivity,wlsnum);
   wrap_air_MPT->AddProperty("EFFICIENCY",wls_Energy,efficiency,wlsnum);
