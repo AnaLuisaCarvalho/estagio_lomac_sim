@@ -260,13 +260,13 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   fiber_rot->rotateX(alpha*rad); // rotation around x axis
   fiber_rot->rotateY(0.*rad);
   fiber_rot->rotateZ(0.*rad);
-  G4ThreeVector fiber_tran = G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2),0.);
+  G4ThreeVector fiber_tran = G4ThreeVector(0.,(((small_side+d_side+(diam_out/cos(alpha)))/2)-5.0*cm),0.);
 
   G4RotationMatrix *fiber_rot1 = new G4RotationMatrix();
   fiber_rot1->rotateX(-alpha*rad); // rotation around x axis
   fiber_rot1->rotateY(0.*rad);
   fiber_rot1->rotateZ(0.*rad);
-  G4ThreeVector fiber_tran1 = G4ThreeVector(0.,-((small_side+d_side+(diam_out/cos(alpha)))/2),0.);
+  G4ThreeVector fiber_tran1 = G4ThreeVector(0.,-(((small_side+d_side+(diam_out/cos(alpha)))/2)-5.0*cm),0.);
 
   //
   // Wrapper
@@ -370,7 +370,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
 
   // Reflecting mirror at the end of the fiber
   G4Tubs *mirror_shape_single = new G4Tubs("mirror_shape_single",0.,diam_out/2,1.0*mm,0.,2*M_PI);
-  G4VSolid *mirror_shape = new G4IntersectionSolid("mirror_shape",air_shape,mirror_shape_single,fiber_rot,G4ThreeVector());
+  G4VSolid *mirror_shape = new G4IntersectionSolid("mirror_shape",air_shape,mirror_shape_single,fiber_rot,G4ThreeVector(0,-5.0*cm,0));
   G4LogicalVolume *mirror_vol = new G4LogicalVolume(mirror_shape,Al,"mirror_vol");
 
   // Reflecting PMT at the end of the fiber
@@ -431,6 +431,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
 
   fScoringVolume = tile_vol;
   fFiberVolume = core_vol;
-   
+  
   return physWorld;
-}
+  
+  }
