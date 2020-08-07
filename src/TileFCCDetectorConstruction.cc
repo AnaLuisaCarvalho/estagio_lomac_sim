@@ -241,12 +241,12 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
                       checkOverlaps);        //overlaps checking
 
   // Geometric parameters for tile+wrapper      
-  G4double small_side = 288*mm, big_side = 302*mm, height = 147*mm, thickness = 5*mm;
+  G4double small_side = 288*mm, big_side = 302*mm, height = 147*mm, thickness = 3*mm;
   G4double height1 = 300*mm;
   G4double d_side = (big_side-small_side)/2;
   G4double alpha = atan(d_side/height);
   G4double e = 200*um; // thickness of the wrapper                                              
-  G4double e_air = 100*um; // thickness of air layer between tile and tyvek? Does not for e_air=0
+  G4double e_air = 1*mm; // thickness of air layer between tile and tyvek? Does not for e_air=0
   // Geometric parameters for fiber          
   G4double diam_out = 1*mm; // fiber full diameter including both claddings                      
   G4double diam_in = (1-(2*0.02))*mm;
