@@ -368,6 +368,34 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4LogicalVolume *out_clad_vol = new G4LogicalVolume(out_clad_shape,FP,"out_clad_vol");
   G4LogicalVolume *out_clad_vol1 = new G4LogicalVolume(out_clad_shape1,FP,"out_clad_vol1");
 
+
+  //
+ 
+  // For Fiber - Kuaray Y-11
+  claddingD = 1.0*mm;
+ claddingL = panelXY;
+ //grooveL = fiberL;
+ //grooveD = 1.01*fiberD;
+
+ fiberL = claddingL;
+ fiberD = claddingD-0.04*mm;
+
+ epoxyL = fiberL;
+ epoxyD = 1.1*claddingD;
+
+}
+
+// Wavelength shifting fiber
+ //
+ G4Tubs* solidFiber =
+   new G4Tubs("Fiber", 0.0, 0.5*fiberD, 0.5*fiberL, 0., twopi);
+ G4LogicalVolume* FiberLV =                        
+   new G4LogicalVolume(solidFiber, fiber_mat, "FiberLV");                                                              
+ //
+ // Place the fiber at the center of the cladding
+ //
+G4PVPlacement* FiberPV = new G4PVPlacement(0, G4ThreeVector(0.0, 0.0, 0.0), FiberLV, "FiberPV", CladdingLV, false, 0, fCheckOverlaps);
+
   // Reflecting mirror at the end of the fiber
   G4Tubs *mirror_shape_single = new G4Tubs("mirror_shape_single",0.,diam_out/2,1.0*mm,0.,2*M_PI);
   G4VSolid *mirror_shape = new G4IntersectionSolid("mirror_shape",air_shape,mirror_shape_single,fiber_rot,G4ThreeVector(-2.0*mm,-5.0*cm,0));
