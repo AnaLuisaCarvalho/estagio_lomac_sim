@@ -369,28 +369,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4LogicalVolume *out_clad_vol1 = new G4LogicalVolume(out_clad_shape1,FP,"out_clad_vol1");
 
 
-  //
- 
-  // For Fiber - Kuaray Y-11
-  claddingD = 1.0*mm;
- claddingL = panelXY;
- //grooveL = fiberL;
- //grooveD = 1.01*fiberD;
-
- fiberL = claddingL;
- fiberD = claddingD-0.04*mm;
-
- epoxyL = fiberL;
- epoxyD = 1.1*claddingD;
-
-}
-
-// Wavelength shifting fiber
- //
- G4Tubs* solidFiber =
-   new G4Tubs("Fiber", 0.0, 0.5*fiberD, 0.5*fiberL, 0., twopi);
- G4LogicalVolume* FiberLV =                        
-   new G4LogicalVolume(solidFiber, fiber_mat, "FiberLV");                                                              
+                                                    
  //
  // Place the fiber at the center of the cladding
  //
