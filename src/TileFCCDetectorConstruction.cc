@@ -368,12 +368,8 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4LogicalVolume *out_clad_vol = new G4LogicalVolume(out_clad_shape,FP,"out_clad_vol");
   G4LogicalVolume *out_clad_vol1 = new G4LogicalVolume(out_clad_shape1,FP,"out_clad_vol1");
 
-
-                                                    
+                                                
  //
- // Place the fiber at the center of the cladding
- //
-G4PVPlacement* FiberPV = new G4PVPlacement(0, G4ThreeVector(0.0, 0.0, 0.0), FiberLV, "FiberPV", CladdingLV, false, 0, fCheckOverlaps);
 
   // Reflecting mirror at the end of the fiber
   G4Tubs *mirror_shape_single = new G4Tubs("mirror_shape_single",0.,diam_out/2,1.0*mm,0.,2*M_PI);
