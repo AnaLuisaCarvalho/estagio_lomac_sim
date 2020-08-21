@@ -252,7 +252,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4double diam_in = (1-(2*0.02))*mm;
   G4double diam_core = (1-(4*0.02))*mm;  
 
-  G4double fiber_length = 500*mm;
+  G4double fiber_length = 200*mm;
   G4double fiber_length_1 = 500*mm;
 
   // Rotation/translation matrices
@@ -362,11 +362,11 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   //
   // Outer cladding: fluorinated polymer (FP)
   // Using Polytetrafluoroethylene because it is the simplest and most widely used in optical fibers
-  G4Tubs *out_clad_shape_single = new G4Tubs("out_clad_shape_single",0.,diam_out/2,fiber_length/2,0.,2*M_PI); 
-  G4VSolid *out_clad_shape = new G4IntersectionSolid("out_clad_shape_single&&air_shape",air_shape,out_clad_shape_single,fiber_rot,G4ThreeVector());
-  G4VSolid *out_clad_shape1 = new G4IntersectionSolid("out_clad_shape1",air_shape,out_clad_shape_single,fiber_rot1,G4ThreeVector());
-  G4LogicalVolume *out_clad_vol = new G4LogicalVolume(out_clad_shape,FP,"out_clad_vol");
-  G4LogicalVolume *out_clad_vol1 = new G4LogicalVolume(out_clad_shape1,FP,"out_clad_vol1");
+  //G4Tubs *out_clad_shape_single = new G4Tubs("out_clad_shape_single",0.,diam_out/2,fiber_length/2,0.,2*M_PI); 
+  //G4VSolid *out_clad_shape = new G4IntersectionSolid("out_clad_shape_single&&air_shape",air_shape,out_clad_shape_single,fiber_rot,G4ThreeVector());
+  //G4VSolid *out_clad_shape1 = new G4IntersectionSolid("out_clad_shape1",air_shape,out_clad_shape_single,fiber_rot1,G4ThreeVector());
+  //G4LogicalVolume *out_clad_vol = new G4LogicalVolume(out_clad_shape,FP,"out_clad_vol");
+  //G4LogicalVolume *out_clad_vol1 = new G4LogicalVolume(out_clad_shape1,FP,"out_clad_vol1");
 
                                                 
  //
@@ -397,10 +397,10 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   
   // Create fiber physical volume (outer cladding, other will be placed inside)
   // No rotation needed here because it was already applied when creating the intersection solid (fiber+air volume)
-  G4VPhysicalVolume *fiber_phys = new G4PVPlacement(0,fiber_tran,out_clad_vol,"fiber_top",air_vol,false,0,checkOverlaps);
+  //G4VPhysicalVolume *fiber_phys = new G4PVPlacement(0,fiber_tran,out_clad_vol,"fiber_top",air_vol,false,0,checkOverlaps);
  
   // Place inner cladding inside
-  G4VPhysicalVolume *in_clad_phys = new G4PVPlacement(0,G4ThreeVector(),in_clad_vol,"in_clad_top",out_clad_vol,false,0,checkOverlaps);
+  //G4VPhysicalVolume *in_clad_phys = new G4PVPlacement(0,G4ThreeVector(),in_clad_vol,"in_clad_top",out_clad_vol,false,0,checkOverlaps);
   // Place core
   G4VPhysicalVolume *core_phys = new G4PVPlacement(0,G4ThreeVector(),core_vol,"core_top",in_clad_vol,false,0,checkOverlaps);
   // Place mirror at the end
@@ -410,14 +410,14 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   Al_surf->SetType(dielectric_metal);
   Al_surf->SetFinish(polished);
   Al_surf->SetModel(glisur);
-  G4LogicalBorderSurface* mirror_fiber_surf = new G4LogicalBorderSurface("mirror_fiber_surf",fiber_phys,mirror_phys,Al_surf);
+  //G4LogicalBorderSurface* mirror_fiber_surf = new G4LogicalBorderSurface("mirror_fiber_surf",fiber_phys,mirror_phys,Al_surf);
   G4MaterialPropertiesTable *Al_surf_MPT = new G4MaterialPropertiesTable();
   Al_surf_MPT->AddProperty("REALRINDEX",wls_Energy,rindex_real_Al,wlsnum);
   Al_surf_MPT->AddProperty("IMAGINARYRINDEX",wls_Energy,rindex_im_Al,wlsnum);
   Al_surf->SetMaterialPropertiesTable(Al_surf_MPT);
 
   // Place fiber that comes out of wrapper
-  G4VPhysicalVolume *fiber_phys_1_top = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)-((height+2*e_air)*tan(alpha)),-(height+2*e_air)),out_clad_vol,"fiber_1_top",logicWorld,false,0,checkOverlaps);
+  //G4VPhysicalVolume *fiber_phys_1_top = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)-((height+2*e_air)*tan(alpha)),-(height+2*e_air)),out_clad_vol,"fiber_1_top",logicWorld,false,0,checkOverlaps);
 
   // Place fiber that comes out of wrapper
   G4VPhysicalVolume *PMT_phys = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)-((height+2*e_air)*tan(alpha))-((height*tan(alpha))/2)-(2.*mm*tan(alpha)),-(height+2*e_air)-(height/2)-(2.*mm)),PMT_vol,"PMT_top",logicWorld,false,0,checkOverlaps);
