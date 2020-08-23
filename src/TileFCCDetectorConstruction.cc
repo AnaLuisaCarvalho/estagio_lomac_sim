@@ -402,7 +402,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   // Place inner cladding inside
   //G4VPhysicalVolume *in_clad_phys = new G4PVPlacement(0,G4ThreeVector(),in_clad_vol,"in_clad_top",out_clad_vol,false,0,checkOverlaps);
   // Place core
-  G4VPhysicalVolume *core_phys = new G4PVPlacement(0,G4ThreeVector(),core_vol,"core_top",in_clad_vol,false,0,checkOverlaps);
+  G4VPhysicalVolume *core_phys = new G4PVPlacement(0,G4ThreeVector(),core_vol,"core_top",air_vol,false,0,checkOverlaps);
   // Place mirror at the end
   G4VPhysicalVolume *mirror_phys = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)+((height+2*e_air)*tan(alpha))/2,(height+2*e_air)/2),mirror_vol,"mirror_top",logicWorld,false,0,checkOverlaps);
 
