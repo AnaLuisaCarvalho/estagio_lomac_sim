@@ -1,0 +1,13 @@
+  File *f = new TFile("outputNtupleTileFCC1.root");
+  TTree *myTree = (TTree *) f->Get("eventTree");
+ Â
+  TH1I *NScintP = new TH1I ("NScintP", "", 1, 1212.9, 11213.9);
+  
+  NScintP->SetXTitle("NScintPhootons");
+  NScintP->SetLineColor(kRed);
+  NScintP->SetLineWidth(4);
+  
+  myTree->Draw("Edep>>NScintP");
+  
+}
+
