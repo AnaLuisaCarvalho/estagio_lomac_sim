@@ -402,15 +402,18 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   // Place inner cladding inside
   //G4VPhysicalVolume *in_clad_phys = new G4PVPlacement(0,G4ThreeVector(),in_clad_vol,"in_clad_top",out_clad_vol,false,0,checkOverlaps);
   // Place core
+ 
+  // creation of 3 more fibers to compose sigma 
+  G4RotationMatrix *fiber_rot2 = new G4RotationMatrix();
+  fiber_rot2->rotateX(0.*deg);
+  fiber_rot2->rotateY(0.*deg);
+  fiber_rot2->rotateZ(90.*deg);
+  
   G4VPhysicalVolume *core_phys = new G4PVPlacement(0,G4ThreeVector(-2.0*mm,10.0*cm,0.),core_vol,"core_top",air_vol,false,0,checkOverlaps);
   core_vol->SetVisAttributes(new G4VisAttributes( G4Color::Magenta() ) );
 
-  G4VPhysicalVolume *core_phys1 = new G4PVPlacement(G4RotationMatrix fiber_rot2,G4ThreeVector(-2.0*mm,8.0*cm,0.),core_vol,"core_top",air_vol,true,1,checkOverlaps);
-  G4RotationMatrix *fiber_root2 = new G4RotationMatrix();
-  fiber_rot2->rotateX(0.*rad); 
-  fiber_rot2->rotateY(0.*rad);
-  fiber_rot2->rotateZ(90.*deg);
-
+  G4VPhysicalVolume *core_phys1 = new G4PVPlacement(fiber_rot2,G4ThreeVector(-2.0*mm,8.0*cm,0.),core_vol,"core_top",air_vol,true,1,checkOverlaps);
+   
   
   G4VPhysicalVolume *core_phys2 = new G4PVPlacement(0,G4ThreeVector(-2.0*mm,6.0*cm,0.),core_vol,"core_top",air_vol,true,2,checkOverlaps);
 
