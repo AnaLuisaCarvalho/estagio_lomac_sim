@@ -252,18 +252,18 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4double diam_in = (1-(2*0.02))*mm;
   G4double diam_core = (1-(4*0.02))*mm;  
 
-  G4double fiber_length = 200*mm;
+  G4double fiber_length = 100*mm;
   G4double fiber_length_1 = 500*mm;
 
   // Rotation/translation matrices
   G4RotationMatrix *fiber_rot = new G4RotationMatrix();
-  fiber_rot->rotateX(alpha*rad); // rotation around x axis
+  fiber_rot->rotateX(0.*rad); // rotation around x axis
   fiber_rot->rotateY(0.*rad);
   fiber_rot->rotateZ(0.*rad);
   G4ThreeVector fiber_tran = G4ThreeVector(-2.0*mm,(((small_side+d_side+(diam_out/cos(alpha)))/2)-5.0*cm),0.);
 
   G4RotationMatrix *fiber_rot1 = new G4RotationMatrix();
-  fiber_rot1->rotateX(-alpha*rad); // rotation around x axis
+  fiber_rot1->rotateX(0.*rad); // rotation around x axis
   fiber_rot1->rotateY(0.*rad);
   fiber_rot1->rotateZ(0.*rad);
   G4ThreeVector fiber_tran1 = G4ThreeVector(-2.0*mm,-(((small_side+d_side+(diam_out/cos(alpha)))/2)-5.0*cm),0.);
@@ -405,17 +405,23 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
  
   // creation of 3 more fibers to compose sigma 
   G4RotationMatrix *fiber_rot2 = new G4RotationMatrix();
-  fiber_rot2->rotateX(0.*deg);
+  fiber_rot2->rotateX(90.*deg);
   fiber_rot2->rotateY(0.*deg);
-  fiber_rot2->rotateZ(90.*deg);
-  
+  fiber_rot2->rotateZ(0.*deg);
+ 
+  G4RotationMatrix *fiber_rot3 = new G4RotationMatrix();
+  fiber_rot3->rotateX(90.*deg);
+  fiber_rot3->rotateY(0.*deg);
+  fiber_rot3->rotateZ(0.*deg);
+
+ 
   G4VPhysicalVolume *core_phys = new G4PVPlacement(0,G4ThreeVector(-2.0*mm,10.0*cm,0.),core_vol,"core_top",air_vol,false,0,checkOverlaps);
   core_vol->SetVisAttributes(new G4VisAttributes( G4Color::Magenta() ) );
 
-  G4VPhysicalVolume *core_phys1 = new G4PVPlacement(fiber_rot2,G4ThreeVector(-2.0*mm,8.0*cm,0.),core_vol,"core_top",air_vol,true,1,checkOverlaps);
+  G4VPhysicalVolume *core_phys1 = new G4PVPlacement(fiber_rot2,G4ThreeVector(-2.0*mm,0.*cm,5.0*cm),core_vol,"core_top",air_vol,true,1,checkOverlaps);
    
   
-  G4VPhysicalVolume *core_phys2 = new G4PVPlacement(0,G4ThreeVector(-2.0*mm,6.0*cm,0.),core_vol,"core_top",air_vol,true,2,checkOverlaps);
+  G4VPhysicalVolume *core_phys2 = new G4PVPlacement(fiber_rot3,G4ThreeVector(-2.0*mm,0.*cm,-5.0*cm),core_vol,"core_top",air_vol,true,2,checkOverlaps);
 
   G4VPhysicalVolume *core_phys3 = new G4PVPlacement(0,G4ThreeVector(-2.0*mm,-10.0*cm,0.),core_vol,"core_top",air_vol,true,3,checkOverlaps);
 
