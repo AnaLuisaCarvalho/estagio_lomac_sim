@@ -428,8 +428,11 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
 
   // Creation of the Torus that attached to the fibers in the corners.
 
- G4Torus *Torus_1 = new G4Torus("Torus_1",99.0*mm,99.1*mm,100.0*mm,0.,90.0*deg);
- G4LogicalVolume *Torus1_vol = new G4LogicalVolume(Torus_1,polystyrene,"Torus1_vol");
+ G4Torus *Torus_1 = new G4Torus("Torus_1",0.45*mm,0.5*mm,100.0*mm,0.,90.0*deg);
+ G4VPhysicalVolume *core_torus_phys = new G4PVPlacement(0,G4ThreeVector(),core_vol,"core_top", air_vol,false,0,checkOverlaps);
+ 
+
+//G4LogicalVolume *Torus1_vol = new G4LogicalVolume(Torus_1,polystyrene,"Torus1_vol");
 
 
   // Place mirror at the end
