@@ -2,7 +2,7 @@
 # Configuration script
 
 # Load geant4
-module load geant/4.10.06
+module load geant/4.10.06.p01
 # Load cmake v.11 (required by geant)
 module load cmake/3.11.2
 # Load root latest version (needed to analyse output ntuple)

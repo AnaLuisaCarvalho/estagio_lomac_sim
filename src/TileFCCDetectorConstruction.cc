@@ -53,6 +53,7 @@
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 #include "G4SDManager.hh"
+#include "G4Torus.hh"
 
 #include <math.h>
 #include <stdio.h>
@@ -403,7 +404,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   //G4VPhysicalVolume *in_clad_phys = new G4PVPlacement(0,G4ThreeVector(),in_clad_vol,"in_clad_top",out_clad_vol,false,0,checkOverlaps);
   // Place core
  
-  // creation of 3 more fibers to compose sigma 
+  // creation of 3 more fibers to compose sigma wich rotation 
   G4RotationMatrix *fiber_rot2 = new G4RotationMatrix();
   fiber_rot2->rotateX(90.*deg);
   fiber_rot2->rotateY(0.*deg);
@@ -425,6 +426,10 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
 
   G4VPhysicalVolume *core_phys3 = new G4PVPlacement(0,G4ThreeVector(-2.0*mm,-10.0*cm,0.),core_vol,"core_top",air_vol,true,3,checkOverlaps);
 
+  // Creation of the Torus that attached to the fibers in the corners.
+
+ G4Torus *Torus_1 = new G4Torus("Torus_1",99.0*mm,99.1*mm,100.0*mm,0.,90.0*deg);
+ G4LogicalVolume *Torus1_vol = new G4LogicalVolume(Torus_1,polystyrene,"Torus1_vol");
 
 
   // Place mirror at the end
