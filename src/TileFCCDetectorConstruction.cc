@@ -248,6 +248,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4double alpha = atan(d_side/height);
   G4double e = 200*um; // thickness of the wrapper                                              
   G4double e_air = 1*mm; // thickness of air layer between tile and tyvek? Does not for e_air=0
+ 
   // Geometric parameters for fiber          
   G4double diam_out = 1*mm; // fiber full diameter including both claddings                      
   G4double diam_in = (1-(2*0.02))*mm;
@@ -257,17 +258,30 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4double fiber_length_1 = 500*mm;
 
   // Rotation/translation matrices
+  //   G4RotationMatrix *fiber_rot = new G4RotationMatrix();
+  //     fiber_rot->rotateX(alpha*rad); // rotation around x axis
+  //       fiber_rot->rotateY(0.*rad);
+  //         fiber_rot->rotateZ(0.*rad);
+  //           G4ThreeVector fiber_tran = G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2),0.);
+  //
+  //             G4RotationMatrix *fiber_rot1 = new G4RotationMatrix();
+  //               fiber_rot1->rotateX(-alpha*rad); // rotation around x axis
+  //                 fiber_rot1->rotateY(0.*rad);
+  //                   fiber_rot1->rotateZ(0.*rad);
+  //                     G4ThreeVector fiber_tran1 = G4ThreeVector(0.,-((small_side+d_side+(diam_out/cos(alpha)))/2),0.);  
+
+// Rotation/translation matrices
   G4RotationMatrix *fiber_rot = new G4RotationMatrix();
-  fiber_rot->rotateX(0.*rad); // rotation around x axis
+  fiber_rot->rotateX(alpha*rad); // rotation around x axis
   fiber_rot->rotateY(0.*rad);
   fiber_rot->rotateZ(0.*rad);
-  G4ThreeVector fiber_tran = G4ThreeVector(-2.0*mm,(((small_side+d_side+(diam_out/cos(alpha)))/2)-5.0*cm),0.);
+  G4ThreeVector fiber_tran = G4ThreeVector(-2.0*mm,-((small_side+d_side+(diam_out/cos(alpha)))/2),0.); 
 
   G4RotationMatrix *fiber_rot1 = new G4RotationMatrix();
-  fiber_rot1->rotateX(0.*rad); // rotation around x axis
+  fiber_rot1->rotateX(alpha*rad); // rotation around x axis
   fiber_rot1->rotateY(0.*rad);
   fiber_rot1->rotateZ(0.*rad);
-  G4ThreeVector fiber_tran1 = G4ThreeVector(-2.0*mm,-(((small_side+d_side+(diam_out/cos(alpha)))/2)-5.0*cm),0.);
+  G4ThreeVector fiber_tran1 = G4ThreeVector(-2.0*mm,-((small_side+d_side+(diam_out/cos(alpha)))/2),0.); 
 
   //
   // Wrapper
@@ -404,32 +418,54 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   //G4VPhysicalVolume *in_clad_phys = new G4PVPlacement(0,G4ThreeVector(),in_clad_vol,"in_clad_top",out_clad_vol,false,0,checkOverlaps);
   // Place core
  
-  // creation of 3 more fibers to compose sigma wich rotation 
-  G4RotationMatrix *fiber_rot2 = new G4RotationMatrix();
-  fiber_rot2->rotateX(90.*deg);
-  fiber_rot2->rotateY(0.*deg);
-  fiber_rot2->rotateZ(0.*deg);
+  //create fiber physical volume
+  G4Tubs *fiber1_sigma = new G4Tubs("fiber1_sigma",0.,diam_in/2,fiber_length/2,0.,2*M_PI);
+  G4LogicalVolume *fiber1_sigma_vol = new G4LogicalVolume(fiber1_sigma,polystyrene,"fiber1_sigma_vol");
+  G4VPhysicalVolume *fiber1_sigma_phy = new G4PVPlacement(0,G4ThreeVector(-2.0*mm,0.,0.),fiber1_sigma_vol,"fiber_top", air_vol,false,0,checkOverlaps);
+  fiber1_sigma_vol->SetVisAttributes(new G4VisAttributes(G4Color::Green()));
  
-  G4RotationMatrix *fiber_rot3 = new G4RotationMatrix();
-  fiber_rot3->rotateX(90.*deg);
-  fiber_rot3->rotateY(0.*deg);
-  fiber_rot3->rotateZ(0.*deg);
+  G4Tubs *fiber2_sigma = new G4Tubs("fiber2_sigma",0.,diam_in/2,fiber_length/2,0.,2*M_PI);
+  G4LogicalVolume *fiber2_sigma_vol = new G4LogicalVolume(fiber2_sigma,polystyrene, "fiber2_sigma_vol");
+  G4VPhysicalVolume *fiber2_sigma_phy = new G4PVPlacement(0,G4ThreeVector(-2.0*mm,-8.0*cm,0.),fiber2_sigma_vol,"fiber_top", air_vol,false,0,checkOverlaps);
+  fiber2_sigma_vol->SetVisAttributes(new G4VisAttributes(G4Color::Green()));
 
  
-  G4VPhysicalVolume *core_phys = new G4PVPlacement(0,G4ThreeVector(-2.0*mm,10.0*cm,0.),core_vol,"core_top",air_vol,false,0,checkOverlaps);
-  core_vol->SetVisAttributes(new G4VisAttributes( G4Color::Magenta() ) );
+ // creation of 3 more fibers to compose sigma wich rotation 
+  //G4RotationMatrix *fiber_rot2 = new G4RotationMatrix();
+  //fiber_rot2->rotateX(90.*deg);
+  //fiber_rot2->rotateY(0.*deg);
+  //fiber_rot2->rotateZ(0.*deg);
+ 
+  //G4RotationMatrix *fiber_rot3 = new G4RotationMatrix();
+  //fiber_rot3->rotateX(90.*deg);
+  //fiber_rot3->rotateY(0.*deg);
+  //fiber_rot3->rotateZ(0.*deg);
 
-  G4VPhysicalVolume *core_phys1 = new G4PVPlacement(fiber_rot2,G4ThreeVector(-2.0*mm,0.*cm,5.0*cm),core_vol,"core_top",air_vol,true,1,checkOverlaps);
+ 
+  //G4VPhysicalVolume *core_phys = new G4PVPlacement(0,G4ThreeVector(-2.0*mm,10.0*cm,0.),core_vol,"core_top",air_vol,false,0,checkOverlaps);
+  //core_vol->SetVisAttributes(new G4VisAttributes( G4Color::Magenta() ) );
+
+  //G4VPhysicalVolume *core_phys1 = new G4PVPlacement(fiber_rot2,G4ThreeVector(-2.0*mm,0.*cm,5.0*cm),core_vol,"core_top",air_vol,true,1,checkOverlaps);
    
   
-  G4VPhysicalVolume *core_phys2 = new G4PVPlacement(fiber_rot3,G4ThreeVector(-2.0*mm,0.*cm,-5.0*cm),core_vol,"core_top",air_vol,true,2,checkOverlaps);
+  //G4VPhysicalVolume *core_phys2 = new G4PVPlacement(fiber_rot3,G4ThreeVector(-2.0*mm,0.*cm,-5.0*cm),core_vol,"core_top",air_vol,true,2,checkOverlaps);
 
-  G4VPhysicalVolume *core_phys3 = new G4PVPlacement(0,G4ThreeVector(-2.0*mm,-10.0*cm,0.),core_vol,"core_top",air_vol,true,3,checkOverlaps);
+  //G4VPhysicalVolume *core_phys3 = new G4PVPlacement(0,G4ThreeVector(-2.0*mm,-10.0*cm,0.),core_vol,"core_top",air_vol,true,3,checkOverlaps);
 
   // Creation of the Torus that attached to the fibers in the corners.
 
- G4Torus *Torus_1 = new G4Torus("Torus_1",0.45*mm,0.5*mm,100.0*mm,0.,90.0*deg);
- G4VPhysicalVolume *core_torus_phys = new G4PVPlacement(0,G4ThreeVector(),core_vol,"core_top", air_vol,false,0,checkOverlaps);
+ G4RotationMatrix *torus_rot1 = new G4RotationMatrix();
+  torus_rot1->rotateX(0.);
+  torus_rot1->rotateY(0.5*M_PI);
+  torus_rot1->rotateZ(0.);
+
+ G4Torus *Torus_1 = new G4Torus("Torus_1",0.,1.0*mm,100.0*mm,0.,0.5*M_PI);
+ G4LogicalVolume *torus_vol = new G4LogicalVolume(Torus_1,polystyrene,"torus_vol");
+ G4VPhysicalVolume *torus_phy = new G4PVPlacement(torus_rot1,G4ThreeVector(-2.0*mm,0.,0.),torus_vol,"fiber_top", air_vol,false,0,checkOverlaps);
+ torus_vol->SetVisAttributes(new G4VisAttributes(G4Color::Green()));
+
+
+// G4VPhysicalVolume *core_torus_phys = new G4PVPlacement(torus_rot1,G4ThreeVector(-2.0*mm,0.,0.),core_vol,"core_torus",air_vol,false,0,checkOverlaps);
  
 
 //G4LogicalVolume *Torus1_vol = new G4LogicalVolume(Torus_1,polystyrene,"Torus1_vol");
