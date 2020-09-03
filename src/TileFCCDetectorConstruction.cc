@@ -426,9 +426,9 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   fiber_rot2->rotateZ(0.*deg);
   
 
-  G4Tubs *fiber1_sigma = new G4Tubs("fiber1_sigma",0.,diam_in/2,2.0*cm,0.,2*M_PI);
+  G4Tubs *fiber1_sigma = new G4Tubs("fiber1_sigma",0.,diam_in/2,1.8*cm,0.,2*M_PI);
   G4LogicalVolume *fiber1_sigma_vol = new G4LogicalVolume(fiber1_sigma,polystyrene,"fiber1_sigma_vol");
-  G4VPhysicalVolume *fiber1_sigma_phy = new G4PVPlacement(0,G4ThreeVector(-2.0*mm,14.0*cm,-6.0*cm),fiber1_sigma_vol,"fiber_top", air_vol,false,0,checkOverlaps);
+  G4VPhysicalVolume *fiber1_sigma_phy = new G4PVPlacement(0,G4ThreeVector(-2.0*mm,14.0*cm,-5.25*cm),fiber1_sigma_vol,"fiber_top", air_vol,false,0,checkOverlaps);
   fiber1_sigma_vol->SetVisAttributes(new G4VisAttributes(G4Color::Green()));
  
   G4Tubs *fiber2_sigma = new G4Tubs("fiber2_sigma",0.,diam_in/2,4.0*cm,0.,2*M_PI);
@@ -436,7 +436,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4VPhysicalVolume *fiber2_sigma_phy = new G4PVPlacement(fiber_rot2,G4ThreeVector(-2.0*mm,0.,6.0*cm),fiber2_sigma_vol,"fiber_top", air_vol,false,0,checkOverlaps);
   fiber2_sigma_vol->SetVisAttributes(new G4VisAttributes(G4Color::Green()));
 
-  G4VPhysicalVolume *fiber3_sigma_phy = new G4PVPlacement(0,G4ThreeVector(-2.0*mm,-14.0*cm,-6.0*cm),fiber1_sigma_vol,"fiber_top", air_vol,true,1,checkOverlaps); 
+  G4VPhysicalVolume *fiber3_sigma_phy = new G4PVPlacement(0,G4ThreeVector(-2.0*mm,-14.0*cm,-5.25*cm),fiber1_sigma_vol,"fiber_top", air_vol,true,1,checkOverlaps); 
  // creation of 3 more fibers to compose sigma wich rotation 
   //G4RotationMatrix *fiber_rot2 = new G4RotationMatrix();
   //fiber_rot2->rotateX(90.*deg);
@@ -477,7 +477,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   //torus_rot3->rotateZ(0.5*M_PI);
 
 
-  G4Torus *Torus_1 = new G4Torus("Torus_1",0.,1.0*mm,100.0*mm,0.,0.5*M_PI);
+  G4Torus *Torus_1 = new G4Torus("Torus_1",0.,diam_in/2,100.0*mm,0.,0.5*M_PI);
   G4LogicalVolume *torus_vol = new G4LogicalVolume(Torus_1,polystyrene,"torus_vol");
   G4VPhysicalVolume *torus_phy = new G4PVPlacement(torus_rot1,G4ThreeVector(-2.0*mm,4.0*cm,-4.0*cm),torus_vol,"fiber_top", air_vol,false,0,checkOverlaps);
   torus_vol->SetVisAttributes(new G4VisAttributes(G4Color::Green()));
