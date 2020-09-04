@@ -265,7 +265,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4ThreeVector fiber_tran = G4ThreeVector(0.,-((small_side+d_side+(diam_out/cos(alpha)))/2),0.); 
 
   G4RotationMatrix *fiber_rot1 = new G4RotationMatrix();
-  fiber_rot1->rotateX(alpha*rad); // rotation around x axis
+  fiber_rot1->rotateX(-alpha*rad); // rotation around x axis
   fiber_rot1->rotateY(0.*rad);
   fiber_rot1->rotateZ(0.*rad);
   G4ThreeVector fiber_tran1 = G4ThreeVector(0.,-((small_side+d_side+(diam_out/cos(alpha)))/2),0.); 
