@@ -258,30 +258,17 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4double fiber_length_1 = 500*mm;
 
   // Rotation/translation matrices
-  //   G4RotationMatrix *fiber_rot = new G4RotationMatrix();
-  //     fiber_rot->rotateX(alpha*rad); // rotation around x axis
-  //       fiber_rot->rotateY(0.*rad);
-  //         fiber_rot->rotateZ(0.*rad);
-  //           G4ThreeVector fiber_tran = G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2),0.);
-  //
-  //             G4RotationMatrix *fiber_rot1 = new G4RotationMatrix();
-  //               fiber_rot1->rotateX(-alpha*rad); // rotation around x axis
-  //                 fiber_rot1->rotateY(0.*rad);
-  //                   fiber_rot1->rotateZ(0.*rad);
-  //                     G4ThreeVector fiber_tran1 = G4ThreeVector(0.,-((small_side+d_side+(diam_out/cos(alpha)))/2),0.);  
-
-// Rotation/translation matrices
   G4RotationMatrix *fiber_rot = new G4RotationMatrix();
   fiber_rot->rotateX(alpha*rad); // rotation around x axis
   fiber_rot->rotateY(0.*rad);
   fiber_rot->rotateZ(0.*rad);
-  G4ThreeVector fiber_tran = G4ThreeVector(-2.0*mm,-((small_side+d_side+(diam_out/cos(alpha)))/2),0.); 
+  G4ThreeVector fiber_tran = G4ThreeVector(0.,-((small_side+d_side+(diam_out/cos(alpha)))/2),0.); 
 
   G4RotationMatrix *fiber_rot1 = new G4RotationMatrix();
   fiber_rot1->rotateX(alpha*rad); // rotation around x axis
   fiber_rot1->rotateY(0.*rad);
   fiber_rot1->rotateZ(0.*rad);
-  G4ThreeVector fiber_tran1 = G4ThreeVector(-2.0*mm,-((small_side+d_side+(diam_out/cos(alpha)))/2),0.); 
+  G4ThreeVector fiber_tran1 = G4ThreeVector(0.,-((small_side+d_side+(diam_out/cos(alpha)))/2),0.); 
 
   //
   // Wrapper
