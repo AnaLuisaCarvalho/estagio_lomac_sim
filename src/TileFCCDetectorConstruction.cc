@@ -426,9 +426,9 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   fiber_rot2->rotateZ(0.*deg);
   
 
-  G4Tubs *fiber1_sigma = new G4Tubs("fiber1_sigma",0.,diam_in/2,1.8*cm,0.,2*M_PI);
+  G4Tubs *fiber1_sigma = new G4Tubs("fiber1_sigma",0.,diam_in/2,1.6*cm,0.,2*M_PI);
   G4LogicalVolume *fiber1_sigma_vol = new G4LogicalVolume(fiber1_sigma,polystyrene,"fiber1_sigma_vol");
-  G4VPhysicalVolume *fiber1_sigma_phy = new G4PVPlacement(0,G4ThreeVector(-2.0*mm,14.0*cm,-5.25*cm),fiber1_sigma_vol,"fiber_top", air_vol,false,0,checkOverlaps);
+  G4VPhysicalVolume *fiber1_sigma_phy = new G4PVPlacement(0,G4ThreeVector(-2.0*mm,14.0*cm,-5.6*cm),fiber1_sigma_vol,"fiber_top", air_vol,false,0,checkOverlaps);
   fiber1_sigma_vol->SetVisAttributes(new G4VisAttributes(G4Color::Green()));
  
   G4Tubs *fiber2_sigma = new G4Tubs("fiber2_sigma",0.,diam_in/2,4.0*cm,0.,2*M_PI);
@@ -436,7 +436,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4VPhysicalVolume *fiber2_sigma_phy = new G4PVPlacement(fiber_rot2,G4ThreeVector(-2.0*mm,0.,6.0*cm),fiber2_sigma_vol,"fiber_top", air_vol,false,0,checkOverlaps);
   fiber2_sigma_vol->SetVisAttributes(new G4VisAttributes(G4Color::Green()));
 
-  G4VPhysicalVolume *fiber3_sigma_phy = new G4PVPlacement(0,G4ThreeVector(-2.0*mm,-14.0*cm,-5.25*cm),fiber1_sigma_vol,"fiber_top", air_vol,true,1,checkOverlaps); 
+  G4VPhysicalVolume *fiber3_sigma_phy = new G4PVPlacement(0,G4ThreeVector(-2.0*mm,-14.0*cm,-5.6*cm),fiber1_sigma_vol,"fiber_top", air_vol,true,1,checkOverlaps); 
  // creation of 3 more fibers to compose sigma wich rotation 
   //G4RotationMatrix *fiber_rot2 = new G4RotationMatrix();
   //fiber_rot2->rotateX(90.*deg);
@@ -493,17 +493,17 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
 
 
   // Place mirror at the end
-  G4VPhysicalVolume *mirror_phys = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)+((height+2*e_air)*tan(alpha))/2,(height+2*e_air)/2),mirror_vol,"mirror_top",logicWorld,false,0,checkOverlaps);
+  //G4VPhysicalVolume *mirror_phys = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)+((height+2*e_air)*tan(alpha))/2,(height+2*e_air)/2),mirror_vol,"mirror_top",logicWorld,false,0,checkOverlaps);
 
-  G4OpticalSurface *Al_surf = new G4OpticalSurface("Al_mirror_surf");
-  Al_surf->SetType(dielectric_metal);
-  Al_surf->SetFinish(polished);
-  Al_surf->SetModel(glisur);
+  //G4OpticalSurface *Al_surf = new G4OpticalSurface("Al_mirror_surf");
+  //Al_surf->SetType(dielectric_metal);
+  //Al_surf->SetFinish(polished);
+  //Al_surf->SetModel(glisur);
   //G4LogicalBorderSurface* mirror_fiber_surf = new G4LogicalBorderSurface("mirror_fiber_surf",fiber_phys,mirror_phys,Al_surf);
-  G4MaterialPropertiesTable *Al_surf_MPT = new G4MaterialPropertiesTable();
-  Al_surf_MPT->AddProperty("REALRINDEX",wls_Energy,rindex_real_Al,wlsnum);
-  Al_surf_MPT->AddProperty("IMAGINARYRINDEX",wls_Energy,rindex_im_Al,wlsnum);
-  Al_surf->SetMaterialPropertiesTable(Al_surf_MPT);
+  //G4MaterialPropertiesTable *Al_surf_MPT = new G4MaterialPropertiesTable();
+  //Al_surf_MPT->AddProperty("REALRINDEX",wls_Energy,rindex_real_Al,wlsnum);
+  //Al_surf_MPT->AddProperty("IMAGINARYRINDEX",wls_Energy,rindex_im_Al,wlsnum);
+  //Al_surf->SetMaterialPropertiesTable(Al_surf_MPT);
 
   // Place fiber that comes out of wrapper
   //G4VPhysicalVolume *fiber_phys_1_top = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)-((height+2*e_air)*tan(alpha)),-(height+2*e_air)),out_clad_vol,"fiber_1_top",logicWorld,false,0,checkOverlaps);
