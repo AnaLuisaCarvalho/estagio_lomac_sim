@@ -262,7 +262,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   fiber_rot->rotateX(alpha*rad); // rotation around x axis
   fiber_rot->rotateY(0.*rad);
   fiber_rot->rotateZ(0.*rad);
-  G4ThreeVector fiber_tran = G4ThreeVector(0.,-((small_side+d_side+(diam_out/cos(alpha)))/2),0.); 
+  G4ThreeVector fiber_tran = G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2),0.); 
 
   G4RotationMatrix *fiber_rot1 = new G4RotationMatrix();
   fiber_rot1->rotateX(-alpha*rad); // rotation around x axis
@@ -280,7 +280,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   // Air that goes inside wrapper volume
   G4Trd *air_shape = new G4Trd("air_shape",(thickness+2*e_air)/2,(thickness+2*e_air)/2,(small_side+2*e_air+2*diam_out)/2,(big_side+2*e_air+2*diam_out)/2,(height+2*e_air)/2);
   G4LogicalVolume *air_vol = new G4LogicalVolume(air_shape,world_mat,"air_vol");
-  //air_vol->SetVisAttributes(G4VisAttributes::GetInvisible());  
+  //air_vol->SetVisAttributes(G4VisAttributes::GetInvisible()); 
 
   // Outer volume of wrapper
   G4VSolid *wrap_shape_out_max = new G4Trd("wrap_shape_out",(thickness+2*(e+e_air))/2,(thickness+2*(e+e_air))/2,(small_side+2*(e+e_air)+2*diam_out)/2,(big_side+2*(e+e_air)+2*diam_out)/2,(height1+2*(e+e_air))/2);
@@ -375,7 +375,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
 
   // Reflecting mirror at the end of the fiber
   G4Tubs *mirror_shape_single = new G4Tubs("mirror_shape_single",0.,diam_out/2,1.0*mm,0.,2*M_PI);
-  G4VSolid *mirror_shape = new G4IntersectionSolid("mirror_shape",air_shape,mirror_shape_single,fiber_rot,G4ThreeVector(-2.0*mm,-5.0*cm,0));
+  G4VSolid *mirror_shape = new G4IntersectionSolid("mirror_shape",air_shape,mirror_shape_single,fiber_rot,G4ThreeVector());
   G4LogicalVolume *mirror_vol = new G4LogicalVolume(mirror_shape,Al,"mirror_vol");
 
   // Reflecting PMT at the end of the fiber
@@ -480,7 +480,7 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
 
 
   // Place mirror at the end
-  //G4VPhysicalVolume *mirror_phys = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)+((height+2*e_air)*tan(alpha))/2,(height+2*e_air)/2),mirror_vol,"mirror_top",logicWorld,false,0,checkOverlaps);
+  G4VPhysicalVolume *mirror_phys = new G4PVPlacement(0,G4ThreeVector(0.,((small_side+d_side+(diam_out/cos(alpha)))/2)+((height+2*e_air)*tan(alpha))/2,(height+2*e_air)/2),mirror_vol,"mirror_top",logicWorld,false,0,checkOverlaps);
 
   //G4OpticalSurface *Al_surf = new G4OpticalSurface("Al_mirror_surf");
   //Al_surf->SetType(dielectric_metal);
@@ -500,7 +500,10 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   
   // Create sensitive detector
   TileFCCFiberSD *fiber_sens = new TileFCCFiberSD("fiber_sens","FiberHitsCollection");
-  core_vol->SetSensitiveDetector(fiber_sens);
+  //core_vol->SetSensitiveDetector(fiber_sens);
+  torus_vol->SetSensitiveDetector(fiber_sens);
+  fiber1_sigma_vol->SetSensitiveDetector(fiber_sens);
+  fiber2_sigma_vol->SetSensitiveDetector(fiber_sens);
   G4SDManager::GetSDMpointer()->AddNewDetector(fiber_sens);
 
   // Create sensitive detector
@@ -509,7 +512,9 @@ G4VPhysicalVolume* TileFCCDetectorConstruction::Construct()
   G4SDManager::GetSDMpointer()->AddNewDetector(PMT_sens);
 
   fScoringVolume = tile_vol;
-  fFiberVolume = core_vol;
+  fFiberVolume = torus_vol;
+  fFiberVolume = fiber1_sigma_vol;
+  fFiberVolume = fiber2_sigma_vol;
   
   return physWorld;
   
